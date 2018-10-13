@@ -1,0 +1,380 @@
+include top.jade 
+                link(rel='stylesheet',href='./css/login.css')
+                .loginbody
+                        .container
+                                .box
+                                .container-forms
+                                        .container-info
+                                                .info-item
+                                                        .table
+                                                                .table-cell
+                                                                        p
+                                                                                | 계정이 있습니까?
+                                                                        .btn
+                                                                                | 로그인
+                                                .info-item
+                                                        .table
+                                                                .table-cell
+                                                                        p
+                                                                                | 계정이 없습니까?
+                                                                        .btn
+                                                                                | 회원가입
+                                        .container-form
+                                                .form-item.log-in
+                                                        .table
+                                                                form.table-cell#login(method="POST" action="/login")
+                                                                        label 아이디
+                                                                        input#loginid(name='id', type='text' autocomplete="off" style="ime-mode:disabled" onkeyup="trim(this);")
+                                                                        label 비밀번호
+                                                                        input#loginpw(name='pw',type='Password' autocomplete="off" style="ime-mode:disabled" onkeyup="trim(this);")
+                                                                        .btn#loginbtn(style="width: 220px;")
+                                                                                | Log in
+                                                .form-item.sign-up
+                                                        .table
+                                                                form.table-cell#register(method="POST" action="/register")
+                                                                        label#idlbl 아이디
+                                                                        input#idcheck(name='id', type='text' style="width: 137px;display: inline;margin-left: 26px;ime-mode:disabled;" autocomplete="off" onkeyup="trim(this);")
+                                                                        button#idck(type="button") 중복확인
+                                                                        label#emaillbl(style="margin-top: 64px;") 이메일
+                                                                        input#emailcheck(name='email',type='text' style="width: 137px;display: inline;margin-left: 26px;ime-mode:disabled;" autocomplete="off" onkeyup="trim(this);")
+                                                                        button#emailck(type="button") 중복확인
+                                                                        label(style="margin-top: 64px;" ) 비밀번호
+                                                                        input#regipw(name='pw',type='Password' autocomplete="off" style="ime-mode:disabled" onkeyup="trim(this);")
+                                                                        label 비밀번호확인
+                                                                        input#regipwok(name='pwok',type='Password' autocomplete="off" style="ime-mode:disabled" onkeyup="trim(this);")
+                                                                        label 이름
+                                                                        input#reginame(name='name',type='text' autocomplete="off" style="ime-mode: active;" onkeyup="trim(this);")
+                                                                        label(style="transform: translateY(35px);left: 29px;") 생년월일
+                                                                        input#birth(name='birth',type='date')
+                                                                        label 휴대폰번호
+                                                                        input#phone(name='phone',type='text' autocomplete="off" onkeyup="trim(this);")
+                                                                        .btn#regibtn(style="width: 220px;")
+                                                                                | Sign up
+                if(regiok)
+                        script.
+                                window.onload = function (){
+                                        $(".container").toggleClass("log-in");
+                                        $(".container-form").css("height","550px");
+                                }
+                script.
+                        var idsave=null; //아이디저장
+                        var emailsave=null; //이메일저장
+                        var ic="false"; //아이디체크
+                        var ec="false"; //이메일체크
+                        //공백제거
+                        function trim(obj){ //공백제거
+                                var a = $(obj).val().replace(/ /gi, '');
+                                $(obj).val(a);
+                                return;
+                        };
+                        //아이디 중복확인
+                        $("#idck").click(function(){
+                                var text = $("#idcheck").val();
+                                var regexp = /[0-9a-zA-Z;\-]/; // 숫자,영문,특수문자
+                                // var regexp = /[0-9]/; // 숫자만
+                                // var regexp = /[a-zA-Z]/; // 영문만
+                                if(text.length>10 || text.length<4){
+                                        alert("아이디는 최소4자 최대10자까지 가능합니다.");
+                                        $("#idcheck").css("box-shadow","0 0 5px 1px #ff73b3");
+                                        $("#idcheck").css("border","1px solid #ff73b3");
+                                        return;
+                                }for( var i=0; i<text.length; i++){
+                                        if(text.charAt(i) != " " && regexp.test(text.charAt(i)) == false ){
+                                                alert("특수문자는 입력할 수 없습니다.");
+                                                $("#idcheck").css("box-shadow","0 0 5px 1px #ff73b3");
+                                                $("#idcheck").css("border","1px solid #ff73b3");
+                                                return;
+                                }}
+                                var id=$("#idcheck").val();
+                                $.ajax({
+                                        url:"/idcheck",
+                                        dataType:'json',
+                                        type:"post",
+                                        data:{'id':id},
+                                        success: function(result){
+                                                if(result.result){
+                                                        alert("중복된 아이디입니다.");
+                                                        //- $('#idck').css("background-color","#3f8be9");
+                                                        $("#idcheck").css("box-shadow","0 0 5px 1px #ff73b3");
+                                                        $("#idcheck").css("border","1px solid #ff73b3");
+                                                }else{
+                                                        alert("사용가능한 아이디입니다");
+                                                        $("#idcheck").css("box-shadow","0 0 5px 1px rgb(63, 139, 233)");
+                                                        $("#idcheck").css("border","1px solid rgb(63, 139, 233)");
+                                                        idsave=$("#idcheck").val();
+                                                        ic="false";
+                                                }
+                                        }
+                                })
+                        });
+                        //이메일정규식
+                        function checkEmail(email) { 
+                                var regExp = /^([0-9a-zA-Z_-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/; 
+                                // var regExp = /^[-!#$%&'*+./0-9=?A-Z^_a-z{|}~]+@[-!#$%&'*+/0-9=?A-Z^_a-z{|}~]+.[-!#$%&'*+./0-9=?A-Z^_a-z{|}~]+$/;
+                                if(regExp.test(email)) {
+                                        return true;
+                                } else {
+                                        return false;
+                        }};
+                        //휴대폰 정규식
+                        function checkPhone(number){
+                                var regExp=/^\d{3}-\d{4}-\d{4}$/;
+                                if(regExp.test(number)) {
+                                        return true;
+                                } else {
+                                        return false;
+                        }};
+                        //회원가입
+                        $("#regibtn").click(function(){
+                                var id=$('#idcheck').val();
+                                var email=$('#emailcheck').val();
+                                var pw=$('#regipw').val();
+                                var name=$("#reginame").val();
+                                var pwok=$('#regipwok').val();
+                                var birth=$("#birth").val();
+                                var number=$("#phone").val();
+                                console.log(birth);
+                                if(id==''){
+                                        alert("아이디를 입력하세요.");
+                                        $('#idcheck').css("box-shadow","0 0 5px 1px #ff73b3");
+                                        $('#idcheck').css("border","1px solid #ff73b3");
+                                }else if(email==''){
+                                        alert("이메일을 입력하세요.");
+                                        $('#emailcheck').css("box-shadow","0 0 5px 1px #ff73b3");
+                                        $('#emailcheck').css("border","1px solid #ff73b3");
+                                }else if(pw==''){
+                                        alert("비밀번호를 입력하세요.");
+                                }else if(pwok==''){
+                                        alert("비밀번호확인을 입력하세요.");
+                                }else if(name==''){
+                                        alert("이름을 입력하세요.");
+                                }else if(number==""){
+                                        alert("휴대폰번호를 입력하세요");
+                                }else if(pw.length>20 || pw.length<4){
+                                        alert("비밀번호는 최소4자 최대20자까지 가능합니다.");
+                                }else if(pw!=pwok){
+                                        alert("비밀번호가 일치하지 않습니다.");
+                                }else if(birth==''){
+                                        alert("생년월일을 선택 해주세요.");
+                                }else  if(!checkPhone(number)){
+                                        alert("휴대폰번호가 유효하지않습니다.");
+                                }else if(idsave!=id){
+                                        alert("아이디중복을 다시 확인 해주세요.");
+                                        $('#idcheck').css("box-shadow","0 0 5px 1px #ff73b3");
+                                        $('#idcheck').css("border","1px solid #ff73b3");
+                                        $("#idlbl")[0].innerText="아이디중복을 다시 확인 해주세요.";
+                                        ic="true";
+                                }else if(emailsave!=email){
+                                        alert("이메일중복을 다시 확인 해주세요.");
+                                        $('#emailcheck').css("box-shadow","0 0 5px 1px #ff73b3");
+                                        $('#emailcheck').css("border","1px solid #ff73b3");
+                                        $("#emaillbl")[0].innerText="이메일중복을 다시 확인 해주세요.";
+                                        ec="true";
+                                }else{
+                                        $('#register').submit();
+                                }
+                        })
+                        //이메일 중복화인
+                        $("#emailck").click(function(){
+                                var email=$('#emailcheck').val();
+                                if(email.length>30){
+                                        alert("이메일은 30자까지 가능합니다.")
+                                        $("#emailcheck").css("box-shadow","0 0 5px 1px #ff73b3");
+                                        $("#emailcheck").css("border","1px solid #ff73b3");
+                                        return;
+                                }else if(!checkEmail(email)){
+                                        alert("이메일형식을 제대로입력하세요.");
+                                        $("#emailcheck").css("box-shadow","0 0 5px 1px #ff73b3");
+                                        $("#emailcheck").css("border","1px solid #ff73b3");
+                                        return;
+                                }
+                                $.ajax({
+                                url : "/emailcheck",
+                                type : "POST",
+                                cache : false,
+                                data : {'email':email},
+                                success : function(result){
+                                        if(result.result == 1){
+                                                        alert("중복된 이메일입니다.");
+                                                        $("#emailcheck").css("box-shadow","0 0 5px 1px #ff73b3");
+                                                        $("#emailcheck").css("border","1px solid #ff73b3");
+                                                }
+                                                else{
+                                                        alert("사용가능한 이메일입니다.");
+                                                        $("#emailcheck").css("box-shadow","0 0 5px 1px rgb(63, 139, 233)");
+                                                        $("#emailcheck").css("border","1px solid rgb(63, 139, 233)");
+                                                        emailsave=email;
+                                                        ec="false";
+                                                }
+                                }});
+                        });
+                        //로그인-회원가입 폼전환
+                        $(".info-item .btn").click(function(){
+                                $(".container").toggleClass("log-in");
+                                if($(this)[0].innerText=="회원가입"){
+                                        $(".container-form").css("height","550px");
+                                }else{
+                                        $(".container-form").css("height","380px");
+                                }
+                        });
+                        //로그인
+                        $("#loginbtn").click(function(){
+                                if($('#loginid').val()==''){
+                                        alert("아이디를 입력하세요.");
+                                }else if($('#loginpw').val()==''){
+                                        alert("비밀번호를 입력하세요.");
+                                }else{
+                                        $(".container-form").css("height","200px");
+                                        $(".container").addClass("active");
+                                        $('.container-forms').find('label').css("display","none");
+                                        setTimeout(function(){
+                                                $("#login").submit();
+                                        },1000)
+                                }
+                        });
+                        //회원가입 css
+                        $('.container-forms').find('input').on('keyup blur focus', function (e) {
+                                var $this = $(this),
+                                label=$this.prev('label');
+                                if (e.type === 'keyup') {
+                                        if($this[0].id=="idcheck"){
+                                                if($this.val() === ''){
+                                                        $this.css("box-shadow","0 0 5px 1px rgb(63, 139, 233)");
+                                                        $this.css("border","1px solid rgb(63, 139, 233)");
+                                                        label[0].innerText="아이디";
+                                                        ic="false";
+                                                }if(idsave==null){
+                                                }else if(idsave!=$this[0].value){
+                                                        $this.css("box-shadow","0 0 5px 1px #ff73b3");
+                                                        $this.css("border","1px solid #ff73b3");
+                                                        label[0].innerText="아이디중복을 다시 확인 해주세요.";
+                                                        idsave=null;
+                                                        ic="true";
+                                                }else{
+                                                        $this.css("box-shadow","0 0 5px 1px rgb(63, 139, 233)");
+                                                        $this.css("border","1px solid rgb(63, 139, 233)");
+                                                        label[0].innerText="아이디";
+                                                        ic="false";
+                                                }
+                                        }if($this[0].id=="emailcheck"){
+                                                if($this.val() === ''){
+                                                        $this.css("box-shadow","0 0 5px 1px rgb(63, 139, 233)");
+                                                        $this.css("border","1px solid rgb(63, 139, 233)");
+                                                        label[0].innerText="이메일";
+                                                        ec="false";
+                                                }if(emailsave==null){
+                                                }else if(emailsave!=$this[0].value){
+                                                        $this.css("box-shadow","0 0 5px 1px #ff73b3");
+                                                        $this.css("border","1px solid #ff73b3");
+                                                        label[0].innerText="이메일중복을 다시 확인 해주세요.";
+                                                        emailsave=null;
+                                                        ec="true";
+                                                }else{
+                                                        $this.css("box-shadow","0 0 5px 1px rgb(63, 139, 233)");
+                                                        $this.css("border","1px solid rgb(63, 139, 233)");
+                                                        label[0].innerText="이메일";
+                                                        ec="false";
+                                                }
+                                        }if($this[0].id=="regipwok"){
+                                                if($("#regipw").val()!=$("#regipwok").val()){
+                                                        label[0].innerText="비밀번호가 일치하지않습니다";
+                                                        $this.css("box-shadow","0 0 5px 1px #ff73b3");
+                                                        $this.css("border","1px solid #ff73b3");
+                                                }else{
+                                                        label[0].innerText="비밀번호가 일치합니다";
+                                                        $this.css("box-shadow","0 0 5px 1px rgb(63, 139, 233)");
+                                                        $this.css("border","1px solid rgb(63, 139, 233)");
+                                                }
+                                        }if ($this.val() === '') {
+                                                if($this[0].id=="regipwok"){
+                                                        label[0].innerText="비밀번호 확인 *";
+                                                        $this.css("box-shadow","0 0 5px 1px rgb(63, 139, 233)");
+                                                        $this.css("border","1px solid rgb(63, 139, 233)");
+                                                }
+                                                label.removeClass('active highlight');
+                                        } else {
+                                                label.addClass('active highlight');
+                                        }
+                                } else if (e.type === 'blur') {
+                                        if( $this.val() === '' ) {
+                                                label.removeClass('active highlight'); 
+                                                if($this[0].id=="idcheck"){
+                                                        if(ic=="true"){
+                                                                $this.css("box-shadow","0 0 5px 1px #ff73b3");
+                                                                $this.css("border","1px solid #ff73b3");
+                                                        }else{
+                                                                $this.css("box-shadow","0 0 5px 1px rgb(63, 139, 233)");
+                                                                $this.css("border","1px solid rgb(63, 139, 233)");
+                                                        }
+                                                }if($this[0].id=="emailcheck"){
+                                                        if(ec=="true"){
+                                                                $this.css("box-shadow","0 0 5px 1px #ff73b3");
+                                                                $this.css("border","1px solid #ff73b3");
+                                                        }else{
+                                                                $this.css("box-shadow","0 0 5px 1px rgb(63, 139, 233)");
+                                                                $this.css("border","1px solid rgb(63, 139, 233)");
+                                                        }
+                                                }
+                                        } else {
+                                                label.removeClass('highlight');   
+                                                if($this[0].id=="idcheck"){
+                                                        if(ic=="true"){
+                                                                $this.css("box-shadow","0 0 5px 1px #ff73b3");
+                                                                $this.css("border","1px solid #ff73b3");
+                                                        }else{
+                                                                $this.css("box-shadow","0 0 5px 1px rgb(63, 139, 233)");
+                                                                $this.css("border","1px solid rgb(63, 139, 233)");
+                                                        }
+                                                }if($this[0].id=="emailcheck"){
+                                                        if(ec=="true"){
+                                                                $this.css("box-shadow","0 0 5px 1px #ff73b3");
+                                                                $this.css("border","1px solid #ff73b3");
+                                                        }else{
+                                                                $this.css("box-shadow","0 0 5px 1px rgb(63, 139, 233)");
+                                                                $this.css("border","1px solid rgb(63, 139, 233)");
+                                                        }
+                                                }
+                                        }   
+                                } else if (e.type === 'focus') {
+                                        if( $this.val() === '' ) {
+                                                label.removeClass('highlight'); 
+                                                if($this[0].id=="idcheck"){
+                                                        if(ic=="true"){
+                                                                $this.css("box-shadow","0 0 5px 1px #ff73b3");
+                                                                $this.css("border","1px solid #ff73b3");
+                                                        }else{
+                                                                $this.css("box-shadow","0 0 5px 1px rgb(63, 139, 233)");
+                                                                $this.css("border","1px solid rgb(63, 139, 233)");
+                                                        }
+                                                }else if($this[0].id=="emailcheck"){
+                                                        if(ec=="true"){
+                                                                $this.css("box-shadow","0 0 5px 1px #ff73b3");
+                                                                $this.css("border","1px solid #ff73b3");
+                                                        }else{
+                                                                $this.css("box-shadow","0 0 5px 1px rgb(63, 139, 233)");
+                                                                $this.css("border","1px solid rgb(63, 139, 233)");
+                                                        }
+                                                }
+                                        } else if( $this.val() !== '' ) {
+                                                label.addClass('highlight');
+                                                if($this[0].id=="idcheck"){
+                                                        if(ic=="true"){
+                                                                $this.css("box-shadow","0 0 5px 1px #ff73b3");
+                                                                $this.css("border","1px solid #ff73b3");
+                                                        }else{
+                                                                $this.css("box-shadow","0 0 5px 1px rgb(63, 139, 233)");
+                                                                $this.css("border","1px solid rgb(63, 139, 233)");
+                                                        }
+                                                }else if($this[0].id=="emailcheck"){
+                                                        if(ec=="true"){
+                                                               $this.css("box-shadow","0 0 5px 1px #ff73b3");
+                                                                $this.css("border","1px solid #ff73b3");
+                                                        }else{
+                                                                $this.css("box-shadow","0 0 5px 1px rgb(63, 139, 233)");
+                                                                $this.css("border","1px solid rgb(63, 139, 233)");
+                                                        }
+                                                }
+                                        }
+                                }
+                        });
+

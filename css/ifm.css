@@ -1,0 +1,115 @@
+.ifm {
+        position: relative;
+        left: 0;
+        top: 20px;
+        width: 1200px;
+        height: 700px;
+        margin:0px auto;
+        font-family: "Roboto", sans-serif;
+        background-color: rgb(219, 182, 185);
+        overflow: hidden;
+}
+.ifm h1,h2{
+        margin: 0px;
+}
+.grade{
+        display: inline-block;
+        position: relative;
+        top:10px;
+        width:150px;
+        height: 50px;
+        background-color: blue;
+        display: none;
+}
+.memdiv{
+        display: inline-block;
+        top: 20px;
+        position: relative;
+        border-bottom:rgb(97, 96, 96)  2px solid;
+        width: 1000px;
+        /* margin-left: 15px; */
+        margin-left: 169px;
+        padding-bottom: 7px;
+}
+.memdiv h2{
+        color:red;
+        display: inline-block;
+}
+.memdiv p{
+        display: inline;
+        font-size: 12px;
+        margin-left: 20px;
+        color: #666;
+}
+.list{
+        position: fixed;
+        top: 290px;
+}
+.link-container {
+        width: 150px;
+        font-family: Maplestory_OTF; 
+}
+      
+.link-container h2 {
+        background-color: rgb(235, 80, 92);
+        color: black;
+        font-size: 18px;
+        line-height: 30px;
+        margin: 0;
+        padding-left: 10px;
+}
+
+.link-container ul {
+        font-size: 13px;
+        list-style-type: none;
+        padding-left: 0;
+        margin: 0;
+}
+
+.link-container ul li{
+        background-image: url('https://i.msdn.microsoft.com/dynimg/IC688534.png');
+        background-repeat: no-repeat;
+        background-position: center left;
+        border-left: #777 1px solid;
+        border-right: #777 1px solid;
+        padding-left: 20px;
+        line-height: 30px;
+}
+.link-container ul li:last-child{
+        border-bottom: #777 1px solid;
+}
+.link-container ul li a {
+        text-decoration: none;
+        color:#777;
+}
+.link-container ul li a:hover {
+        text-decoration:underline;
+        color:black;
+}
+.table{
+        position: relative;
+        display: inline-block;
+        width: 1000px;
+        margin-left: 169px;
+        top: 40px;
+}
+.table tr{
+        display: table;
+        width:1000px;
+        border-top:#777 1px solid;
+}
+.table th{
+        text-align: left;
+        width: 20%;
+        font-size:12px;
+}
+.table td{
+        text-align: left;
+        font-size:12px;
+}
+.table tr:nth-child(1){
+        border-top: 2px rgb(97, 96, 96) solid;
+}
+.table tr:nth-child(5){
+        border-bottom: 2px rgb(97, 96, 96) solid;
+}

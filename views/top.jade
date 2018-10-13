@@ -1,0 +1,41 @@
+doctype html
+html
+        head
+                meta(charset='utf-8')
+                link(rel='stylesheet',href='./css/main.css')
+                script(src='https://code.jquery.com/jquery-2.2.4.min.js')
+        body
+                .topimp
+                        .inner
+                                .loginlist
+                                        nav
+                                                ul.login
+                                                        if(name)
+                                                                li: a(href="/logout") 로그아웃
+                                                                li: a(href="/information") 회원정보
+                                                        else
+                                                                li: a(href="/login") 로그인
+                                                                li: a(href="/register") 회원가입
+                                                        li: a(href="/basket") 장바구니
+                                                        li: a(href="/help") 고객센터
+                .topdiv
+                        .search
+                                .searchtop
+                                        .searchbox
+                                                h1.logo
+                                                        a(href="/")
+                                                button#search
+                        nav.category
+                                ul#mainMenu
+                                        li: a(href='/keboard') 키보드
+                                        li: a(href='/mouse') 마우스
+                                        li: a(href='/headset') 헤드셋
+                                        li: a(href='/chair') 게이밍 의자
+                                        li: a(href='/pad') 패드
+                                        li: a(href='/acc') PC악세사리
+                block content
+        script(src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js')
+        script.
+                $("#search").click(function(){
+                        location.href="/search"
+                })

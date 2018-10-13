@@ -1,0 +1,126 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+.topimp {
+    position: relative;
+    width:100%;
+    /* border-bottom:1px solid #dadada; */
+    border-bottom:1px solid #F43142; 
+    z-index:10000;
+}
+.topimp .inner{
+    width: 1200px;
+    height: 39px;
+    margin: 0 auto;
+}
+.loginlist{
+    padding: 6px;
+    float: right;
+}
+.loginlist nav .login{
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+.loginlist nav .login li{
+    border-left:1px solid #999;
+    display: inline;
+    font-size: 12px;
+    letter-spacing: -1px;
+    padding: 0 10px 0 15px;
+}
+.loginlist nav .login li:first-child{
+    border-left:0px
+}
+.loginlist a{
+    color: #666;
+    text-decoration: none;
+    font-family: Maplestory OTF;
+}
+.loginlist a:hover{
+    color:red;
+    text-decoration: underline;
+}
+.topdiv{
+    position: relative;
+    background: #fff;
+    z-index: 40;
+    display: block;
+    border-bottom:1px solid #F43142;
+}
+.searchtop{
+    width:1200px;
+    margin:0 auto;
+}
+.search{
+    width:100%;
+    height:100px;
+    border-bottom:1px solid #F43142;
+}
+.searchbox{
+    top: 29px;
+    position: relative;
+    width: 377px;
+    height: 38px;
+    margin: 0 auto;
+    padding: 0 80px 0 111px;
+    background: url(/img/test.png) no-repeat 0 0;
+}
+.searchbox .logo{
+    position: absolute;
+    left: 0px;
+    top: -13px;
+    width: 109px;
+    height: 32px;
+}
+.searchbox .logo a{
+    display: block;
+    height: 100%;
+    text-indent: -9999px;
+}
+#search{
+    position: absolute;
+    right: 24px;
+    top: -8px;
+    width: 42px;
+    height: 40px;
+    background: none;
+    text-indent: -9999px;
+    border: 0px;
+    cursor: pointer;
+}
+.category{
+    width: 1200px;
+    margin: 10px auto; 
+    text-align: center;
+}
+
+
+#mainMenu{
+    list-style: none;
+    margin: 0; padding: 0 0 25px 5px;
+    margin-left: 32%;
+    /* border-bottom: 1px solid red; */
+  }
+  #mainMenu li{
+    float: left;
+    margin: 0; padding: 0 10px;
+  }
+  #mainMenu a{
+    display: block;
+    margin: 0; padding: 5px 0 1px 0;  
+    height: 16px;
+  
+    font-family: Maplestory_OTF; 
+    font-size: 17px; color: #000000; 
+    text-decoration:none; 
+  }
+  @font-face {
+    font-family: Maplestory_OTF; 
+    src:  url("/img/Maplestory_OTF_Light.otf"),url("/img/Maplestory Light.ttf"),url("/img/Maplestory_OTF_Bold.otf"),url("/img/Maplestory Bold_0.ttf");
+  }
+  /* #mainMenu a:visited{ color: #F43142; } */
+  #mainMenu a:hover{ color: #F43142; }
+  /* #mainMenu a:active{ color: #F43142; } */
+  #mainMenu a:hover, #mainMenu a:active{ border-bottom: 3px solid #F43142; }
