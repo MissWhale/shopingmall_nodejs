@@ -1,0 +1,148 @@
+.upload {
+        position: relative;
+        left: 0;
+        top: 20px;
+        width: 1200px;
+        height: auto;
+        margin:0px auto;
+        font-family: "Roboto", sans-serif;
+        border:1px solid;
+}
+.manage{
+        width: auto;
+        margin: 0px auto 10px 0px; 
+        text-align: center;
+        height: 42px;
+        background: #F43142;
+    }
+#manageMenu{
+        list-style: none;
+        margin: 0; padding: 0 0 25px 5px;
+        margin-left: 32%;
+}
+#manageMenu li{
+        float: left;
+        margin: 0; padding: 0 10px;
+}
+#manageMenu a{
+        display: block;
+        margin: 0; padding: 5px 0 1px 0;  
+        height: 32px;
+        font-family: Maplestory_OTF; 
+        font-size: 30px; color: brown; 
+        text-decoration:none; 
+        cursor: pointer;
+}
+#manageMenu a:hover, #manageMenu a:active{ border-bottom: 5px solid white;color: white; }
+
+.usermg{
+        display: block;
+        width: 1120px;
+        border: 1px solid;
+        margin: 10px 40px;
+        height: 700px;
+}
+.prodmg{
+        display: block;
+        width: 1120px;
+        border: 1px solid;
+        margin: 10px 40px;
+        height: 700px;
+}
+.ordermg{
+        display: block;
+        width: 1120px;
+        border: 1px solid;
+        margin: 10px 40px;
+        height: 700px;
+}
+.faqmg{
+        display: block;
+        width: 1120px;
+        border: 1px solid;
+        margin: 10px 40px;
+        height: 700px;
+}
+a {
+        text-decoration:none;
+        color:black;
+}
+.rainbtn {
+        width:100px;
+        height:30px;
+        background-image: linear-gradient(90deg, #00C0FF 0%, #FFCF00 49%, #FC4F4F 80%, #00C0FF 100%);
+        border-radius:5px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-transform:uppercase;
+        font-size:14px;
+        font-weight:bold;
+}
+.rainbtn:after {
+        content:attr(alt);
+        width:95px;
+        height:25px;
+        background-color:white;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+}
+.rainbtn:hover {
+        animation:slidebg 2s linear infinite;
+}
+
+@keyframes slidebg {
+        to {
+                background-position:20vw;
+        }
+}
+
+.table{
+        display: block;
+        width: 1120px;
+}
+.table tr{
+        display: table;
+        width:1120px;
+        border-top:#777 1px solid;
+}
+.table th{
+        text-align: left;
+        width: 20%;
+        font-size:12px;
+}
+.table td{
+        text-align: left;
+        font-size:12px;
+}
+.table tr:nth-child(1){
+        border-top: 2px rgb(97, 96, 96) solid;
+}
+.table tr:nth-child(9){
+        border-bottom: 2px rgb(97, 96, 96) solid;
+        margin-bottom: 20px;
+}
+input,textarea{
+        width:100%;
+        border:2px solid #aaa;
+        border-radius:4px;
+        margin:8px 0;
+        outline:none;
+        padding:8px;
+        box-sizing:border-box;
+        transition:.3s;
+}
+      
+input:focus,textarea:focus{
+        border-color:#ff747d;
+        box-shadow:0 0 8px 0 #ff747d;
+}
+textarea{
+        resize: none;
+        max-height: 500px;
+}
+.uploadbtn{
+        width: auto;
+        margin-left:460px;
+}

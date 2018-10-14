@@ -1,0 +1,14 @@
+include ../user/top.jade 
+                link(rel='stylesheet',href='./css/management.css')
+                .upload
+                        nav.manage
+                                ul#manageMenu
+                                        li: a#user(href="/management") 회원관리
+                                        li: a#prod(href="/product") 상품관리
+                                        li: a#order(href="/order") 주문관리
+                                        li: a#faq(href="/faq") FAQ관리
+                        .faqmg
+                                a FAQ관리
+        script.
+                $("#faq").css("border-bottom","5px solid white");
+                $("#faq").css("color","white");

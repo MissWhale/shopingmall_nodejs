@@ -1,0 +1,64 @@
+include ../user/top.jade 
+                link(rel='stylesheet',href='./css/management.css')
+                link(rel='stylesheet', href='./css/selectbox.min.css')
+                script(type='text/javascript', src='./js/selectbox.min.js')
+                script(type='text/javascript', src='./js/autosize.js')
+                .upload
+                        nav.manage
+                                ul#manageMenu
+                                        li: a#user(href="/management") 회원관리
+                                        li: a#prod(href="/product") 상품관리
+                                        li: a#order(href="/order") 주문관리
+                                        li: a#faq(href="/faq") FAQ관리
+                        .prodmg(style="border:0px")
+                                h2 상품등록
+                                form#frm(action="/productupload" method="post")
+                                        .table
+                                                table
+                                                        tbody
+                                                                tr
+                                                                        th 상품분류
+                                                                        td 
+                                                                                select#color.justselect(name='kind')
+                                                                                        option(value='keborad') 키보드
+                                                                                        option(value='mouse') 마우스
+                                                                                        option(value='headset') 헤드셋
+                                                                                        option(value='chair') 게이밍의자
+                                                                                        option(value='pad') 패드
+                                                                                        option(value='pcacc') PC악세사리
+                                                                tr
+                                                                        th 상품코드
+                                                                        td: input(type='text' style="width: 250px;" name="num")
+                                                                tr
+                                                                        th 상품명
+                                                                        td: input(type='text' style="width: 250px;" name="name")
+                                                                tr
+                                                                        th 제조사
+                                                                        td: input(type='text' style="width: 250px;" name="comp")
+                                                                tr
+                                                                        th 판매수량
+                                                                        td: input(type='number' min=0 style="width: 100px;" value="0" name="count")
+                                                                tr
+                                                                        th 가격
+                                                                        td
+                                                                                input(type='text' style="width: 100px;" value="0" name="price") 
+                                                                                p(style="display: inline;") 원
+                                                                tr
+                                                                        th 상품설명
+                                                                        td: textarea#explan(name="text")
+                                                                tr
+                                                                        th 썸네일
+                                                                        td: input(type='text' name="simg")
+                                                                tr
+                                                                        th 사진
+                                                                        td: input(type='text' name="bimg")
+                                .uploadbtn
+                                        a.rainbtn#upload(alt="등록" style="margin: 10px 0px;")
+                                        a.rainbtn(href="/product" alt="취소" style="margin-left: 110px;margin-top: -40px;")
+        script.
+                $("#prod").css("border-bottom","5px solid white");
+                $("#prod").css("color","white");
+                autosize(document.querySelectorAll('#explan'));
+                $("#upload").click(function(){
+                        $("#frm").submit();
+                })

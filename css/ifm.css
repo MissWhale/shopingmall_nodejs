@@ -6,7 +6,7 @@
         height: 700px;
         margin:0px auto;
         font-family: "Roboto", sans-serif;
-        background-color: rgb(219, 182, 185);
+        border:1px solid;
         overflow: hidden;
 }
 .ifm h1,h2{
@@ -112,4 +112,68 @@
 }
 .table tr:nth-child(5){
         border-bottom: 2px rgb(97, 96, 96) solid;
+}
+.passmodi{
+        position: relative;
+        display: none;
+        width: 1000px;
+        left: 169px;
+        top: 50px;
+        height: 200px;
+}
+.passtt{
+        display: inline-block;
+        position: relative;
+        border-bottom:rgb(97, 96, 96)  2px solid;
+        width: 1000px;
+        color:red;
+        padding-bottom: 7px;
+}
+.passfield{
+        width: 920px;
+        height: auto;
+        margin: 20px 40px;
+        background:rgb(226, 222, 222);
+        font-size: 12px;
+}
+.passfield th{
+        text-align: left;
+}
+.passbtn{
+        width: auto;
+        margin-left: 350px;
+}
+a {
+        text-decoration:none;
+        color:black;
+}
+.rainbtn {
+        width:100px;
+        height:30px;
+        background-image: linear-gradient(90deg, #00C0FF 0%, #FFCF00 49%, #FC4F4F 80%, #00C0FF 100%);
+        border-radius:5px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-transform:uppercase;
+        font-size:14px;
+        font-weight:bold;
+}
+.rainbtn:after {
+        content:attr(alt);
+        width:95px;
+        height:25px;
+        background-color:white;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+}
+.rainbtn:hover {
+        animation:slidebg 2s linear infinite;
+}
+
+@keyframes slidebg {
+        to {
+                background-position:20vw;
+        }
 }

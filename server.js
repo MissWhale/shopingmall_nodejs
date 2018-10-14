@@ -60,7 +60,6 @@ app.get('/information',function(req,res){
                 res.render('ifm',{name:dname,user:result[0],birth:test});
             }
         });
-        // res.render('ifm',{name:dname});
     }else{
         res.render('ifm',{regiok:true});
     }
@@ -133,6 +132,30 @@ app.post('/register',function(req,res){
             }
         }
     })
+})
+app.post("/passchange",function(req,res){
+    var pw={
+        pw:req.body.pw,
+        newpw:req.body.newpw,
+        id:req.session.user
+    }
+    var sql="select count(*) as result from login where id=? and pw=?";
+    con.query(sql,[pw.id,pw.pw],function(err,result){
+        if(err) console.log(err);
+        else{
+            if(result[0].result){
+                var sql="update login set pw=? where id=? and pw=?";
+                con.query(sql,[pw.newpw,pw.id,pw.pw],function(err,result){
+                    if(err) console.log(err);
+                    else{
+                        res.send(true);
+                    }
+                });
+            }else{
+                res.send(false);
+            }
+        }
+    });
 })
 app.post("/idcheck",function(req,res){
     var id=req.body.id;
