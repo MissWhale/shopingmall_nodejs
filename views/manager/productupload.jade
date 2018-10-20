@@ -10,7 +10,7 @@ include ../user/top.jade
                                         li: a#prod(href="/product") 상품관리
                                         li: a#order(href="/order") 주문관리
                                         li: a#faq(href="/faq") FAQ관리
-                        .prodmg(style="border:0px")
+                        .prodmg(style="border:0px;margin-left:30px;margin-bottom: 50px;")
                                 h2 상품등록
                                 form#frm(action="/productupload" method="post")
                                         .table
@@ -20,12 +20,12 @@ include ../user/top.jade
                                                                         th 상품분류
                                                                         td 
                                                                                 select#color.justselect(name='kind')
-                                                                                        option(value='keborad') 키보드
-                                                                                        option(value='mouse') 마우스
-                                                                                        option(value='headset') 헤드셋
-                                                                                        option(value='chair') 게이밍의자
-                                                                                        option(value='pad') 패드
-                                                                                        option(value='pcacc') PC악세사리
+                                                                                        option(value='키보드') 키보드
+                                                                                        option(value='마우스') 마우스
+                                                                                        option(value='헤드셋') 헤드셋
+                                                                                        option(value='의자') 게이밍의자
+                                                                                        option(value='패드') 패드
+                                                                                        option(value='PC악세사리') PC악세사리
                                                                 tr
                                                                         th 상품코드
                                                                         td: input(type='text' style="width: 250px;" name="num")
@@ -45,20 +45,81 @@ include ../user/top.jade
                                                                                 p(style="display: inline;") 원
                                                                 tr
                                                                         th 상품설명
-                                                                        td: textarea#explan(name="text")
+                                                                        td: textarea#explan(name="text" )
+                                form#sfrm(method="post" enctype="multipart/form-data" )
+                                        .table
+                                                table
+                                                        tbody
                                                                 tr
                                                                         th 썸네일
-                                                                        td: input(type='text' name="simg")
+                                                                        td
+                                                                                //- input(type='text' name="simg" style="width: 400px;")
+                                                                                input#simg(type='file' name="simg" accept=".jpg,.jpeg,.png,.gif,.bmp")
+                                                                input(name="no" style="display:none;")
+                                form#bfrm(method="post" enctype="multipart/form-data" )
+                                        .table
+                                                table
+                                                        tbody
                                                                 tr
                                                                         th 사진
-                                                                        td: input(type='text' name="bimg")
+                                                                        td
+                                                                                //- input(type='text' name="bimg" style="width: 400px;")
+                                                                                input#bimg(type='file' name="bimg" accept=".jpg,.jpeg,.png,.gif,.bmp")
+                                                                input(name="bno" style="display:none;")
                                 .uploadbtn
                                         a.rainbtn#upload(alt="등록" style="margin: 10px 0px;")
                                         a.rainbtn(href="/product" alt="취소" style="margin-left: 110px;margin-top: -40px;")
         script.
+                $.ajax({
+                        url:"/getnum",
+                        type:"post",
+                        success: function(result){
+                                var no=result.num;
+                                $("#sfrm")[0][0].value=no;
+                                $("#bfrm")[0][0].value=no;
+                        }
+                })
                 $("#prod").css("border-bottom","5px solid white");
                 $("#prod").css("color","white");
                 autosize(document.querySelectorAll('#explan'));
                 $("#upload").click(function(){
                         $("#frm").submit();
+                })
+                $("#simg").on("change",function(){
+                        var form=$('#sfrm')[0];
+                        var data = new FormData(form);
+                        console.log(data);
+                        $.ajax({
+                                url:"/simgdb",
+                                type:"post",
+                                processData: false,
+                                contentType: false,
+                                data:data,
+                                success: function(result){
+                                        if(!result){
+                                                alert("사진 업로드가 실패했습니다.");
+                                        }else{
+                                                console.log("성공");
+                                        }
+                                }
+                        })
+                })
+                $("#bimg").on("change",function(){
+                        var form=$('#bfrm')[0];
+                        var data = new FormData(form);
+                        console.log(form);
+                        $.ajax({
+                                url:"/bimgdb",
+                                type:"post",
+                                processData: false,
+                                contentType: false,
+                                data:data,
+                                success: function(result){
+                                        if(!result){
+                                                alert("사진 업로드가 실패했습니다.");
+                                        }else{
+                                                console.log("성공");
+                                        }
+                                }
+                        })
                 })

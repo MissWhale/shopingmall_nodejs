@@ -1,0 +1,143 @@
+include ../user/top.jade 
+                link(rel='stylesheet',href='./css/management.css')
+                link(rel='stylesheet', href='./css/selectbox.min.css')
+                script(type='text/javascript', src='./js/selectbox.min.js')
+                script(type='text/javascript', src='./js/autosize.js')
+                .upload
+                        nav.manage
+                                ul#manageMenu
+                                        li: a#user(href="/management") 회원관리
+                                        li: a#prod(href="/product") 상품관리
+                                        li: a#order(href="/order") 주문관리
+                                        li: a#faq(href="/faq") FAQ관리
+                        .prodmg(style="border:0px;margin-left:30px;margin-bottom: 50px;")
+                                h2 상품등록
+                                form#frm(action="/productupload" method="post")
+                                        .table
+                                                table
+                                                        tbody
+                                                                tr
+                                                                        th 상품분류
+                                                                        td 
+                                                                                select#color.justselect(name='kind')
+                                                                                        if(result.pkind=='키보드')
+                                                                                                option(value='키보드' selected) 키보드
+                                                                                        else
+                                                                                                option(value='키보드') 키보드
+                                                                                        if(result.pkind=='마우스')
+                                                                                                option(value='마우스' selected) 마우스
+                                                                                        else
+                                                                                                option(value='마우스') 마우스
+                                                                                        if(result.pkind=='헤드셋')
+                                                                                                option(value='헤드셋' selected) 헤드셋
+                                                                                        else
+                                                                                                option(value='헤드셋') 헤드셋
+                                                                                        if(result.pkind=='게이밍의자')
+                                                                                                option(value='게이밍의자' selected) 게이밍의자
+                                                                                        else
+                                                                                                option(value='게이밍의자') 게이밍의자
+                                                                                        if(result.pkind=='패드')
+                                                                                                option(value='패드' selected) 패드
+                                                                                        else
+                                                                                                option(value='패드') 패드
+                                                                                        if(result.pkind=='PC악세사리')
+                                                                                                option(value='PC악세사리' selected) PC악세사리
+                                                                                        else
+                                                                                                option(value='PC악세사리') PC악세사리
+                                                                tr
+                                                                        th 상품코드
+                                                                        td: input(type='text' style="width: 250px;" name="num" value=result.pnum)
+                                                                tr
+                                                                        th 상품명
+                                                                        td: input(type='text' style="width: 250px;" name="name" value=result.name)
+                                                                tr
+                                                                        th 제조사
+                                                                        td: input(type='text' style="width: 250px;" name="comp" value=result.comp)
+                                                                tr
+                                                                        th 판매수량
+                                                                        td: input(type='number' min=0 style="width: 100px;" name="count" value=result.count)
+                                                                tr
+                                                                        th 가격
+                                                                        td
+                                                                                input(type='text' style="width: 100px;"  name="price" value=result.ptext) 
+                                                                                p(style="display: inline;") 원
+                                                                tr
+                                                                        th 상품설명
+                                                                        td: textarea#explan(name="text" )=result.ptext
+                                form#sfrm(method="post" enctype="multipart/form-data" )
+                                        .table
+                                                table
+                                                        tbody
+                                                                tr
+                                                                        th 썸네일
+                                                                        td
+                                                                                //- input(type='text' name="simg" style="width: 400px;")
+                                                                                input#simg(type='file' name="simg" accept=".jpg,.jpeg,.png,.gif,.bmp" value=result.simgname)=result.simgorigin
+                                                                input(name="no" style="display:none;")
+                                form#bfrm(method="post" enctype="multipart/form-data" )
+                                        .table
+                                                table
+                                                        tbody
+                                                                tr
+                                                                        th 사진
+                                                                        td
+                                                                                //- input(type='text' name="bimg" style="width: 400px;")
+                                                                                input#bimg(type='file' name="bimg" accept=".jpg,.jpeg,.png,.gif,.bmp" value=result.bimgname)
+                                                                input(name="bno" style="display:none;")
+                                .uploadbtn
+                                        a.rainbtn#upload(alt="수정" style="margin: 10px 0px;")
+                                        a.rainbtn(href="/product" alt="취소" style="margin-left: 110px;margin-top: -40px;")
+        script.
+                $.ajax({
+                        url:"/getnum",
+                        type:"post",
+                        success: function(result){
+                                var no=result.max+1;
+                                $("#sfrm")[0][0].value=no;
+                                $("#bfrm")[0][0].value=no;
+                        }
+                })
+                $("#prod").css("border-bottom","5px solid white");
+                $("#prod").css("color","white");
+                autosize(document.querySelectorAll('#explan'));
+                $("#upload").click(function(){
+                        $("#frm").submit();
+                })
+                $("#simg").on("change",function(){
+                        var form=$('#sfrm')[0];
+                        var data = new FormData(form);
+                        console.log(data);
+                        $.ajax({
+                                url:"/simgdb",
+                                type:"post",
+                                processData: false,
+                                contentType: false,
+                                data:data,
+                                success: function(result){
+                                        if(!result){
+                                                alert("사진 업로드가 실패했습니다.");
+                                        }else{
+                                                console.log("성공");
+                                        }
+                                }
+                        })
+                })
+                $("#bimg").on("change",function(){
+                        var form=$('#bfrm')[0];
+                        var data = new FormData(form);
+                        console.log(form);
+                        $.ajax({
+                                url:"/bimgdb",
+                                type:"post",
+                                processData: false,
+                                contentType: false,
+                                data:data,
+                                success: function(result){
+                                        if(!result){
+                                                alert("사진 업로드가 실패했습니다.");
+                                        }else{
+                                                console.log("성공");
+                                        }
+                                }
+                        })
+                })
