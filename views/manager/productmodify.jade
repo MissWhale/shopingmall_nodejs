@@ -3,6 +3,7 @@ include ../user/top.jade
                 link(rel='stylesheet', href='./css/selectbox.min.css')
                 script(type='text/javascript', src='./js/selectbox.min.js')
                 script(type='text/javascript', src='./js/autosize.js')
+                script(type='text/javascript', src='./js/ckeditor/ckeditor.js')
                 .upload
                         nav.manage
                                 ul#manageMenu
@@ -12,58 +13,6 @@ include ../user/top.jade
                                         li: a#faq(href="/faq") FAQ관리
                         .prodmg(style="border:0px;margin-left:30px;margin-bottom: 50px;")
                                 h2 상품등록
-                                form#frm(action="/productupload" method="post")
-                                        .table
-                                                table
-                                                        tbody
-                                                                tr
-                                                                        th 상품분류
-                                                                        td 
-                                                                                select#color.justselect(name='kind')
-                                                                                        if(result.pkind=='키보드')
-                                                                                                option(value='키보드' selected) 키보드
-                                                                                        else
-                                                                                                option(value='키보드') 키보드
-                                                                                        if(result.pkind=='마우스')
-                                                                                                option(value='마우스' selected) 마우스
-                                                                                        else
-                                                                                                option(value='마우스') 마우스
-                                                                                        if(result.pkind=='헤드셋')
-                                                                                                option(value='헤드셋' selected) 헤드셋
-                                                                                        else
-                                                                                                option(value='헤드셋') 헤드셋
-                                                                                        if(result.pkind=='게이밍의자')
-                                                                                                option(value='게이밍의자' selected) 게이밍의자
-                                                                                        else
-                                                                                                option(value='게이밍의자') 게이밍의자
-                                                                                        if(result.pkind=='패드')
-                                                                                                option(value='패드' selected) 패드
-                                                                                        else
-                                                                                                option(value='패드') 패드
-                                                                                        if(result.pkind=='PC악세사리')
-                                                                                                option(value='PC악세사리' selected) PC악세사리
-                                                                                        else
-                                                                                                option(value='PC악세사리') PC악세사리
-                                                                tr
-                                                                        th 상품코드
-                                                                        td: input(type='text' style="width: 250px;" name="num" value=result.pnum)
-                                                                tr
-                                                                        th 상품명
-                                                                        td: input(type='text' style="width: 250px;" name="name" value=result.name)
-                                                                tr
-                                                                        th 제조사
-                                                                        td: input(type='text' style="width: 250px;" name="comp" value=result.comp)
-                                                                tr
-                                                                        th 판매수량
-                                                                        td: input(type='number' min=0 style="width: 100px;" name="count" value=result.count)
-                                                                tr
-                                                                        th 가격
-                                                                        td
-                                                                                input(type='text' style="width: 100px;"  name="price" value=result.ptext) 
-                                                                                p(style="display: inline;") 원
-                                                                tr
-                                                                        th 상품설명
-                                                                        td: textarea#explan(name="text" )=result.ptext
                                 form#sfrm(method="post" enctype="multipart/form-data" )
                                         .table
                                                 table
@@ -71,37 +20,82 @@ include ../user/top.jade
                                                                 tr
                                                                         th 썸네일
                                                                         td
-                                                                                //- input(type='text' name="simg" style="width: 400px;")
-                                                                                input#simg(type='file' name="simg" accept=".jpg,.jpeg,.png,.gif,.bmp" value=result.simgname)=result.simgorigin
-                                                                input(name="no" style="display:none;")
-                                form#bfrm(method="post" enctype="multipart/form-data" )
+                                                                                img#thumb(src="./dbimg/"+result.simgname style="border:1px solid;width:144px;height:144px")
+                                                                                input#simg(type='file' name="simg" accept=".jpg,.jpeg,.png,.gif,.bmp" style="display:none")
+                                                                                a.rainbtn#simgcgn(alt="썸네일변경")
+                                                                                a.rainbtn#simgcgnclose(alt="취소" style="display:none")
+                                                                input(name="no" style="display:none;" value=pro.num)
+                                form#frm(action="/productmodify" method="post")
                                         .table
                                                 table
                                                         tbody
+                                                                tr(style="border-top: 1px rgb(97, 96, 96) solid;")
+                                                                        th 상품분류
+                                                                        td 
+                                                                                select#color.justselect(name='kind')
+                                                                                        if(pro.pkind=='키보드')
+                                                                                                option(value='키보드' selected) 키보드
+                                                                                        else
+                                                                                                option(value='키보드') 키보드
+                                                                                        if(pro.pkind=='마우스')
+                                                                                                option(value='마우스' selected) 마우스
+                                                                                        else
+                                                                                                option(value='마우스') 마우스
+                                                                                        if(pro.pkind=='헤드셋')
+                                                                                                option(value='헤드셋' selected) 헤드셋
+                                                                                        else
+                                                                                                option(value='헤드셋') 헤드셋
+                                                                                        if(pro.pkind=='의자')
+                                                                                                option(value='의자' selected) 게이밍의자
+                                                                                        else
+                                                                                                option(value='의자') 게이밍의자
+                                                                                        if(pro.pkind=='패드')
+                                                                                                option(value='패드' selected) 패드
+                                                                                        else
+                                                                                                option(value='패드') 패드
+                                                                                        if(pro.pkind=='PC악세사리')
+                                                                                                option(value='PC악세사리' selected) PC악세사리
+                                                                                        else
+                                                                                                option(value='PC악세사리') PC악세사리
                                                                 tr
-                                                                        th 사진
+                                                                        th 상품코드
+                                                                        td: input(type='text' style="width: 250px;" name="num" value=pro.pnum)
+                                                                tr
+                                                                        th 상품명
+                                                                        td: input(type='text' style="width: 250px;" name="name" value=pro.name)
+                                                                tr
+                                                                        th 제조사
+                                                                        td: input(type='text' style="width: 250px;" name="comp" value=pro.comp)
+                                                                tr
+                                                                        th 판매수량
+                                                                        td: input(type='number' min=0 style="width: 100px;"  name="count" value=pro.count)
+                                                                tr
+                                                                        th 가격
                                                                         td
-                                                                                //- input(type='text' name="bimg" style="width: 400px;")
-                                                                                input#bimg(type='file' name="bimg" accept=".jpg,.jpeg,.png,.gif,.bmp" value=result.bimgname)
-                                                                input(name="bno" style="display:none;")
+                                                                                input(type='text' style="width: 100px;"  name="price" value=pro.price) 
+                                                                                p(style="display: inline;") 원
+                                                                tr
+                                                                        th 상품설명
+                                                                        td: textarea#explan(name="text" )=pro.ptext
+                                                                        input(name="no" style="display:none;" value=pro.num)
                                 .uploadbtn
-                                        a.rainbtn#upload(alt="수정" style="margin: 10px 0px;")
+                                        a.rainbtn#upload(alt="변경" style="margin: 10px 0px;")
                                         a.rainbtn(href="/product" alt="취소" style="margin-left: 110px;margin-top: -40px;")
         script.
-                $.ajax({
-                        url:"/getnum",
-                        type:"post",
-                        success: function(result){
-                                var no=result.max+1;
-                                $("#sfrm")[0][0].value=no;
-                                $("#bfrm")[0][0].value=no;
-                        }
-                })
                 $("#prod").css("border-bottom","5px solid white");
                 $("#prod").css("color","white");
-                autosize(document.querySelectorAll('#explan'));
                 $("#upload").click(function(){
                         $("#frm").submit();
+                })
+                $("#simgcgnclose").click(function(){
+                        $("#simg").css("display",'none');
+                        $("#simgcgn").css("display",'flex');
+                        $(this).css("display","none");
+                })
+                $('#simgcgn').click(function(){
+                        $("#simg").css("display",'block');
+                        $("#simgcgnclose").css("display",'flex');
+                        $(this).css("display","none");
                 })
                 $("#simg").on("change",function(){
                         var form=$('#sfrm')[0];
@@ -113,31 +107,17 @@ include ../user/top.jade
                                 processData: false,
                                 contentType: false,
                                 data:data,
-                                success: function(result){
-                                        if(!result){
+                                success: function(pro){
+                                        if(!pro){
                                                 alert("사진 업로드가 실패했습니다.");
                                         }else{
-                                                console.log("성공");
+                                                console.log(pro.src);
+                                                $("#thumb").attr('src','./dbimg/'+pro.src);
                                         }
                                 }
                         })
                 })
-                $("#bimg").on("change",function(){
-                        var form=$('#bfrm')[0];
-                        var data = new FormData(form);
-                        console.log(form);
-                        $.ajax({
-                                url:"/bimgdb",
-                                type:"post",
-                                processData: false,
-                                contentType: false,
-                                data:data,
-                                success: function(result){
-                                        if(!result){
-                                                alert("사진 업로드가 실패했습니다.");
-                                        }else{
-                                                console.log("성공");
-                                        }
-                                }
-                        })
-                })
+                CKEDITOR.replace( 'explan',{
+                        extraPlugins: 'autogrow',
+                        filebrowserUploadUrl: '/bimgdb',
+                });

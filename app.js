@@ -70,13 +70,32 @@
         });
 }
 {//라우팅###################################라우팅#####################################라우팅
-        app.get('/',function(req,res){
-                if(req.session.displayname){
-                        var dname=req.session.displayname;
-                        res.render('main',{name:dname,id:req.session.user});
-                }else{
-                        res.render('main');
-                }
+        app.get(['/','/pagenum=:pno'],function(req,res){
+                var sql="select * from product join productimg using(num)";
+                con.query(sql,function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                var maxpost=8; //페이지당 상품수
+                                var pno=req.params.pno; //페이지넘버
+                                if(!pno)  var pno=1;
+                                var postcnt=Object.keys(result).length; //총상품수
+                                var pager={
+                                        pagecnt:postcnt/maxpost == 0 ? Math.trunc(postcnt/maxpost) : Math.trunc(postcnt/maxpost) +1, //총페이지수
+                                        startpost:maxpost*pno-maxpost, //시작상품넘버
+                                        endpost:maxpost*pno-1< postcnt ?  maxpost*pno-1 : postcnt-1  //마지막상품넘버
+                                }
+                                // console.log(req.params.pno);
+                                // console.log(pno);
+                                // console.log(postcnt);
+                                // console.log(pager);
+                                if(req.session.displayname){
+                                        var dname=req.session.displayname;
+                                        res.render('main',{name:dname,id:req.session.user,product:result,pager:pager,pno:pno});
+                                }else{
+                                        res.render('main',{product:result,pager:pager,pno:pno});
+                                }
+                        }
+                })
         });
         app.get('/help',function(req,res){
                 if(req.session.displayname){
@@ -166,20 +185,14 @@
                         if(err) console.log(err);
                         else{
                                 if(result.affectedRows){
-                                        var sql="select simg,bimg from productimg where num=?";
+                                        var sql="select simg from productimg where num=?";
                                         con.query(sql,num,function(err,result){
                                                 if(err) console.log(err);
                                                 else{
                                                         var simg=result[0].simg;
-                                                        var bimg=result[0].bimg;
                                                         fs.exists(simg,function(ex){ //썸네일 삭제
                                                                 if(ex){
                                                                         fs.unlink(simg,function(err){
-                                                                                if(err) console.log(err);
-                                                        })}})
-                                                        fs.exists(bimg,function(ex){ //이미지 삭제
-                                                                if(ex){
-                                                                        fs.unlink(bimg,function(err){
                                                                                 if(err) console.log(err);
                                                         })}})
                                                         var sql="delete from productimg where num=? " //사진 db제거
@@ -198,15 +211,44 @@
         })
         app.get(["/productmodify",'/productmodify?:num'],function(req,res){ //상품수정
                 var num=req.query.num;
-                var sql="select * from product natural join productimg where num=?";
-                con.query(sql,num,function(err,result){
+                var sql="select * from product where num=?";
+                con.query(sql,num,function(err,pro){
                         if(err) console.log(err);
                         else{
-                                if(req.session.displayname){
-                                        var dname=req.session.displayname;
-                                        res.render('productmodify',{name:dname,id:req.session.user,result:result[0]});
+                                var sql="select * from productimg where num=?";
+                                con.query(sql,num,function(err,result){
+                                        if(err) console.log(err);
+                                        else{
+                                                 if(req.session.displayname){
+                                                        var dname=req.session.displayname;
+                                                        res.render('productmodify',{name:dname,id:req.session.user,pro:pro[0],result:result[0]});
+                                                }else{
+                                                        res.render('productmodify');
+                                                }
+                                        }
+                                })
+                        }
+                })
+        })
+        app.post('/productmodify',function(req,res){
+                var pro={
+                        no:req.body.no,
+                        name:req.body.name,
+                        kind:req.body.kind,
+                        num:req.body.num,
+                        comp:req.body.comp,
+                        count:req.body.count,
+                        price:req.body.price,
+                        text:req.body.text
+                }
+                var sql="update product set pkind=?,pnum=?,name=?,comp=?,count=?,price=?,ptext=? where num=?";
+                con.query(sql,[pro.kind,pro.num,pro.name,pro.comp,pro.count,pro.price,pro.text,pro.no],function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                if(result.affectedRows){
+                                        res.redirect('/product');
                                 }else{
-                                        res.render('productmodify');
+                                        res.send('<script>alert("수정이 실패하였습니다");location.back()"</script>');
                                 }
                         }
                 })
@@ -246,44 +288,109 @@
                         name:req.file.filename
                 }
                 var num=req.body.no;
-                console.log(req);
-                // var sql='insert into productimg(simg,simgorigin,simgname,num) values(?,?,?,?)';
-                // con.query(sql,[file.path,file.origin,file.name,num],function(err,result){
-                //         if(err) console.log(err);
-                //         else{
-                //                 if(result.affectedRows){
-                //                         res.send("true");
-                //                 }else res.send("false");
-                //         }
-                // })
-        })
-        app.post("/bimgdb",upload.single('bimg'),function(req,res){ //이미지업로드
-                var file={
-                        path:req.file.path,
-                        origin:req.file.originalname,
-                        name:req.file.filename
-                }
-                var num=req.body.bno;
-                var sql="select count(*) as result from productimg where num=?"
+                var sql="select simg,count(*) as count from productimg where num=?";
                 con.query(sql,num,function(err,result){
-                        if(result[0].result){
-                                var sql="update productimg set bimg=?,bimgorigin=?,bimgname=? where num=?"
-                                con.query(sql,[file.path,file.origin,file.name,num],function(err,result){
-                                        if(err) console.log(err);
-                                        else res.send(true);
-                                })
-                        }else{
-                                var sql='insert into productimg(bimg,bimgorigin,bimgname,num) values(?,?)';
-                                con.query(sql,[file.path,file.origin,file.name,num],function(err,result){
-                                        if(err) console.log(err);
-                                        else{
-                                                if(result.affectedRows){
-                                                        res.send("true");
-                                                }else res.send("false");
-                                        }
-                                })
+                        if(err) console.log(err);
+                        else{
+                                var count=result[0].count;
+                                var simg=result[0].simg;
+                                if(count){
+                                        fs.exists(simg,function(ex){ //기존썸네일 삭제
+                                                if(ex){
+                                                        fs.unlink(simg,function(err){
+                                                                if(err) console.log(err);
+                                        })}})
+                                        var sql="update productimg set simg=?,simgorigin=?,simgname=? where num=?";
+                                        con.query(sql,[file.path,file.origin,file.name,num],function(err,result){
+                                                if(err) console.log(err);
+                                                else{
+                                                        if(result.affectedRows){
+                                                                res.send({"src":file.name});
+                                                        }else res.send();
+                                                }
+                                        })
+                                }else{
+                                        var sql='insert into productimg(simg,simgorigin,simgname,num) values(?,?,?,?)';
+                                        con.query(sql,[file.path,file.origin,file.name,num],function(err,result){
+                                                if(err) console.log(err);
+                                                else{
+                                                        if(result.affectedRows){
+                                                                res.send({"src":file.name});
+                                                        }else res.send();
+                                                }
+                                        })
+                                }
                         }
                 })
+        })
+        app.post("/bimgdb",upload.single('upload'),function(req,res){ //이미지업로드
+                if(req.file){
+                        var file={
+                                path:req.file.path,
+                                origin:req.file.originalname,
+                                name:req.file.filename
+                        }
+                        res.send({
+                                "uploaded":1,
+                                "filename":file.origin,
+                                "url":'/dbimg/'+file.name,
+                                "error":{
+                                        "message":"업로드 성공"
+                        }});
+                }else{
+                        res.send({
+                                "uploaded":0,
+                                "error":{
+                                        "message":"업로드 실패"
+                        }});
+                }
+                // var num=req.body.bno;
+                // var sql="SHOW TABLE STATUS LIKE 'product'";
+                // con.query(sql,function(err,result){
+                //         if(err) console.log(err);
+                //         else{
+                //                 var num=result[0].Auto_increment;
+                //                 console.log(num);
+                //                 var sql="select count(*) as result from productimg where num=?";
+                //                 con.query(sql,num,function(err,result){
+                //                         if(err) console.log(err);
+                //                         console.log("dbresult"+result[0].result);
+                //                         if(result[0].result){
+                //                                 var sql="update productimg set bimg=?,bimgorigin=?,bimgname=? where num=?"
+                //                                 con.query(sql,[file.path,file.origin,file.name,num],function(err,result){
+                //                                         if(err) console.log(err);
+                //                                         else res.send({
+                //                                                 "uploaded":1,
+                //                                                 "filename":file.origin,
+                //                                                 "url":'/dbimg/'+file.name,
+                //                                                 "error":{
+                //                                                         "message":"업로드 성공"
+                //                                         }});
+                //                                 })
+                //                         }else{
+                //                                 var sql='insert into productimg(bimg,bimgorigin,bimgname,num) values(?,?,?,?)';
+                //                                 con.query(sql,[file.path,file.origin,file.name,num],function(err,result){
+                //                                         if(err) console.log(err);
+                //                                         else{
+                //                                                 if(result.affectedRows){
+                //                                                         res.send({
+                //                                                                 "uploaded":1,
+                //                                                                 "filename":file.origin,
+                //                                                                 "url":'/dbimg/'+file.name,
+                //                                                                 "error":{
+                //                                                                         "message":"업로드 성공"
+                //                                                         }});
+                //                                                 }else res.send({
+                //                                                         "uploaded":0,
+                //                                                         "error":{
+                //                                                                 "message":"업로드 실패"
+                //                                                 }});
+                //                                         }
+                //                                 })
+                //                         }
+                //                 })
+                //         }
+                // })
         })
         app.post("/getnum",function(req,res){ //Auto_increment Get
                 var sql="SHOW TABLE STATUS LIKE 'product'";

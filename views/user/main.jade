@@ -1,2 +1,44 @@
 include top.jade 
-                link(rel='stylesheet',href='./css/login.css')
+                .upload(style="border:none")
+                        .pro
+                                ul.proul
+                                        each pro,i in product
+                                                if(i>=pager.startpost && i<=pager.endpost)
+                                                        li
+                                                                .totallist
+                                                                        .thumb
+                                                                                a
+                                                                                        img(src="./dbimg/"+pro.simgname)
+                                                                        .proinfo
+                                                                                a=pro.name
+                                                                                .listbtm
+                                                                                        a 별점
+                                                                                        a 리뷰
+                                                                        .proprice
+                                                                                strong=pro.price
+                                                                                |원
+                                                                                .delivery
+                                                                                        p
+                                                                                                sapn 배송비 2,500원
+                                                                        .procomp
+                                                                                a=pro.comp
+                .pagingdiv
+                        .paging
+                                - var n = 1
+                                span
+                                        ul
+                                                while n <= pager.pagecnt
+                                                        li
+                                                                a(href="/pagenum="+n)=n++
+
+                                        
+
+                        
+                        
+
+
+
+
+
+
+

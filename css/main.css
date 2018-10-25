@@ -1,126 +1,250 @@
 body{
-    margin: 0;
-    padding: 0;
+        margin:  0;
+        padding:  0;
 }
-.topimp {
-    position: relative;
-    width:100%;
-    /* border-bottom:1px solid #dadada; */
-    border-bottom:1px solid #F43142; 
-    z-index:10000;
+.topimp  {
+        position:  relative;
+        width:100%;
+        /*  border-bottom:1px  solid  #dadada;  */
+        border-bottom:1px  solid  #e5e5e5;  
+        z-index:10000;
 }
-.topimp .inner{
-    width: 1200px;
-    height: 39px;
-    margin: 0 auto;
+.topimp  .inner{
+        width:  1200px;
+        height:  39px;
+        margin:  0  auto;
 }
 .loginlist{
-    padding: 6px;
-    float: right;
+        padding:  6px;
+        float:  right;
 }
-.loginlist nav .login{
-    list-style:none;
-    margin:0;
-    padding:0;
+.loginlist  nav  .login{
+        list-style:none;
+        margin:0;
+        padding:0;
 }
-.loginlist nav .login li{
-    border-left:1px solid #999;
-    display: inline;
-    font-size: 12px;
-    letter-spacing: -1px;
-    padding: 0 10px 0 15px;
+.loginlist  nav  .login  li{
+        border-left:1px  solid  #999;
+        display:  inline;
+        font-size:  12px;
+        letter-spacing:  -1px;
+        padding:  0  10px  0  15px;
 }
-.loginlist nav .login li:first-child{
-    border-left:0px
+.loginlist  nav  .login  li:first-child{
+        border-left:0px
 }
-.loginlist a{
-    color: #666;
-    text-decoration: none;
-    font-family: Maplestory OTF;
+.loginlist  a{
+        color:  #666;
+        text-decoration:  none;
+        font-family:  Maplestory  OTF;
 }
-.loginlist a:hover{
-    color:red;
-    text-decoration: underline;
+.loginlist  a:hover{
+        color:red;
+        text-decoration:  underline;
 }
 .topdiv{
-    position: relative;
-    background: #fff;
-    z-index: 40;
-    display: block;
-    border-bottom:1px solid #F43142;
+        position:  relative;
+        background:  #fff;
+        z-index:  40;
+        display:  block;
+        border-bottom:1px  solid  black;
 }
 .searchtop{
-    width:1200px;
-    margin:0 auto;
+        width:1200px;
+        margin:0  auto;
 }
 .search{
-    width:100%;
-    height:100px;
-    border-bottom:1px solid #F43142;
+        width:100%;
+        height:100px;
+        border-bottom:1px  solid  #e5e5e5;
 }
 .searchbox{
-    top: 29px;
-    position: relative;
-    width: 377px;
-    height: 38px;
-    margin: 0 auto;
-    padding: 0 80px 0 111px;
-    background: url(/img/test.png) no-repeat 0 0;
+        top:  29px;
+        position:  relative;
+        width:  377px;
+        height:  38px;
+        margin:  0  auto;
+        padding:  0  80px  0  111px;
+        background:  url(/img/test.png)  no-repeat  0  0;
 }
-.searchbox .logo{
-    position: absolute;
-    left: 0px;
-    top: -13px;
-    width: 109px;
-    height: 32px;
+.searchbox  .logo{
+        position:  absolute;
+        left:  0px;
+        top:  -13px;
+        width:  109px;
+        height:  32px;
 }
-.searchbox .logo a{
-    display: block;
-    height: 100%;
-    text-indent: -9999px;
+.searchbox  .logo  a{
+        display:  block;
+        height:  100%;
+        text-indent:  -9999px;
 }
 #search{
-    position: absolute;
-    right: 24px;
-    top: -8px;
-    width: 42px;
-    height: 40px;
-    background: none;
-    text-indent: -9999px;
-    border: 0px;
-    cursor: pointer;
+        position:  absolute;
+        right:  24px;
+        top:  -8px;
+        width:  42px;
+        height:  40px;
+        background:  none;
+        text-indent:  -9999px;
+        border:  0px;
+        cursor:  pointer;
 }
 .category{
-    width: 1200px;
-    margin: 10px auto; 
-    text-align: center;
+        width:  1200px;
+        margin:  10px  auto;  
+        text-align:  center;
 }
 
 
 #mainMenu{
-    list-style: none;
-    margin: 0; padding: 0 0 25px 5px;
-    margin-left: 32%;
-    /* border-bottom: 1px solid red; */
-  }
-  #mainMenu li{
-    float: left;
-    margin: 0; padding: 0 10px;
-  }
-  #mainMenu a{
-    display: block;
-    margin: 0; padding: 5px 0 1px 0;  
-    height: 16px;
-  
-    font-family: Maplestory_OTF; 
-    font-size: 17px; color: #000000; 
-    text-decoration:none; 
-  }
-  @font-face {
-    font-family: Maplestory_OTF; 
-    src:  url("/img/Maplestory_OTF_Light.otf"),url("/img/Maplestory Light.ttf"),url("/img/Maplestory_OTF_Bold.otf"),url("/img/Maplestory Bold_0.ttf");
-  }
-  /* #mainMenu a:visited{ color: #F43142; } */
-  #mainMenu a:hover{ color: #F43142; }
-  /* #mainMenu a:active{ color: #F43142; } */
-  #mainMenu a:hover, #mainMenu a:active{ border-bottom: 3px solid #F43142; }
+        list-style:  none;
+        margin:  0;  padding:  0  0  25px  5px;
+        margin-left:  32%;
+        /*  border-bottom:  1px  solid  red;  */
+    }
+    #mainMenu  li{
+        float:  left;
+        margin:  0;  padding:  0  10px;
+    }
+    #mainMenu  a{
+        display:  block;
+        margin:  0;  padding:  5px  0  1px  0;    
+        height:  16px;
+    
+        font-family:  Maplestory_OTF;  
+        font-size:  17px;  color:  #000000;  
+        text-decoration:none;  
+    }
+    @font-face  {
+        font-family:  Maplestory_OTF;  
+        src:    url("/img/Maplestory_OTF_Light.otf"),url("/img/Maplestory  Light.ttf"),url("/img/Maplestory_OTF_Bold.otf"),url("/img/Maplestory  Bold_0.ttf");
+    }
+    /*  #mainMenu  a:visited{  color:  #F43142;  }  */
+    #mainMenu  a:hover{  color:  #F43142;  }
+    /*  #mainMenu  a:active{  color:  #F43142;  }  */
+    #mainMenu  a:hover,  #mainMenu  a:active{  border-bottom:  3px  solid  #F43142;  }
+
+    .upload  {
+        position:  relative;
+        left:  0;
+        top:  20px;
+        width:  1200px;
+        height:  auto;
+        margin:0px  auto;
+        font-family:  "Roboto",  sans-serif;
+        border:1px  solid;
+}
+.proul{
+        display: flex;
+        align-content: flex-start;
+        flex-direction: column;
+        flex-wrap: wrap;
+        overflow: auto;
+        padding: 0px;
+        background-color: #f7f7f7;
+        border-top: 1px solid #e5e5e5;
+}
+.proul li{
+        list-style: none;
+        border-bottom: 1px solid #e5e5e5;
+        padding: 20px 0;
+        width:100%;
+        letter-spacing: -1px;
+}
+.totallist{
+        padding:10px 0;
+}
+.thumb{
+        float:left;
+        position: relative;
+        margin-left: 40px;
+}
+.thumb a{
+        display:block;
+        position: relative;
+}
+.thumb  img{
+        display: inline;
+        width:160px;
+        height:160px;
+}
+.proinfo{
+        position: relative;
+        float:left;
+        width:  560px;
+        height:  160px;
+        padding:  5px  0  0  15px;
+        border-right:1px  solid  #e5e5e5;
+        border-left:  1px  solid  #e5e5e5;
+}
+.proinfo  .listbtm{
+        margin-top: 100px;
+}
+strong{
+        font-size: 20px;
+}
+.proprice{
+        padding: 5px 0 0 15px;
+        position: relative;
+        float:left;
+        width:  200px;
+        height: 160px;
+}
+.proprice .delivery{
+        margin-top: 100px;
+        font-size:12px;
+}
+.procomp{
+        width:  185px;
+        height:160px;
+        padding:  5px  0  0  20px;
+        float:left;
+        position: relative;
+        border-left:  1px  solid  #e5e5e5;
+        font-weight: bold;
+}
+.pagingdiv{
+        margin: 0px auto;
+        width: 1200px;
+        position: relative;
+}
+.paging{
+        height:61px;
+}
+.paging span{
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        display: -webkit-flex;
+        -webkit-justify-content: center;
+}
+.paging ul {  
+        list-style:none;  
+        float:left;  
+        display:inline;  
+}  
+.paging ul li {  
+        float:left;  
+}  
+.paging ul li a {  
+        float:left;  
+        padding:4px;  
+        margin-right:3px;  
+        width:15px;  
+        color:#000;  
+        font:bold 12px tahoma;  
+        border:1px solid #eee;  
+        text-align:center;  
+        text-decoration:none;  
+}  
+.paging ul li a:hover, ul li a:focus {  
+        color:#fff;  
+        border:1px solid #f40;  
+        background-color:#f40;  
+}  
