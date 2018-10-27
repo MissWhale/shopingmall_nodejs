@@ -1,0 +1,154 @@
+include ../user/top.jade
+                link(rel='stylesheet', href='./css/selectbox.min.css')
+                script(type='text/javascript', src='./js/selectbox.min.js')
+                .upload
+                        .prct_simple
+                                .prct_imgbox
+                                        img(src="./dbimg/"+pro.simgname)
+                                        .prct_wbox
+                                                a 별점
+                                                a 리뷰
+                                .prct_infobox
+                                        .prct_defalut_info
+                                                .prct_defalut_area
+                                                        label="상품코드 : "+pro.pnum
+                                                        h3=pro.name
+                                                //- hr
+                                                .prct_defalut_table
+                                                        table
+                                                                tbody
+                                                                        tr
+                                                                                th 가격
+                                                                                td
+                                                                                        strong(style="color:black")=pro.price+"원" 
+                                                                        tr
+                                                                                th 배송비
+                                                                                td#deli 
+                                                                                        span#deliprice 2500원
+                                                                                        select#color.justselect(name='kind')
+                                                                                                option(value='ok') 주문시결제(선결제)
+                                                                                                option(value='no') 상품수령시결제(착불)     
+                                                                        tr
+                                                                                th 옵션
+                                                                                td.option
+                                                                                        a
+                                                                                                span 선택하세요
+                                                                                                img(src="./img/down.png")
+                                                                                        .optiondivno
+                                                                                                .optiontop
+                                                                                                        span 옵션선택
+                                                                                                        img.opcls(src="./img/exit.png")
+                                                                                                .optionlist
+                                                                                                        ul
+                                                                                                                li.listsel(data-name="white" data-price="28900" data-num="1")
+                                                                                                                        a
+                                                                                                                                span white
+                                                                                                                                strong 28900원
+                                                                                                                li.listsel(data-name="black" data-price="28900" data-num="2")
+                                                                                                                        a
+                                                                                                                                span black
+                                                                                                                                strong 28900원
+                                                //- hr
+                                                .optionprice
+                                                        ul.optionul
+                                                .optiontotal(style="display:none")
+                                                        table
+                                                                tbody
+                                                                        tr
+                                                                                th 총 합계금액
+                                                                                td
+                                                                                        strong#totalprice=0
+                                                                                        span 원
+
+
+
+                script.
+                        $( window ).on( "load", function() {
+                                $(".justwrap").css("display","inline-grid");
+                        })
+                        $(".option").click(function(){
+                                $(".optiondiv").css("display","block");
+                                $(".optiondivno").attr("class","optiondiv");
+                        })
+                        $(".opcls").click(function(){
+                                $(".optiondiv").css("display","none");
+                                $(".optiondiv").attr("class","optiondivno");
+                        })
+                        $("li[class='listsel']").click(function(){
+                                $(".optiondiv").css("display","none");
+                                $(".optiondiv").attr("class","optiondivno");
+                                //- console.log($(this));
+                                var name=$(this)[0].dataset.name;
+                                var price=$(this)[0].dataset.price;
+                                var num=$(this)[0].dataset.num;
+                                //- console.log($('.optionul').children());
+                                //- console.log($(this)[0].dataset.name);
+                                //- console.log($('.optionul').children());
+                                var dupl=0;
+                                for(var start=0;start<=$('.optionul').children().length;start++){
+                                        //- console.log("Test");
+                                        //- console.log($('.optionul').children().eq(start).attr('class'));
+                                        //- console.log($(this)[0].dataset.name+":"+start+"고른거");
+                                        //- console.log($('.optionul').children().children()[start].innerHTML+":"+start+"있는거");
+                                        if($(this)[0].dataset.name == $('.optionul').children().eq(start).attr('class')){
+                                                dupl=1;
+                                        }
+                                }
+                                if(dupl){
+                                        alert("이미 선택되어 있는 옵션입니다.");
+                                }else{
+                                        var html="<li class="+name+"><p>"+name+"</p><button class='min' data-price="+price+" onclick=minus(this);></button>";
+                                        var html=html+"<input class='mp_wrap' type='text' data-price="+price+" name='procnt' value='1'  onchange=cntcgn(this);>";
+                                        var html=html+"<button class='plus' data-price="+price+" onclick=plus(this);></button>";
+                                        var html=html+="<button class='delete' onclick=del(this);></button>";
+                                        var html=html+'<span class=op_price>'+price+'원</span></li>';
+                                        $('.optionul').append(html);
+                                        if($('.optionul').children().length){
+                                                $(".optiontotal").css('display','block');
+                                        }
+                                        $("#totalprice")[0].innerHTML=Number($("#totalprice")[0].innerHTML)+Number(price);
+                                }
+                        })
+                        function minus(m){
+                                var price=m.dataset.price;
+                                if($(m).next().val()>1){
+                                        $(m).next()[0].value=Number($(m).next().val())-1;
+                                        $(m).next().next().next().next()[0].innerHTML=Number($(m).next()[0].value)*Number(price)+"원";
+                                        $("#totalprice")[0].innerHTML=Number($("#totalprice")[0].innerHTML)-Number(price);
+                                }
+                                else{
+                                        alert('최소수량은 1이상입니다');
+                                }
+                        }
+                        function plus(p){
+                                var price=p.dataset.price;
+                                $(p).prev()[0].value=Number($(p).prev().val())+1;
+                                $(p).next().next()[0].innerHTML=Number($(p).prev()[0].value)*Number(price)+"원";
+                                $("#totalprice")[0].innerHTML=Number($("#totalprice")[0].innerHTML)+Number(price);
+                        }
+                        function del(d){
+                                //- console.log($(d).next()[0].innerHTML.slice(0,-1));
+                                var total=$(d).next()[0].innerHTML.slice(0,-1);
+                                 $("#totalprice")[0].innerHTML=Number($("#totalprice")[0].innerHTML)-Number(total);
+                                var total=$(d).prev().prev().val()
+                                $(d).parent().remove();
+                                if(!$('.optionul').children().length){
+                                        $(".optiontotal").css('display','none');
+                                        $("#totalprice")[0].innerHTML=0;
+                                }
+                        }
+                        function cntcgn(c){
+                                var price=c.dataset.price;
+                                var first=$(c).next().next().next()[0].innerHTML.slice(0,-1);
+                                var final=Number($(c).val())*Number(price);
+                                var result=Number(final)-Number(first);
+                                //- if(first>final){
+                                //-         var result=Number(first)-Number(final);
+                                //-         $("#totalprice")[0].innerHTML=Number($("#totalprice")[0].innerHTML)-Number(result);
+                                //- }else{
+                                //-         var result=Number(final)-Number(first);
+                                //-         $("#totalprice")[0].innerHTML=Number($("#totalprice")[0].innerHTML)+Number(result);
+                                //- }
+                                $(c).next().next().next()[0].innerHTML=Number($(c).val())*Number(price)+"원";
+                                $("#totalprice")[0].innerHTML=Number($("#totalprice")[0].innerHTML)+Number(result);
+                        };

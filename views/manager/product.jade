@@ -7,6 +7,7 @@ include ../user/top.jade
                                         li: a#prod(href="/product") 상품관리
                                         li: a#order(href="/order") 주문관리
                                         li: a#faq(href="/faq") FAQ관리
+                        a.rainbtn#upload(href="/productupload" alt="상품등록" style="margin: 10px 0px;")
                         .prodmg
                                 .container-table100
                                         .wrap-table100
@@ -37,12 +38,77 @@ include ../user/top.jade
                                                                                                         td.column7=new Date(pro.pdate).format("yyyy-MM-dd")
                                                                                                         td.column8: a.rainbtnlist#modi(alt="수정" name=pro.num)
                                                                                                         td.column9: a.rainbtnlist#delete(alt="삭제" name=pro.num)
+                .pagingdiv
+                        .paging
+                                -var pover=Math.trunc(pager.pagecnt/10)
+                                if(pover)
+                                        if(pno<11)
+                                                - var n = 1 //시작페이지
+                                                - var max=10 //끝페이지
+                                                - var next=11 //다음10페이지
+                                                - var check=1 //다음,마지막페이지 체크
+                                        else
+                                                - var n=pno%10 ==0 ? (Math.trunc(pno/10)-1)*10+1 : Math.trunc(pno/10)*10+1 //시작페이지
+                                                - var ip=Math.trunc(n/10) //시작페이지앞자리
+                                                - var fp=Math.trunc(pager.pagecnt/10) //마지막페이지앞자리
+                                                -var pna=pager.pagecnt-n //잔여페이지수
+                                                -var next=(ip+1)*10+1 //다음10페이지
+                                                -var prev=ip*10 //전10페이지
+                                                if(ip == fp)
+                                                        -var max=n+pna
+                                                else
+                                                        -var max=n+9
+                                else
+                                        - var n = 1
+                                        - var max=pager.pagecnt
+                                span
+                                        ul
+                                                if(pno>10)
+                                                        li
+                                                                a#first(href="/product" style="height: 14px;")
+                                                                        img(src="./img/dbackb.png")
+                                                if(prev)
+                                                        li
+                                                                a#prev(href="/product="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        img(src="./img/backb.png")
+                                                while n <= max
+                                                        li
+                                                                if(pno==n)
+                                                                        a(href="/product="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                else
+                                                                        a(href="/product="+n)=n++
 
+                                                if(ip != fp || check)
+                                                        li
+                                                                a#next(href="/product="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        img(src="./img/forb.png")
+                                                        li
+                                                                a#final(href="/product="+pager.pagecnt style="height: 14px;")
+                                                                        img(src="./img/dforb.png")
 
-                                a.rainbtn#upload(href="/productupload" alt="상품등록" style="margin: 10px 0px;")
         script.
                 $("#prod").css("border-bottom","5px solid white");
                 $("#prod").css("color","white");
+                $("#first").hover(function(){
+                                $("#first").children().attr('src','./img/dbackw.png');
+                        },function(){
+                                $("#first").children().attr('src','./img/dbackb.png');
+                        })
+                        $("#prev").hover(function(){
+                                $("#prev").children().attr('src','./img/backw.png');
+                        },function(){
+                                $("#prev").children().attr('src','./img/backb.png');
+                        })
+                        $("#next").hover(function(){
+                                $("#next").children().attr('src','./img/forw.png');
+                        },function(){
+                                $("#next").children().attr('src','./img/forb.png');
+                        })
+                        $("#final").hover(function(){
+                                $("#final").children().attr('src','./img/dforw.png');
+                        },function(){
+                                $("#final").children().attr('src','./img/dforb.png');
+                        })
                 $("a[id='modi']").click(function(){
                         num=$(this)[0].name;
                         console.log(num);

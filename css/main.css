@@ -2,6 +2,10 @@ body{
         margin:  0;
         padding:  0;
 }
+a{
+        color: black;
+        text-decoration: none;
+}
 .topimp  {
         position:  relative;
         width:100%;
@@ -247,4 +251,232 @@ strong{
         color:#fff;  
         border:1px solid #f40;  
         background-color:#f40;  
-}  
+}
+.prct_simple{
+        float:left;
+        width:1100px;
+}
+.prct_imgbox{
+        float:left;
+        width:400px;
+        position:relative;
+        padding:50px;
+        border:1px solid;
+}
+.prct_imgbox img{
+        width:400px;
+        height:400px;
+}
+.prct_wbox{
+        width: 398px;
+        height: 35px;
+        padding-top: 15px;
+        border:1px solid;
+}
+.prct_infobox{
+        position: relative;
+        float: left;
+        width: 548px;
+        background: white;
+        padding: 20px;
+}
+.prct_defalut_info{
+        position: relative;
+        margin-bottom: 1px;
+        padding-bottom: 30px;
+        display: inline-block;
+        width:100%;
+}
+.prct_defalut_area{
+        background-color:#eee;
+}
+.prct_defalut_table{
+        background-color:#eee;
+        border-bottom: 1px solid;
+        border-top: 1px solid;
+}
+.prct_infobox label{
+        font-size: 0.87em;
+        background-color: #38373c;
+        color: #fff;
+        padding: 3px 5px;
+}
+.prct_defalut_info tr{
+        height: 30px;
+}
+.prct_defalut_info th{
+        text-align: left;
+        font-weight: normal;
+        width: 200px;
+        font-size: 12px;
+}
+.prct_defalut_info td{
+        text-align: right;
+        width: 380px;
+}
+.prct_defalut_info strong{
+        color: #F43142;
+        font-size: 1.4em;
+}
+#deli{
+        padding-top: 10px;
+        padding-left: 5px;
+}
+.prct_defalut_info span{
+        display: inline;
+}
+.option{
+        text-align:left !important;
+}
+.option a{
+        font-size: 12px;
+        font-family: Helvetica,Arial,sans-serif;
+        background-color: white;
+        border:1px solid #dadada;
+        padding: 7px 0px 3px 10px;
+        display: block;
+        width: 370px;
+        height: 23px;
+}
+.option span{
+
+}
+.option img{
+        position: absolute;
+        right: 12px;
+        width: 16.5px;
+}
+.optiondiv{
+        width: 382px;
+        display:block;
+        position: absolute;
+        top: 176px;
+}
+.optiondivno{
+        display:none;
+}
+.optiontop{
+        background: #999999;
+        height: 40px;
+        border-bottom: 1px solid #555;
+}
+.optiontop span{
+        line-height: 22px;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        padding: 9px;
+        margin:0px;
+        display: inline-block;
+}
+.optiontop img{
+        position: absolute;
+        right: 15px;
+        top: 13px;
+}
+.optionlist ul{
+        padding: 0px;
+        list-style: none;
+        margin: 0px;
+}
+.optionlist a{
+        border:1px solid #e5e5e5;
+        border-top:none;
+        padding: 8px 0px 0px 10px;
+}
+.optionlist strong{
+        position: absolute; 
+        right: 25px;
+        color:black;
+        font: bold 12px Tahoma,sans-serif;
+}
+.optionul{
+        list-style: none;
+        padding: 0px;
+}
+.optionul li{
+        border-top:1px solid;
+        border-bottom:1px solid;
+        padding-bottom: 10px;
+        margin-top:10px;
+        background-color: #eee;
+}
+.optionul .min{
+        width: 23px;
+        height: 23px;
+        border:1px solid #e5e5e5;
+        overflow: hidden;
+        padding:0;
+        position: absolute;
+}
+.optionul .plus{
+        width: 23px;
+        height: 23px;
+        border:1px solid #e5e5e5;
+        overflow: hidden;
+        padding:0;
+        position: absolute;
+        left: 55px;
+}
+.optionul .delete{
+        width: 23px;
+        height: 23px;
+        border:1px solid #e5e5e5;
+        overflow: hidden;
+        padding:0;
+        position: relative;
+        float: right;
+}
+.delete{
+        background: url('../img/deleteb.png') no-repeat;
+        background-color: white;
+        background-position: center;
+        cursor: pointer;
+}
+.delete:hover{
+        background: url('../img/deletew.png') no-repeat;
+        background-color: #F43142;
+        background-position: center;
+}
+.min{
+        background: url('../img/minusb.png') no-repeat;
+        background-color: white;
+        background-position: center;
+        cursor: pointer;
+}
+.min:hover{
+        background: url('../img/minusw.png') no-repeat;
+        background-color: #F43142;
+        background-position: center;
+}
+.plus{
+        background: url('../img/plusb.png') no-repeat;
+        background-position: center;
+        background-color: white;
+        cursor: pointer;
+}
+.plus:hover{
+        background: url('../img/plusw.png') no-repeat;
+        background-color: #F43142;
+        background-position: center;
+}
+.mp_wrap{
+        padding: 1px 4px 1px;
+        width: 22px;
+        height: 19px;
+        border-top:1px solid #e5e5e5;
+        border-bottom:1px solid #e5e5e5;
+        border-left:none !important;
+        border-right:none !important;
+        text-align: center;
+        margin-bottom: -20px;
+        margin-left: 24px;
+}
+.optionul span{
+        position: relative;
+        float: right;
+        color: black;
+        font: bold 12px Tahoma,sans-serif;
+        margin-top: 3px;
+        margin-right: 10px;
+}

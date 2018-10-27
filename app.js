@@ -71,32 +71,51 @@
 }
 {//라우팅###################################라우팅#####################################라우팅
         app.get(['/','/pagenum=:pno'],function(req,res){
-                var sql="select * from product join productimg using(num)";
+                var maxpost=15; //페이지당 상품수
+                var pno=req.params.pno; //페이지넘버
+                if(!pno)  var pno=1;
+                var start=maxpost*pno-maxpost;
+                var sql="select count(*) as postcnt from product join productimg using(num)";
                 con.query(sql,function(err,result){
                         if(err) console.log(err);
                         else{
-                                var maxpost=8; //페이지당 상품수
-                                var pno=req.params.pno; //페이지넘버
-                                if(!pno)  var pno=1;
-                                var postcnt=Object.keys(result).length; //총상품수
-                                var pager={
-                                        pagecnt:postcnt/maxpost == 0 ? Math.trunc(postcnt/maxpost) : Math.trunc(postcnt/maxpost) +1, //총페이지수
-                                        startpost:maxpost*pno-maxpost, //시작상품넘버
-                                        endpost:maxpost*pno-1< postcnt ?  maxpost*pno-1 : postcnt-1  //마지막상품넘버
-                                }
-                                // console.log(req.params.pno);
-                                // console.log(pno);
-                                // console.log(postcnt);
-                                // console.log(pager);
-                                if(req.session.displayname){
-                                        var dname=req.session.displayname;
-                                        res.render('main',{name:dname,id:req.session.user,product:result,pager:pager,pno:pno});
-                                }else{
-                                        res.render('main',{product:result,pager:pager,pno:pno});
-                                }
+                                var postcnt=result[0].postcnt;
+                                var sql="select * from product join productimg using(num) order by num desc limit ?,? ";
+                                con.query(sql,[start,maxpost],function(err,result){
+                                        if(err) console.log(err);
+                                        else{
+                                                var pager={
+                                                        pagecnt:postcnt%maxpost == 0 ? Math.trunc(postcnt/maxpost) : Math.trunc(postcnt/maxpost) +1, //총페이지수
+                                                        startpost:maxpost*pno-maxpost, //시작상품넘버
+                                                        endpost:maxpost*pno-1< postcnt ?  maxpost*pno-1 : postcnt-1  //마지막상품넘버
+                                                }
+                                                if(req.session.displayname){
+                                                        var dname=req.session.displayname;
+                                                        res.render('main',{name:dname,id:req.session.user,product:result,pager:pager,pno:pno});
+                                                }else{
+                                                        res.render('main',{product:result,pager:pager,pno:pno});
+                                                }
+                                        }
+                                })
                         }
                 })
         });
+        app.get(['/productDetail','/productDetail?num=:pno'],function(req,res){
+                var pno=req.query.num;
+                console.log(pno);
+                var sql="select * from product join productimg using(num) where num=?"
+                con.query(sql,pno,function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                if(req.session.displayname){
+                                        var dname=req.session.displayname;
+                                        res.render('prodetail',{name:dname,id:req.session.user,pro:result[0]});
+                                }else{
+                                        res.render('prodetail');
+                                }
+                        }
+                })
+        })
         app.get('/help',function(req,res){
                 if(req.session.displayname){
                         var dname=req.session.displayname;
@@ -164,17 +183,33 @@
                         res.render('management');
                 }
         })
-        app.get("/product",function(req,res){
-                var sql="select *  from product";
+        app.get(["/product","/product=:pno"],function(req,res){
+                var maxpost=20; //페이지당 상품수
+                var pno=req.params.pno; //페이지넘버
+                if(!pno)  var pno=1;
+                var start=maxpost*pno-maxpost;
+                var sql="select count(*) as postcnt from product join productimg using(num)";
                 con.query(sql,function(err,result){
                         if(err) console.log(err);
                         else{
-                                if(req.session.displayname){
-                                        var dname=req.session.displayname;
-                                        res.render('product',{name:dname,id:req.session.user,result:result});
-                                }else{
-                                        res.render('product',{result:result});
-                                }
+                                var postcnt=result[0].postcnt;
+                                var sql="select * from product join productimg using(num) order by num desc limit ?,?";
+                                con.query(sql,[start,maxpost],function(err,result){
+                                        if(err) console.log(err);
+                                        else{
+                                                var pager={
+                                                        pagecnt:postcnt%maxpost == 0 ? Math.trunc(postcnt/maxpost) : Math.trunc(postcnt/maxpost) +1, //총페이지수
+                                                        startpost:maxpost*pno-maxpost, //시작상품넘버
+                                                        endpost:maxpost*pno-1< postcnt ?  maxpost*pno-1 : postcnt-1  //마지막상품넘버
+                                                }
+                                                if(req.session.displayname){
+                                                        var dname=req.session.displayname;
+                                                        res.render('product',{name:dname,id:req.session.user,result:result,pager:pager,pno:pno});
+                                                }else{
+                                                        res.render('product',{result:result,pager:pager,pno:pno});
+                                                }
+                                        }
+                                })
                         }
                 })
         })
@@ -344,53 +379,6 @@
                                         "message":"업로드 실패"
                         }});
                 }
-                // var num=req.body.bno;
-                // var sql="SHOW TABLE STATUS LIKE 'product'";
-                // con.query(sql,function(err,result){
-                //         if(err) console.log(err);
-                //         else{
-                //                 var num=result[0].Auto_increment;
-                //                 console.log(num);
-                //                 var sql="select count(*) as result from productimg where num=?";
-                //                 con.query(sql,num,function(err,result){
-                //                         if(err) console.log(err);
-                //                         console.log("dbresult"+result[0].result);
-                //                         if(result[0].result){
-                //                                 var sql="update productimg set bimg=?,bimgorigin=?,bimgname=? where num=?"
-                //                                 con.query(sql,[file.path,file.origin,file.name,num],function(err,result){
-                //                                         if(err) console.log(err);
-                //                                         else res.send({
-                //                                                 "uploaded":1,
-                //                                                 "filename":file.origin,
-                //                                                 "url":'/dbimg/'+file.name,
-                //                                                 "error":{
-                //                                                         "message":"업로드 성공"
-                //                                         }});
-                //                                 })
-                //                         }else{
-                //                                 var sql='insert into productimg(bimg,bimgorigin,bimgname,num) values(?,?,?,?)';
-                //                                 con.query(sql,[file.path,file.origin,file.name,num],function(err,result){
-                //                                         if(err) console.log(err);
-                //                                         else{
-                //                                                 if(result.affectedRows){
-                //                                                         res.send({
-                //                                                                 "uploaded":1,
-                //                                                                 "filename":file.origin,
-                //                                                                 "url":'/dbimg/'+file.name,
-                //                                                                 "error":{
-                //                                                                         "message":"업로드 성공"
-                //                                                         }});
-                //                                                 }else res.send({
-                //                                                         "uploaded":0,
-                //                                                         "error":{
-                //                                                                 "message":"업로드 실패"
-                //                                                 }});
-                //                                         }
-                //                                 })
-                //                         }
-                //                 })
-                //         }
-                // })
         })
         app.post("/getnum",function(req,res){ //Auto_increment Get
                 var sql="SHOW TABLE STATUS LIKE 'product'";

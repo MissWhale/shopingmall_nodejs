@@ -292,3 +292,48 @@ textarea{
         align-items:center;
         justify-content:center;
 }
+
+.pagingdiv{
+        margin: 0px auto;
+        width: 1200px;
+        position: relative;
+}
+.paging{
+        height:61px;
+}
+.paging span{
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        display: -webkit-flex;
+        -webkit-justify-content: center;
+}
+.paging ul {  
+        list-style:none;  
+        float:left;  
+        display:inline;  
+}  
+.paging ul li {  
+        float:left;  
+}  
+.paging ul li a {  
+        float:left;  
+        padding:4px;  
+        margin-right:3px;  
+        width:15px;  
+        color:#000;  
+        font:bold 12px tahoma;  
+        border:1px solid #eee;  
+        text-align:center;  
+        text-decoration:none;  
+}  
+.paging ul li a:hover, ul li a:focus {  
+        color:#fff;  
+        border:1px solid #f40;  
+        background-color:#f40;  
+}

@@ -3,33 +3,94 @@ include top.jade
                         .pro
                                 ul.proul
                                         each pro,i in product
-                                                if(i>=pager.startpost && i<=pager.endpost)
-                                                        li
-                                                                .totallist
-                                                                        .thumb
-                                                                                a
-                                                                                        img(src="./dbimg/"+pro.simgname)
-                                                                        .proinfo
-                                                                                a=pro.name
-                                                                                .listbtm
-                                                                                        a 별점
-                                                                                        a 리뷰
-                                                                        .proprice
-                                                                                strong=pro.price
-                                                                                |원
-                                                                                .delivery
-                                                                                        p
-                                                                                                sapn 배송비 2,500원
-                                                                        .procomp
-                                                                                a=pro.comp
+                                                li
+                                                        .totallist
+                                                                .thumb
+                                                                        a(href='/productDetail?num='+pro.num)
+                                                                                img(src="./dbimg/"+pro.simgname)
+                                                                .proinfo
+                                                                        a(href='/productDetail?num='+pro.num)=pro.name
+                                                                        .listbtm
+                                                                                a 별점
+                                                                                a 리뷰
+                                                                .proprice
+                                                                        strong=pro.price
+                                                                        |원
+                                                                        .delivery
+                                                                                p
+                                                                                        sapn 배송비 2,500원
+                                                                .procomp
+                                                                        a=pro.comp
                 .pagingdiv
                         .paging
-                                - var n = 1
+                                -var pover=Math.trunc(pager.pagecnt/10)
+                                if(pover)
+                                        if(pno<11)
+                                                - var n = 1 //시작페이지
+                                                - var max=10 //끝페이지
+                                                - var next=11 //다음10페이지
+                                                - var check=1 //다음,마지막페이지 체크
+                                        else
+                                                - var n=pno%10 ==0 ? (Math.trunc(pno/10)-1)*10+1 : Math.trunc(pno/10)*10+1 //시작페이지
+                                                - var ip=Math.trunc(n/10) //시작페이지앞자리
+                                                - var fp=Math.trunc(pager.pagecnt/10) //마지막페이지앞자리
+                                                -var pna=pager.pagecnt-n //잔여페이지수
+                                                -var next=(ip+1)*10+1 //다음10페이지
+                                                -var prev=ip*10 //전10페이지
+                                                if(ip == fp)
+                                                        -var max=n+pna
+                                                else
+                                                        -var max=n+9
+                                else
+                                        - var n = 1
+                                        - var max=pager.pagecnt
                                 span
                                         ul
-                                                while n <= pager.pagecnt
+                                                if(pno>10)
                                                         li
-                                                                a(href="/pagenum="+n)=n++
+                                                                a#first(href="/" style="height: 14px;")
+                                                                        img(src="./img/dbackb.png")
+                                                if(prev)
+                                                        li
+                                                                a#prev(href="/pagenum="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        img(src="./img/backb.png")
+                                                while n <= max
+                                                        li
+                                                                if(pno==n)
+                                                                        a(href="/pagenum="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                else
+                                                                        a(href="/pagenum="+n)=n++
+
+                                                if(ip != fp || check)
+                                                        li
+                                                                a#next(href="/pagenum="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        img(src="./img/forb.png")
+                                                        li
+                                                                a#final(href="/pagenum="+pager.pagecnt style="height: 14px;")
+                                                                        img(src="./img/dforb.png")
+                script.
+                        $("#first").hover(function(){
+                                $("#first").children().attr('src','./img/dbackw.png');
+                        },function(){
+                                $("#first").children().attr('src','./img/dbackb.png');
+                        })
+                        $("#prev").hover(function(){
+                                $("#prev").children().attr('src','./img/backw.png');
+                        },function(){
+                                $("#prev").children().attr('src','./img/backb.png');
+                        })
+                        $("#next").hover(function(){
+                                $("#next").children().attr('src','./img/forw.png');
+                        },function(){
+                                $("#next").children().attr('src','./img/forb.png');
+                        })
+                        $("#final").hover(function(){
+                                $("#final").children().attr('src','./img/dforw.png');
+                        },function(){
+                                $("#final").children().attr('src','./img/dforb.png');
+                        })
+
+
 
                                         
 
