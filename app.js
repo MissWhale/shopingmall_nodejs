@@ -71,7 +71,7 @@
 }
 {//라우팅###################################라우팅#####################################라우팅
         app.get(['/','/pagenum=:pno'],function(req,res){
-                var maxpost=15; //페이지당 상품수
+                var maxpost=10; //페이지당 상품수
                 var pno=req.params.pno; //페이지넘버
                 if(!pno)  var pno=1;
                 var start=maxpost*pno-maxpost;
@@ -111,7 +111,7 @@
                                         var dname=req.session.displayname;
                                         res.render('prodetail',{name:dname,id:req.session.user,pro:result[0]});
                                 }else{
-                                        res.render('prodetail');
+                                        res.render('prodetail',{pro:result[0]});
                                 }
                         }
                 })

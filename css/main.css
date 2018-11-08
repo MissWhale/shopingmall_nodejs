@@ -350,7 +350,7 @@ strong{
         width: 382px;
         display:block;
         position: absolute;
-        top: 176px;
+        top: 167px;
 }
 .optiondivno{
         display:none;
@@ -479,4 +479,33 @@ strong{
         font: bold 12px Tahoma,sans-serif;
         margin-top: 3px;
         margin-right: 10px;
+}
+.buydiv {
+
+}
+.buydiv a{
+        display: inline-block;
+        background: transparent;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-style: normal;
+        font-size: 15px;
+        letter-spacing: 0.3em;
+        color: red;
+        border-radius: 0;
+        padding: 18px 85px 20px;
+        transition: all 0.7s ease-out;
+        background: linear-gradient(270deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0.8), rgba(189, 21, 21, 0), rgba(255, 1, 1, 0));
+        background-position: 1% 50%;
+        background-size: 300% 300%;
+        text-decoration: none;
+        margin: 0.625rem;
+        border: none;
+        border: 1px solid red;
+}
+.buydiv a:hover{
+        color: #fff;
+        border: 1px solid red;
+        color: white;
+        background-position: 99% 50%;
 }
