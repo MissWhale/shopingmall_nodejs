@@ -33,7 +33,6 @@
         }
         var option={
                 host:'114.71.137.109',
-
                 port:3306,
                 user:'root',
                 password:'tmvlflt1234',
@@ -76,17 +75,17 @@
                 var pno=req.params.pno; //페이지넘버
                 if(!pno)  var pno=1;
                 var start=maxpost*pno-maxpost;
-                var sql="select count(*) as postcnt from product join productimg using(num)";
+                var sql="select count(*) as postcnt from product";
                 con.query(sql,function(err,result){
                         if(err) console.log(err);
                         else{
+                                console.log(result);
                                 var postcnt=result[0].postcnt;
-                                var sql="select product.*, productimg.*, optprice from product join productimg using(num) join productopt using(num) WHERE optprice = (select min(optprice) from productopt) ORDER by product.num DESC limit ?,?;";
+                                var sql="select product.*, productimg.*, min(optprice) as optprice from product join productimg using(num) join productopt using(num) group by product.num ORDER by product.num DESC limit ?,?;";
                                 con.query(sql,[start,maxpost],function(err,result){
                                         if(err) console.log(err);
                                         else{
                                                 console.log(result);
-                                                var sql
                                                 var pager={
                                                         pagecnt:postcnt%maxpost == 0 ? Math.trunc(postcnt/maxpost) : Math.trunc(postcnt/maxpost) +1, //총페이지수
                                                         startpost:maxpost*pno-maxpost, //시작상품넘버
@@ -118,7 +117,6 @@
                                                 con.query(sql,pno,function(err,opt){
                                                         if(err) console.log(err);
                                                         else{
-                                                                console.log(opt);
                                                                 if(req.session.displayname){
                                                                         var dname=req.session.displayname;
                                                                         res.render('prodetail',{name:dname,id:req.session.user,pro:result[0],opt:opt,min:min[0]});
@@ -240,20 +238,24 @@
                                         con.query(sql,num,function(err,result){
                                                 if(err) console.log(err);
                                                 else{
-                                                        var simg=result[0].simg;
-                                                        fs.exists(simg,function(ex){ //썸네일 삭제
-                                                                if(ex){
-                                                                        fs.unlink(simg,function(err){
-                                                                                if(err) console.log(err);
-                                                        })}})
-                                                        var sql="delete from productimg where num=? " //사진 db제거
-                                                        con.query(sql,num,function(err,result){
-                                                                if(err) console.log(err);
-                                                                else{
-                                                                        if(result.affectedRows) res.send(true);
-                                                                        else res.send(false);
+                                                        if(result[0].simg){
+                                                                var simg=result[0].simg;
+                                                                if (simg!="C:\\2-2\\shopingmall\\dbimg\\thumbnail.png"){
+                                                                        fs.exists(simg,function(ex){ //썸네일 삭제
+                                                                                if(ex){
+                                                                                        fs.unlink(simg,function(err){
+                                                                                                if(err) console.log(err);
+                                                                        })}})
                                                                 }
-                                                        })
+                                                                var sql="delete from productimg where num=? " //사진 db제거
+                                                                con.query(sql,num,function(err,result){
+                                                                        if(err) console.log(err);
+                                                                        else{
+                                                                                if(result.affectedRows) res.send(true);
+                                                                                else res.send(false);
+                                                                        }
+                                                                })
+                                                        }
                                                 }
                                         })
                                 }else res.send(false);
@@ -293,7 +295,7 @@
                         price:req.body.price,
                         text:req.body.text
                 }
-                var sql="update product set pkind=?,name=?,comp=?ptext=? where num=?";
+                var sql="update product set pkind=?,name=?,comp=?,ptext=? where num=?";
                 con.query(sql,[pro.kind,pro.name,pro.comp,pro.text,pro.no],function(err,result){
                         if(err) console.log(err);
                         else{
@@ -328,7 +330,8 @@
                         name:req.body.name,
                         kind:req.body.kind,
                         comp:req.body.comp,
-                        text:req.body.text,
+                        // text:encodeURIComponent(req.body.text)
+                        text:req.body.text
                 }
                 var sql='insert into product(pkind,name,comp,ptext) values(?,?,?,?)';
                 con.query(sql,[pro.kind,pro.name,pro.comp,pro.text],function(err,result){
@@ -336,6 +339,23 @@
                         else{
                                 if(result.affectedRows){
                                         res.redirect('/product');
+                                }
+                        }
+                })
+        })
+        app.post("/noimg",function(req,res){
+                var no=req.body.no;
+                var simg="C:\\2-2\\shopingmall\\img\\thumbnail.png";
+                var simgorigin="thumbnail.png";
+                var simgname="thumbnail.png";
+                var sql='insert into productimg(simg,simgorigin,simgname,num) values(?,?,?,?)';
+                con.query(sql,[simg,simgorigin,simgname,no],function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                if(result.affectedRows){
+                                        res.send("true");
+                                }else{
+                                        res.send("false");
                                 }
                         }
                 })

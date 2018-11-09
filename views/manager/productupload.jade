@@ -68,7 +68,21 @@ include ../user/top.jade
                 $("#prod").css("border-bottom","5px solid white");
                 $("#prod").css("color","white");
                 $("#upload").click(function(){
-                        $("#frm").submit();
+                        if(!$("#simg").val()){
+                                $.ajax({
+                                        url:"/noimg",
+                                        type:"post",
+                                        dataType:"json",
+                                        data:{no:$("#sfrm")[0][0].value},
+                                        success: function(result){
+                                                if(result){
+                                                        $("#frm").submit();
+                                                }
+                                        }
+                                })
+                        }else{
+                                $("#frm").submit();
+                        }
                 })
                 $("#simg").on("change",function(){
                         var form=$('#sfrm')[0];

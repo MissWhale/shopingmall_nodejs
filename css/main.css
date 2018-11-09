@@ -509,3 +509,278 @@ strong{
         color: white;
         background-position: 99% 50%;
 }
+.detailinfo  {
+        display: flex;
+        position:  relative;
+        left:  0;
+        top:  40px;
+        width:  1200px;
+        height:  auto;
+        margin:0px  auto;
+        font-family:  "Roboto",  sans-serif;
+}
+
+.procate{
+        z-index: 10000;
+        width:  1200px;
+        height: 35px;
+        padding:10px;
+        text-align:  center;
+        position: absolute;
+        background:white;
+}
+.procateFixed {
+        position: fixed;
+        top: 0px;
+}
+.probuyFixed {
+        position: fixed;
+        top: 55px;
+        left: 1273px;
+}
+@media (max-width:1280px){
+        .probuyFixed{
+                left: 953px;
+        }
+}
+
+#cateMenu{
+        list-style:  none;
+        margin:  0;  
+        padding:  0  0  25px  5px;
+        /*  border-bottom:  1px  solid  red;  */
+    }
+    #cateMenu  li{
+        float:  left;
+        margin:  0;  
+    }
+    #cateMenu  a{
+        display: block;
+        margin: 0;
+        padding: 5px 70px 17px 70px;
+        height: 20px;
+        font-size: 17px;
+        font-weight: bold;
+        color: #000000;
+        text-decoration: none;
+    }
+    /*  #mainMenu  a:visited{  color:  #F43142;  }  */
+    #cateMenu  a:hover{  color:  #F43142;  }
+    /*  #mainMenu  a:active{  color:  #F43142;  }  */
+    #cateMenu  a:hover,  #mainMenu  a:active{  border-bottom:  3px  solid  #F43142;  }
+.proimgdiv{
+        top: 50px;
+        position: relative;
+        display: flex;
+        width: 1200px;
+}
+.proimg{
+        margin-top:20px;
+        margin-left: 20px;
+        width: 900px;
+        border-right: 1px solid;
+}
+.probuy{
+        margin-top:20px;
+        margin-left: 20px;
+}
+
+.sideoption{
+        text-align:left !important;
+}
+.sideoption a{
+        font-size: 12px;
+        font-family: Helvetica,Arial,sans-serif;
+        background-color: white;
+        border:1px solid #dadada;
+        padding: 7px 0px 3px 10px;
+        display: block;
+        width: 245px;
+        height: 23px;
+}
+.sideoption span{
+
+}
+.sideoption img{
+        position: absolute;
+        right: 12px;
+        width: 16.5px;
+}
+
+.sideoptiondiv{
+        width: 257px;
+        display:block;
+        position: absolute;
+        top: 20px;
+        z-index: 1000;
+}
+.probuy probuyFixed .sideoptiondiv{
+        top:0px;
+}
+.sideoptiondivno{
+        display:none;
+}
+.sideoptiontop{
+        background: #999999;
+        height: 40px;
+        border-bottom: 1px solid #555;
+}
+.sideoptiontop span{
+        line-height: 22px;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        padding: 9px;
+        margin:0px;
+        display: inline-block;
+}
+.sideoptiontop img{
+        position: absolute;
+        right: 15px;
+        top: 13px;
+}
+.sideoptionlist ul{
+        padding: 0px;
+        list-style: none;
+        margin: 0px;
+}
+.sideoptionlist a{
+        border:1px solid #e5e5e5;
+        border-top:none;
+        padding: 8px 0px 0px 10px;
+}
+.sideoptionlist strong{
+        position: absolute; 
+        right: 25px;
+        color:black;
+        font: bold 12px Tahoma,sans-serif;
+}
+.sideoptionul{
+        list-style: none;
+        padding: 0px;
+}
+.sideoptionul li{
+        border-top:1px solid;
+        border-bottom:1px solid;
+        padding-bottom: 10px;
+        margin-top:10px;
+        background-color: #eee;
+}
+.sideoptionul .min{
+        width: 23px;
+        height: 23px;
+        border:1px solid #e5e5e5;
+        overflow: hidden;
+        padding:0;
+        position: absolute;
+}
+.sideoptionul .plus{
+        width: 23px;
+        height: 23px;
+        border:1px solid #e5e5e5;
+        overflow: hidden;
+        padding:0;
+        position: absolute;
+}
+.sideoptionul .delete{
+        width: 23px;
+        height: 23px;
+        border:1px solid #e5e5e5;
+        overflow: hidden;
+        padding:0;
+        position: relative;
+        float: right;
+}
+.sidedelete{
+        background: url('../img/deleteb.png') no-repeat;
+        background-color: white;
+        background-position: center;
+        cursor: pointer;
+}
+.sidedelete:hover{
+        background: url('../img/deletew.png') no-repeat;
+        background-color: #F43142;
+        background-position: center;
+}
+.sidemin{
+        background: url('../img/minusb.png') no-repeat;
+        background-color: white;
+        background-position: center;
+        cursor: pointer;
+}
+.sidemin:hover{
+        background: url('../img/minusw.png') no-repeat;
+        background-color: #F43142;
+        background-position: center;
+}
+.sideplus{
+        background: url('../img/plusb.png') no-repeat;
+        background-position: center;
+        background-color: white;
+        cursor: pointer;
+}
+.sideplus:hover{
+        background: url('../img/plusw.png') no-repeat;
+        background-color: #F43142;
+        background-position: center;
+}
+.sidemp_wrap{
+        padding: 1px 4px 1px;
+        width: 22px;
+        height: 19px;
+        border-top:1px solid #e5e5e5;
+        border-bottom:1px solid #e5e5e5;
+        border-left:none !important;
+        border-right:none !important;
+        text-align: center;
+        margin-bottom: -20px;
+        margin-left: 24px;
+}
+.sideoptionul span{
+        position: relative;
+        float: right;
+        color: black;
+        font: bold 12px Tahoma,sans-serif;
+        margin-top: 3px;
+        margin-right: 10px;
+}
+.sideoptiontotal strong{
+        color: #F43142;
+        font-size: 1.4em;
+}
+.sideoptiontotal th{
+        text-align: left;
+        font-weight: normal;
+        font-size: 12px;
+}
+.sideoptiontotal td{
+        text-align: right;
+        width: 180px;
+}
+
+.sidebuy a{
+        display: inline-block;
+        background: transparent;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-style: normal;
+        font-size: 13px;
+        letter-spacing: 0.3em;
+        color: red;
+        border-radius: 0;
+        padding: 18px 19px 20px;
+        transition: all 0.7s ease-out;
+        background: linear-gradient(270deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0.8), rgba(189, 21, 21, 0), rgba(255, 1, 1, 0));
+        background-position: 1% 50%;
+        background-size: 300% 300%;
+        text-decoration: none;
+        margin: 0.625rem;
+        border: none;
+        border: 1px solid red;
+}
+.sidebuy a:hover{
+        color: #fff;
+        border: 1px solid red;
+        color: white;
+        background-position: 99% 50%;
+}
