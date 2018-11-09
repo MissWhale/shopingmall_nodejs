@@ -33,6 +33,7 @@
         }
         var option={
                 host:'114.71.137.109',
+
                 port:3306,
                 user:'root',
                 password:'tmvlflt1234',
@@ -80,10 +81,12 @@
                         if(err) console.log(err);
                         else{
                                 var postcnt=result[0].postcnt;
-                                var sql="select * from product join productimg using(num) order by num desc limit ?,? ";
+                                var sql="select product.*, productimg.*, optprice from product join productimg using(num) join productopt using(num) WHERE optprice = (select min(optprice) from productopt) ORDER by product.num DESC limit ?,?;";
                                 con.query(sql,[start,maxpost],function(err,result){
                                         if(err) console.log(err);
                                         else{
+                                                console.log(result);
+                                                var sql
                                                 var pager={
                                                         pagecnt:postcnt%maxpost == 0 ? Math.trunc(postcnt/maxpost) : Math.trunc(postcnt/maxpost) +1, //총페이지수
                                                         startpost:maxpost*pno-maxpost, //시작상품넘버
@@ -107,12 +110,25 @@
                 con.query(sql,pno,function(err,result){
                         if(err) console.log(err);
                         else{
-                                if(req.session.displayname){
-                                        var dname=req.session.displayname;
-                                        res.render('prodetail',{name:dname,id:req.session.user,pro:result[0]});
-                                }else{
-                                        res.render('prodetail',{pro:result[0]});
-                                }
+                                var sql="select optcode,min(optprice) as min from productopt where num=?";
+                                con.query(sql,pno,function(err,min){
+                                        if(err) console.log(err);
+                                        else{
+                                                var sql="select * from productopt where num=?";
+                                                con.query(sql,pno,function(err,opt){
+                                                        if(err) console.log(err);
+                                                        else{
+                                                                console.log(opt);
+                                                                if(req.session.displayname){
+                                                                        var dname=req.session.displayname;
+                                                                        res.render('prodetail',{name:dname,id:req.session.user,pro:result[0],opt:opt,min:min[0]});
+                                                                }else{
+                                                                        res.render('prodetail',{pro:result[0],opt:opt});
+                                                                }
+                                                        }
+                                                })
+                                        }
+                                })
                         }
                 })
         })
@@ -188,12 +204,12 @@
                 var pno=req.params.pno; //페이지넘버
                 if(!pno)  var pno=1;
                 var start=maxpost*pno-maxpost;
-                var sql="select count(*) as postcnt from product join productimg using(num)";
+                var sql="select count(*) as postcnt from product";
                 con.query(sql,function(err,result){
                         if(err) console.log(err);
                         else{
                                 var postcnt=result[0].postcnt;
-                                var sql="select * from product join productimg using(num) order by num desc limit ?,?";
+                                var sql="select * from product order by num desc limit ?,?";
                                 con.query(sql,[start,maxpost],function(err,result){
                                         if(err) console.log(err);
                                         else{
@@ -246,17 +262,18 @@
         })
         app.get(["/productmodify",'/productmodify?:num'],function(req,res){ //상품수정
                 var num=req.query.num;
-                var sql="select * from product where num=?";
+                var sql="select * from product natural join productimg where num=?";
                 con.query(sql,num,function(err,pro){
                         if(err) console.log(err);
                         else{
-                                var sql="select * from productimg where num=?";
+                                var sql="select a.* from productopt a where num=?";
                                 con.query(sql,num,function(err,result){
                                         if(err) console.log(err);
                                         else{
-                                                 if(req.session.displayname){
+                                                // console.log(result);
+                                                if(req.session.displayname){
                                                         var dname=req.session.displayname;
-                                                        res.render('productmodify',{name:dname,id:req.session.user,pro:pro[0],result:result[0]});
+                                                        res.render('productmodify',{name:dname,id:req.session.user,pro:pro[0],opt:result});
                                                 }else{
                                                         res.render('productmodify');
                                                 }
@@ -276,8 +293,8 @@
                         price:req.body.price,
                         text:req.body.text
                 }
-                var sql="update product set pkind=?,pnum=?,name=?,comp=?,count=?,price=?,ptext=? where num=?";
-                con.query(sql,[pro.kind,pro.num,pro.name,pro.comp,pro.count,pro.price,pro.text,pro.no],function(err,result){
+                var sql="update product set pkind=?,name=?,comp=?ptext=? where num=?";
+                con.query(sql,[pro.kind,pro.name,pro.comp,pro.text,pro.no],function(err,result){
                         if(err) console.log(err);
                         else{
                                 if(result.affectedRows){
@@ -289,6 +306,16 @@
                 })
         })
         app.get("/productupload",function(req,res){
+                var sql="SHOW TABLE STATUS LIKE 'product'";
+                con.query(sql,function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                var sql="delete from productopt where num=?";
+                                con.query(sql,result[0].Auto_increment,function(err,result){
+                                        if (err) console.log(err);
+                                })
+                        }
+                })
                 if(req.session.displayname){
                         var dname=req.session.displayname;
                         res.render('productupload',{name:dname,id:req.session.user});
@@ -300,14 +327,11 @@
                 var pro={
                         name:req.body.name,
                         kind:req.body.kind,
-                        num:req.body.num,
                         comp:req.body.comp,
-                        count:req.body.count,
-                        price:req.body.price,
                         text:req.body.text,
                 }
-                var sql='insert into product(pkind,pnum,name,comp,count,price,ptext) values(?,?,?,?,?,?,?)';
-                con.query(sql,[pro.kind,pro.num,pro.name,pro.comp,pro.count,pro.price,pro.text],function(err,result){
+                var sql='insert into product(pkind,name,comp,ptext) values(?,?,?,?)';
+                con.query(sql,[pro.kind,pro.name,pro.comp,pro.text],function(err,result){
                         if(err) console.log(err);
                         else{
                                 if(result.affectedRows){
@@ -379,6 +403,70 @@
                                         "message":"업로드 실패"
                         }});
                 }
+        })
+        app.post("/optadd",function(req,res){
+                var opt={
+                        code:req.body.code,
+                        name:req.body.name,
+                        cnt:req.body.cnt,
+                        price:req.body.price,
+                        num:req.body.num
+                }
+                var sql="insert into productopt(optcode,optname,optprice,optcnt,num) values(?,?,?,?,?)";
+                con.query(sql,[opt.code,opt.name,opt.price,opt.cnt,opt.num],function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                if(result.affectedRows){
+                                        res.send("true");
+                                }else{
+                                        res.send("false");
+                                }
+                        }
+                })
+        })
+        app.post("/optmodi",function(req,res){
+                var num=req.body.num;
+                var opt={
+                        code:req.body.code,
+                        name:req.body.name,
+                        cnt:req.body.cnt,
+                        price:req.body.price,
+                        num:req.body.num
+                }
+                var sql="update productopt set optcode=?,optname=?,optprice=?,optcnt=? where optnum=?";
+                con.query(sql,[opt.code,opt.name,opt.price,opt.cnt,opt.num],function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                if(result.affectedRows){
+                                        res.send("true");
+                                }else{
+                                        res.send("false");
+                                }
+                        }
+                })
+        })
+        app.post("/optdel",function(req,res){
+                var num=req.body.num;
+                var sql="delete from productopt where optnum=?";
+                con.query(sql,num,function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                if(result.affectedRows){
+                                        res.send("true");
+                                }else{
+                                        res.send("false");
+                                }
+                        }
+                })
+        })
+        app.post("/getoptnum",function(req,res){ //Auto_increment Get
+                var sql="SHOW TABLE STATUS LIKE 'productopt'";
+                con.query(sql,function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                res.send({num:result[0].Auto_increment});
+                        }
+                })
         })
         app.post("/getnum",function(req,res){ //Auto_increment Get
                 var sql="SHOW TABLE STATUS LIKE 'product'";

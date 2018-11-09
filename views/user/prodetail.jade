@@ -1,6 +1,7 @@
 include ../user/top.jade
                 link(rel='stylesheet', href='./css/selectbox.min.css')
                 script(type='text/javascript', src='./js/selectbox.min.js')
+                script.
                 .upload
                         .prct_simple
                                 .prct_imgbox
@@ -11,7 +12,7 @@ include ../user/top.jade
                                 .prct_infobox
                                         .prct_defalut_info
                                                 .prct_defalut_area
-                                                        label="상품코드 : "+pro.pnum
+                                                        label="상품코드 : "+min.optcode
                                                         h3=pro.name
                                                 //- hr
                                                 .prct_defalut_table
@@ -20,7 +21,7 @@ include ../user/top.jade
                                                                         tr
                                                                                 th 가격
                                                                                 td
-                                                                                        strong(style="color:black")=pro.price+"원" 
+                                                                                        strong(style="color:black")=min.min+"원" 
                                                                         tr
                                                                                 th 배송비
                                                                                 td#deli 
@@ -40,14 +41,13 @@ include ../user/top.jade
                                                                                                         img.opcls(src="./img/exit.png")
                                                                                                 .optionlist
                                                                                                         ul
-                                                                                                                li.listsel(data-name="white" data-price="28900" data-num="1")
-                                                                                                                        a
-                                                                                                                                span white
-                                                                                                                                strong 28900원
-                                                                                                                li.listsel(data-name="black" data-price="28900" data-num="2")
-                                                                                                                        a
-                                                                                                                                span black
-                                                                                                                                strong 28900원
+                                                                                                                each op in opt
+                                                                                                                        li.listsel(data-name=op.optname data-price=op.optprice data-num=op.optnum)
+                                                                                                                                a
+                                                                                                                                        span=op.optname
+                                                                                                                                        
+                                                                                                                                        -var price=op.optprice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                                                                                                        strong=price
                                                 //- hr
                                                 .optionprice
                                                         ul.optionul
@@ -57,7 +57,7 @@ include ../user/top.jade
                                                                         tr
                                                                                 th 총 합계금액
                                                                                 td
-                                                                                        strong#totalprice=0
+                                                                                        strong#totalprice(data-total="0")=0
                                                                                         span 원
                                                 .buydiv
                                                         a 장바구니
@@ -71,30 +71,22 @@ include ../user/top.jade
                         $( window ).on( "load", function() {
                                 $(".justwrap").css("display","inline-grid");
                         })
-                        $(".option").click(function(){
+                        $(".option").click(function(){ //옵션창활성화
                                 $(".optiondiv").css("display","block");
                                 $(".optiondivno").attr("class","optiondiv");
                         })
-                        $(".opcls").click(function(){
+                        $(".opcls").click(function(){ //옵션창닫기
                                 $(".optiondiv").css("display","none");
                                 $(".optiondiv").attr("class","optiondivno");
                         })
-                        $("li[class='listsel']").click(function(){
+                        $("li[class='listsel']").click(function(){ //옵션선택
                                 $(".optiondiv").css("display","none");
                                 $(".optiondiv").attr("class","optiondivno");
-                                //- console.log($(this));
                                 var name=$(this)[0].dataset.name;
                                 var price=$(this)[0].dataset.price;
                                 var num=$(this)[0].dataset.num;
-                                //- console.log($('.optionul').children());
-                                //- console.log($(this)[0].dataset.name);
-                                //- console.log($('.optionul').children());
                                 var dupl=0;
                                 for(var start=0;start<=$('.optionul').children().length;start++){
-                                        //- console.log("Test");
-                                        //- console.log($('.optionul').children().eq(start).attr('class'));
-                                        //- console.log($(this)[0].dataset.name+":"+start+"고른거");
-                                        //- console.log($('.optionul').children().children()[start].innerHTML+":"+start+"있는거");
                                         if($(this)[0].dataset.name == $('.optionul').children().eq(start).attr('class')){
                                                 dupl=1;
                                         }
@@ -106,54 +98,63 @@ include ../user/top.jade
                                         var html=html+"<input class='mp_wrap' type='text' data-price="+price+" name='procnt' value='1'  onchange=cntcgn(this);>";
                                         var html=html+"<button class='plus' data-price="+price+" onclick=plus(this);></button>";
                                         var html=html+="<button class='delete' onclick=del(this);></button>";
-                                        var html=html+'<span class=op_price>'+price+'원</span></li>';
+                                        var html=html+'<span class=op_price data-tp='+price+'>'+numberWithCommas(price)+'원</span></li>';
                                         $('.optionul').append(html);
                                         if($('.optionul').children().length){
                                                 $(".optiontotal").css('display','block');
                                         }
-                                        $("#totalprice")[0].innerHTML=Number($("#totalprice")[0].innerHTML)+Number(price);
+                                        $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)+Number(price);
+                                        $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
                                 }
                         })
-                        function minus(m){
+                        function minus(m){ //수량감소
                                 var price=m.dataset.price;
                                 if($(m).next().val()>1){
                                         $(m).next()[0].value=Number($(m).next().val())-1;
-                                        $(m).next().next().next().next()[0].innerHTML=Number($(m).next()[0].value)*Number(price)+"원";
-                                        $("#totalprice")[0].innerHTML=Number($("#totalprice")[0].innerHTML)-Number(price);
+                                        $(m).next().next().next().next()[0].dataset.tp=Number($(m).next()[0].value)*Number(price);
+                                        $(m).next().next().next().next()[0].innerHTML=numberWithCommas($(m).next().next().next().next()[0].dataset.tp)+"원";
+                                        $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)-Number(price);
+                                        $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
                                 }
                                 else{
                                         alert('최소수량은 1이상입니다');
                                 }
                         }
-                        function plus(p){
+                        function plus(p){ //수량추가
                                 var price=p.dataset.price;
                                 $(p).prev()[0].value=Number($(p).prev().val())+1;
-                                $(p).next().next()[0].innerHTML=Number($(p).prev()[0].value)*Number(price)+"원";
-                                $("#totalprice")[0].innerHTML=Number($("#totalprice")[0].innerHTML)+Number(price);
+                                $(p).next().next()[0].dataset.tp=Number($(p).prev()[0].value)*Number(price);
+                                $(p).next().next()[0].innerHTML=numberWithCommas(Number($(p).next().next()[0].dataset.tp))+"원";
+                                $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)+Number(price);
+                                $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
                         }
-                        function del(d){
-                                //- console.log($(d).next()[0].innerHTML.slice(0,-1));
-                                var total=$(d).next()[0].innerHTML.slice(0,-1);
-                                 $("#totalprice")[0].innerHTML=Number($("#totalprice")[0].innerHTML)-Number(total);
-                                var total=$(d).prev().prev().val()
+                        function del(d){ //옵션삭제
+                                var total=$(d).next()[0].dataset.tp;
+                                $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)-Number(total);
+                                 $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
                                 $(d).parent().remove();
                                 if(!$('.optionul').children().length){
                                         $(".optiontotal").css('display','none');
+                                        $("#totalprice")[0].dataset.total=0;
                                         $("#totalprice")[0].innerHTML=0;
                                 }
                         }
-                        function cntcgn(c){
+                        function cntcgn(c){ //inputbox 숫자변경
+                                if(Number($(c).val())<1){
+                                        alert("1이하는 입력할 수 없습니다");
+                                        $(c)[0].value=1;
+                                        return;
+                                }
                                 var price=c.dataset.price;
-                                var first=$(c).next().next().next()[0].innerHTML.slice(0,-1);
+                                var first=$(c).next().next().next()[0].dataset.tp;
                                 var final=Number($(c).val())*Number(price);
                                 var result=Number(final)-Number(first);
-                                //- if(first>final){
-                                //-         var result=Number(first)-Number(final);
-                                //-         $("#totalprice")[0].innerHTML=Number($("#totalprice")[0].innerHTML)-Number(result);
-                                //- }else{
-                                //-         var result=Number(final)-Number(first);
-                                //-         $("#totalprice")[0].innerHTML=Number($("#totalprice")[0].innerHTML)+Number(result);
-                                //- }
-                                $(c).next().next().next()[0].innerHTML=Number($(c).val())*Number(price)+"원";
-                                $("#totalprice")[0].innerHTML=Number($("#totalprice")[0].innerHTML)+Number(result);
+                                $(c).next().next().next()[0].dataset.tp=final;
+                                $(c).next().next().next()[0].innerHTML=numberWithCommas($(c).next().next().next()[0].dataset.tp)+"원";
+                                $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)+Number(result);
+                                $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
                         };
+                        function numberWithCommas(x) { //콤마찍기
+                                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        }
+

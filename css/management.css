@@ -337,3 +337,12 @@ textarea{
         border:1px solid #f40;  
         background-color:#f40;  
 }
+.optul{
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+}
+.optul input{
+        margin-right: 10px;
+        margin-left: 10px;
+}

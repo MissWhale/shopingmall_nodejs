@@ -38,22 +38,17 @@ include ../user/top.jade
                                                                                         option(value='패드') 패드
                                                                                         option(value='PC악세사리') PC악세사리
                                                                 tr
-                                                                        th 상품코드
-                                                                        td: input(type='text' style="width: 250px;" name="num")
-                                                                tr
                                                                         th 상품명
                                                                         td: input(type='text' style="width: 250px;" name="name")
                                                                 tr
                                                                         th 제조사
                                                                         td: input(type='text' style="width: 250px;" name="comp")
-                                                                tr
-                                                                        th 판매수량
-                                                                        td: input(type='number' min=0 style="width: 100px;" value="0" name="count")
-                                                                tr
-                                                                        th 가격
+                                                                tr 
+                                                                        th 옵션
                                                                         td
-                                                                                input(type='text' style="width: 100px;" value="0" name="price") 
-                                                                                p(style="display: inline;") 원
+                                                                                .optlist
+                                                                                        ul.optul
+                                                                                a.rainbtn#optadd(alt="옵션추가")
                                                                 tr
                                                                         th 상품설명
                                                                         td: textarea#explan(name="text" )
@@ -78,7 +73,6 @@ include ../user/top.jade
                 $("#simg").on("change",function(){
                         var form=$('#sfrm')[0];
                         var data = new FormData(form);
-                        console.log(data);
                         $.ajax({
                                 url:"/simgdb",
                                 type:"post",
@@ -99,3 +93,141 @@ include ../user/top.jade
                         extraPlugins: 'autogrow',
                         filebrowserUploadUrl: '/bimgdb',
                 });
+                $("#optadd").click(function(){
+                        $.ajax({
+                                url:"/getoptnum",
+                                type:"post",
+                                success: function(result){
+                                        var num=result.num;
+                                        var html="<li class="+num+"><span>제품코드</span><input type='text' class='optcode' style='width:100px'>";
+                                        var html=html+"<span>제품이름</span><input type='text' class='optname' style='width:160px'>";
+                                        var html=html+"<span>수량</span><input type='number' min=0 value='0' class='optcnt' style='width:60px;text-align: right;'>";
+                                        var html=html+"<span>가격</span><input type='text' value='0' class='optprice' style='width:70px;text-align: right;margin-right:0px'><span>원</span>";
+                                        var html=html+"<a class='rainbtn' alt='완료' id='ok' data-num="+num+" onclick='optup(this)' style='position: absolute;margin-left: 650px;margin-top: -40px;'></a>";
+                                        var html=html+"<a class='rainbtn' alt='수정' id='modi' data-num="+num+" onclick='optmodi(this)' style='position: absolute;margin-left: 650px;margin-top: -40px;display:none'></a>";
+                                        var html=html+"<a class='rainbtn' alt='수정완료' id='modiok' data-num="+num+" onclick='optmodiok(this)' style='position: absolute;margin-left: 650px;margin-top: -40px;display:none'></a>";
+                                        var html=html+"<a class='rainbtn' alt='취소' id='close' data-num="+num+" onclick='optclose(this)' style='position: absolute;margin-left: 760px;margin-top: -40px;'></a>";
+                                        var html=html+"<a class='rainbtn' alt='취소' id='modicl' data-num="+num+" onclick='optmodicl(this)' style='position: absolute;margin-left: 760px;margin-top: -40px;display:none'></a>";
+                                        var html=html+"<a class='rainbtn' alt='삭제' id='del' data-num="+num+" onclick='optdel(this)' style='position: absolute;margin-left: 760px;margin-top: -40px;display:none'></a></li>";
+                                        $('.optul').append(html);
+                                }
+                        })
+                        $(this).css("display","none");
+                });
+                function optup(a){
+                        var li=$("li[class="+a.dataset.num+"]");
+                        var code=li.children()[1].value;
+                        var name=li.children()[3].value;
+                        var cnt=li.children()[5].value;
+                        var price=li.children()[7].value;
+                        var no=$("#sfrm")[0][0].value;
+                        if(!code){
+                                alert("제품코드를 입력하세요");
+                                return;
+                        }else if(!name){
+                                alert("제품이름을 일력하세요");
+                                return;
+                        }else if(cnt<1){
+                                alert("수량을 1개이상 입력하세요");
+                                return;
+                        }else if(price<100){
+                                alert("금액을 100원이상 입력하세요");
+                                return;
+                        }
+                       $.ajax({
+                                url:"/optadd",
+                                type:"post",
+                                dataType:'json',
+                                data:{code:code,name:name,cnt:cnt,price:price,num:no},
+                                success: function(result){
+                                        if(result){
+                                                li.children(1).attr("readonly","true");
+                                                li.children(3).attr("readonly","true");
+                                                li.children(5).attr("readonly","true");
+                                                li.children(7).attr("readonly","true");
+                                                li.children("#ok").css("display","none");
+                                                li.children("#close").css("display","none");
+                                                li.children("#modi").css("display","flex");
+                                                li.children("#del").css("display","flex");
+                                                $("#optadd").css("display","flex");
+                                                alert("옵션등록성공");
+                                        }
+                                }
+                        });
+                }
+                function optmodi(a){
+                        var no=a.dataset.num;
+                        var li=$("li[class="+no+"]");
+                        li.children()[1].removeAttribute("readonly");
+                        li.children()[3].removeAttribute("readonly");
+                        li.children()[5].removeAttribute("readonly");
+                        li.children()[7].removeAttribute("readonly");
+                        li.children()[1].dataset.text=li.children()[1].value;                      
+                        li.children()[3].dataset.text=li.children()[3].value;
+                        li.children()[5].dataset.text=li.children()[5].value;
+                        li.children()[7].dataset.text=li.children()[7].value;
+                        li.children("#modi").css("display","none");
+                        li.children("#del").css("display","none");
+                        li.children("#modiok").css("display","flex");
+                        li.children("#modicl").css("display","flex");
+                }
+                function optmodiok(a){
+                        var no=a.dataset.num;
+                        var code=$('.optcode').val();
+                        var name=$('.optname').val();
+                        var cnt=$('.optcnt').val();
+                        var price=$('.optprice').val();
+                        var li=$("li[class="+no+"]");
+                        $.ajax({
+                                url:"/optmodi",
+                                type:"post",
+                                dataType:'json',
+                                data:{code:code,name:name,cnt:cnt,price:price,num:no},
+                                success: function(result){
+                                        if(result){
+                                                li.children(1).attr("readonly","true");
+                                                li.children(3).attr("readonly","true");
+                                                li.children(5).attr("readonly","true");
+                                                li.children(7).attr("readonly","true");
+                                                li.children("#modiok").css("display","none");
+                                                li.children("#modicl").css("display","none");
+                                                li.children("#modi").css("display","flex");
+                                                li.children("#del").css("display","flex");
+                                                alert("옵션이 수정되었습니다.");
+                                        }else{
+                                                alert("옵션 수정이 실패 하였습니다.");
+                                        }
+                                }
+                        })
+                }
+                function optmodicl(a){
+                        var no=a.dataset.num;
+                        var li=$("li[class="+no+"]");
+                        li.children("#modi").css("display","flex");
+                        li.children("#del").css("display","flex");
+                        li.children("#modiok").css("display","none");
+                        li.children("#modicl").css("display","none");
+                        li.children()[1].value=li.children()[1].dataset.text;
+                        li.children()[3].value=li.children()[3].dataset.text;
+                        li.children()[5].value=li.children()[5].dataset.text;
+                        li.children()[7].value=li.children()[7].dataset.text;
+                }
+                function optclose(a){
+                        $("li[class="+a.dataset.num+"]").remove();
+                        $("#optadd").css("display","flex");
+                }
+                function optdel(a){
+                        $.ajax({
+                                url:"/optdel",
+                                type:"post",
+                                data:{num:a.dataset.num},
+                                success: function(result){
+                                        if(result){
+                                                alert("옵션이 삭제되었습니다.");
+                                        }else{
+                                                alert("옵션 삭제가 실패 하였습니다.");
+                                        }
+                                }
+                        })
+                        $("li[class="+a.dataset.num+"]").remove();
+                }
