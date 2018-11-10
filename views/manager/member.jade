@@ -1,0 +1,158 @@
+include ../user/top.jade 
+                link(rel='stylesheet',href='./css/management.css')
+                .upload
+                        nav.manage
+                                ul#manageMenu
+                                        li: a#user(href="/member") 회원관리
+                                        li: a#prod(href="/product") 상품관리
+                                        li: a#order(href="/order") 주문관리
+                                        li: a#faq(href="/faq") FAQ관리
+                        .prodmg
+                                .container-table100
+                                        .wrap-table100
+                                                .table100
+                                                        table
+                                                                thead
+                                                                        tr.table100-head
+                                                                                th.column1 ID
+                                                                                th.column2 비밀번호
+                                                                                th.column3 이름
+                                                                                th.column4 휴대전화
+                                                                                th.column5 이메일
+                                                                                th.column6 생년월일
+                                                                                th.column7 수정
+                                                                                th.column8 삭제
+                                                                tbody
+                                                                        ul
+                                                                                if(result)
+                                                                                        each mem in result     
+                                                                                                tr(class=mem.id)
+                                                                                                        td.column1(data-id=mem.id style="width: 10%;")
+                                                                                                                a=mem.id
+                                                                                                                input(type="text" name=mem.id style="display:none" value=mem.id)
+                                                                                                        td.column2(data-pw=mem.pw style="width: 10%;")
+                                                                                                                a=mem.pw
+                                                                                                                input(type="text" name=mem.pw style="display:none" value=mem.pw)
+                                                                                                        td.column3(data-name=mem.name style="width: 10%;")
+                                                                                                                a=mem.name
+                                                                                                                input(type="text" name=mem.name style="display:none" value=mem.name)
+                                                                                                        td.column4(data-phone=mem.phone style="width: 15%;")
+                                                                                                                a=mem.phone
+                                                                                                                input(type="text" name=mem.phone style="display:none" value=mem.phone)
+                                                                                                        td.column5(data-email=mem.email style="width: 25%;")
+                                                                                                                a=mem.email
+                                                                                                                input(type="text" name=mem.email style="display:none" value=mem.email)
+                                                                                                        td.column6(data-birth=mem.birth style="width: 15%;")
+                                                                                                                a=new Date(mem.birth).format("yyyy-MM-dd")
+                                                                                                                input(type="date" name=mem.pw style="display:none" value=new Date(mem.birth).format("yyyy-MM-dd"))
+                                                                                                        td.column7(style="width: 7.5%;"): a.rainbtnlist#modi(alt="수정" name=mem.id)
+                                                                                                                a.rainbtnlist#ok(alt="완료" name=mem.id style="display:none")
+                                                                                                        td.column8(style="width:7.5%;"): a.rainbtnlist#delete(alt="삭제" name=mem.id)
+                                                                                                                a.rainbtnlist#close(alt="취소" name=mem.id style="display:none")
+                .pagingdiv
+                        .paging
+                                -var pover=Math.trunc(pager.pagecnt/10)
+                                if(pover)
+                                        if(pno<11)
+                                                - var n = 1 //시작페이지
+                                                - var max=10 //끝페이지
+                                                - var next=11 //다음10페이지
+                                                - var check=1 //다음,마지막페이지 체크
+                                        else
+                                                - var n=pno%10 ==0 ? (Math.trunc(pno/10)-1)*10+1 : Math.trunc(pno/10)*10+1 //시작페이지
+                                                - var ip=Math.trunc(n/10) //시작페이지앞자리
+                                                - var fp=Math.trunc(pager.pagecnt/10) //마지막페이지앞자리
+                                                -var pna=pager.pagecnt-n //잔여페이지수
+                                                -var next=(ip+1)*10+1 //다음10페이지
+                                                -var prev=ip*10 //전10페이지
+                                                if(ip == fp)
+                                                        -var max=n+pna
+                                                else
+                                                        -var max=n+9
+                                else
+                                        - var n = 1
+                                        - var max=pager.pagecnt
+                                span
+                                        ul
+                                                if(pno>10)
+                                                        li
+                                                                a#first(href="/member" style="height: 14px;")
+                                                                        img(src="./img/dbackb.png")
+                                                if(prev)
+                                                        li
+                                                                a#prev(href="/member="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        img(src="./img/backb.png")
+                                                while n <= max
+                                                        li
+                                                                if(pno==n)
+                                                                        a(href="/member="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                else
+                                                                        a(href="/member="+n)=n++
+
+                                                if(ip != fp || check)
+                                                        li
+                                                                a#next(href="/member="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        img(src="./img/forb.png")
+                                                        li
+                                                                a#final(href="/member="+pager.pagecnt style="height: 14px;")
+                                                                        img(src="./img/dforb.png")
+        script.
+                $("#user").css("border-bottom","5px solid white");
+                $("#user").css("color","white");
+                $("a[id=modi]").click(function(){
+                        console.log($(this).parent().parent().children());
+                        var tr=$(this).parent().parent().children();
+                        $(this).parent().parent().children(1).children("a").css("display","none");
+                        $(this).parent().parent().children(1).children("input").css("display","inline");
+                        $(this).parent().parent().children(6).children("#modi").css("display","none");
+                        $(this).parent().parent().children(6).children("#ok").css("display","flex");
+                        $(this).parent().parent().children(7).children("#delete").css("display","none");
+                        $(this).parent().parent().children(7).children("#close").css("display","flex");
+                });
+                $("a[id=delete]").click(function(){
+                        $.ajax({
+                                url:"/memdel",
+                                type:"post",
+                                dataType:'json',
+                                data:{'id':$(this).attr("name")},
+                                success: function(result){
+                                        if(result){
+                                                alert("해당 회원이 삭제 되었습니다.");
+                                                location.reload();
+                                        }else{
+                                                alert("회원 삭제가 실패 하였습니다.");
+                                        }
+                                }
+                        })
+                });
+                $("a[id=ok]").click(function(){
+                        var pid=$(this).attr("name");
+                        var id=$(this).parent().parent().children(1).children("input")[0].value;
+                        var pw=$(this).parent().parent().children(1).children("input")[1].value;
+                        var name=$(this).parent().parent().children(1).children("input")[2].value;
+                        var phone=$(this).parent().parent().children(1).children("input")[3].value;
+                        var email=$(this).parent().parent().children(1).children("input")[4].value;
+                        var birth=$(this).parent().parent().children(1).children("input")[5].value;
+                        $.ajax({
+                                url:"/memmodi",
+                                type:"post",
+                                dataType:'json',
+                                data:{pid:pid,id:id,pw:pw,name:name,phone:phone,email:email,birth:birth},
+                                success: function(result){
+                                        if(result){
+                                                alert("해당 회원정보가 수정 되었습니다.");
+                                                location.reload();
+                                        }else{
+                                                alert("회원정보수정이 실패하였습니다.");
+                                        }
+                                }
+                        })
+                });
+                $("a[id=close]").click(function(){
+                        $(this).parent().parent().children(1).children("a").css("display","block");
+                        $(this).parent().parent().children(1).children("input").css("display","none");
+                        $(this).parent().parent().children(6).children("#modi").css("display","flex");
+                        $(this).parent().parent().children(6).children("#ok").css("display","none");
+                        $(this).parent().parent().children(7).children("#delete").css("display","flex");
+                        $(this).parent().parent().children(7).children("#close").css("display","none");
+                });

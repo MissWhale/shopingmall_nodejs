@@ -580,6 +580,59 @@ strong{
         width: 900px;
         border-right: 1px solid;
 }
+.review{
+        margin-top:20px;
+        margin-left: 20px;
+        width: 900px;
+        border-right: 1px solid;
+}
+.revtable{
+        margin-top: 20px;
+        padding: 10px 0px 20px 10px;
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        width: 870px;
+}
+.revstar{
+        display: inline-block;
+}
+.star1{
+        background: url('http://miuu227.godohosting.com/images/icon/ico_review.png') no-repeat -24px 0;
+        background-size: auto 100%;
+        width: 10px;
+        height: 15px;
+        float:left;
+        text-indent: -9999px;
+        cursor: pointer;
+    }
+    .star2{
+        background: url('http://miuu227.godohosting.com/images/icon/ico_review.png') no-repeat -33px;
+        background-size: auto 100%;
+        width: 10px;
+        height: 15px;
+        float:left;
+        text-indent: -9999px;
+        cursor: pointer;
+    }
+    .star1.on{background-position:2px 0;}
+    .star2.on{background-position:-7px 0;}
+.revuser{
+        display: inline-block;
+}
+.revuser .name{
+        margin-left: 670px;
+        font-size:12px;
+}
+.revuser .date{
+        margin-left: 10px;
+        font-size:12px;
+}
+.revopt{
+        font-size:12px;
+}
+.revtext{
+        font-size: 14px;
+}
 .probuy{
         margin-top:20px;
         margin-left: 20px;
@@ -673,6 +726,7 @@ strong{
         overflow: hidden;
         padding:0;
         position: absolute;
+        margin-top: 1px;
 }
 .sideoptionul .plus{
         width: 23px;
@@ -681,6 +735,7 @@ strong{
         overflow: hidden;
         padding:0;
         position: absolute;
+        margin-top: 1px;
 }
 .sideoptionul .delete{
         width: 23px;

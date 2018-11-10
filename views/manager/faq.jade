@@ -3,12 +3,103 @@ include ../user/top.jade
                 .upload
                         nav.manage
                                 ul#manageMenu
-                                        li: a#user(href="/management") 회원관리
+                                        li: a#user(href="/member") 회원관리
                                         li: a#prod(href="/product") 상품관리
                                         li: a#order(href="/order") 주문관리
                                         li: a#faq(href="/faq") FAQ관리
-                        .faqmg
-                                a FAQ관리
-        script.
+                        a.rainbtn#upload(href="/faqupload" alt="faq등록" style="margin: 10px 0px;")
+                        .prodmg
+                                .container-table100
+                                        .wrap-table100
+                                                .table100
+                                                        table
+                                                                thead
+                                                                        tr.table100-head
+                                                                                th.column1 번호
+                                                                                th.column2 제목
+                                                                                th.column3 작성일
+                                                                                th.column4 수정
+                                                                                th.column5(style="width: 7.5%") 삭제
+                                                                tbody
+                                                                        ul
+                                                                                if(result)
+                                                                                        each faq in result     
+                                                                                                tr
+                                                                                                        td.column1(style="width: 7%;")=faq.fnum
+                                                                                                        td.column2(style="width: 63%;text-align:left;")=faq.ftitle
+                                                                                                        td.column3(style="width: 15%")=new Date(faq.freg_date).format("yyyy-MM-dd")
+                                                                                                        td.column4(style="width: 7.5%"): a.rainbtnlist#modi(alt="수정" name=faq.fnum)
+                                                                                                        td.column5(style="width: 7.5%"): a.rainbtnlist#delete(alt="삭제" name=faq.fnum)
+                .pagingdiv
+                        .paging
+                                -var pover=Math.trunc(pager.pagecnt/10)
+                                if(pover)
+                                        if(pno<11)
+                                                - var n = 1 //시작페이지
+                                                - var max=10 //끝페이지
+                                                - var next=11 //다음10페이지
+                                                - var check=1 //다음,마지막페이지 체크
+                                        else
+                                                - var n=pno%10 ==0 ? (Math.trunc(pno/10)-1)*10+1 : Math.trunc(pno/10)*10+1 //시작페이지
+                                                - var ip=Math.trunc(n/10) //시작페이지앞자리
+                                                - var fp=Math.trunc(pager.pagecnt/10) //마지막페이지앞자리
+                                                -var pna=pager.pagecnt-n //잔여페이지수
+                                                -var next=(ip+1)*10+1 //다음10페이지
+                                                -var prev=ip*10 //전10페이지
+                                                if(ip == fp)
+                                                        -var max=n+pna
+                                                else
+                                                        -var max=n+9
+                                else
+                                        - var n = 1
+                                        - var max=pager.pagecnt
+                                span
+                                        ul
+                                                if(pno>10)
+                                                        li
+                                                                a#first(href="/faq" style="height: 14px;")
+                                                                        img(src="./img/dbackb.png")
+                                                if(prev)
+                                                        li
+                                                                a#prev(href="/faq="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        img(src="./img/backb.png")
+                                                while n <= max
+                                                        li
+                                                                if(pno==n)
+                                                                        a(href="/faq="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                else
+                                                                        a(href="/faq="+n)=n++
+
+                                                if(ip != fp || check)
+                                                        li
+                                                                a#next(href="/faq="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        img(src="./img/forb.png")
+                                                        li
+                                                                a#final(href="/faq="+pager.pagecnt style="height: 14px;")
+                                                                        img(src="./img/dforb.png")
+       script.
                 $("#faq").css("border-bottom","5px solid white");
                 $("#faq").css("color","white");
+                $("a[id=modi]").click(function(){
+                        var num=$(this).attr("name");
+                        href ="/faqmodify?num="+num;
+                        location.href =href;
+                })
+                $("a[id=delete]").click(function(){
+                        var num=$(this).attr("name");
+                        console.log(num);
+                        $.ajax({
+                                url:"/faqdelete",
+                                type:"post",
+                                dataType:'json',
+                                data:{num:num},
+                                success: function(result){
+                                        if(result){
+                                                alert("해당 글이 삭제 되었습니다.");
+                                                location.reload();
+                                        }else{
+                                                alert("해당 글을 삭제하지 못하였습니다.");
+                                        }
+                                }
+                        })
+                })

@@ -1,0 +1,44 @@
+include ../user/top.jade 
+                link(rel='stylesheet',href='./css/management.css')
+                link(rel='stylesheet', href='./css/selectbox.min.css')
+                script(type='text/javascript', src='./js/selectbox.min.js')
+                script(type='text/javascript', src='./js/autosize.js')
+                script(type='text/javascript', src='./js/ckeditor/ckeditor.js')
+                .upload
+                        nav.manage
+                                ul#manageMenu
+                                        li: a#user(href="/management") 회원관리
+                                        li: a#prod(href="/product") 상품관리
+                                        li: a#order(href="/order") 주문관리
+                                        li: a#faq(href="/faq") FAQ관리
+                        .prodmg(style="border:0px;margin-left:30px;margin-bottom: 50px;")
+                                h2 FAQ등록
+                                form#frm(action="/faqupload" method="post")
+                                        .table
+                                                table
+                                                        tbody
+                                                                tr(style="border-top: 2px rgb(97, 96, 96) solid;")
+                                                                        th 제목
+                                                                        td: input#title(type='text' name="title")
+                                                                tr
+                                                                        th 내용
+                                                                        td: textarea#explan(name="text" )
+                                .uploadbtn
+                                        a.rainbtn#upload(alt="등록" style="margin: 10px 0px;")
+                                        a.rainbtn(href="/faq" alt="취소" style="margin-left: 110px;margin-top: -40px;")
+        script.
+                $("#faq").css("border-bottom","5px solid white");
+                $("#faq").css("color","white");
+                $("#upload").click(function(){
+                        if(!$("#title").val()){
+                                alert("제목을 입력하세요");
+                                return;
+                        }else if(!CKEDITOR.instances.explan.getData()){
+                                alert("내용을 입력하세요");
+                        }else{
+                                $("#frm").submit();
+                        }
+                })
+                CKEDITOR.replace( 'explan',{
+                        extraPlugins: 'autogrow',
+                });

@@ -65,15 +65,55 @@ include ../user/top.jade
                 .detailinfo
                         nav.procate
                                 ul#cateMenu
-                                        li: a(style="color: #F43142;border-bottom: 3px solid #F43142;") 상품정보
-                                        li: a 상품리뷰
+                                        li: a.cateifm(style="color: #F43142;border-bottom: 3px solid #F43142;") 상품정보
+                                        li: a.caterev 상품리뷰
                         .proimgdiv
                                 .proimg
                                         a#ptext(style="display:none")=pro.ptext
+                                .review(style="display:none")
+                                        .revtable
+                                                .revstar
+                                                        span(class="star1 on") 별1왼쪽
+                                                        span.star2 별1오른족
+                                                        span.star1 별2왼쪽
+                                                        span.star2 별2오른쪽
+                                                        span.star1 별3왼쪽
+                                                        span.star2 별3오른쪽
+                                                        span.star1 별4왼쪽
+                                                        span.star2 별4오른쪽
+                                                        span.star1 별5왼쪽
+                                                        span.star2 별5오른쪽
+                                                .revuser
+                                                        span.name name
+                                                        span.date date
+                                                .revopt
+                                                        | [옵션]
+                                                .revtext
+                                                        | 손에맞아서 좋은데 스나이퍼스위치쪽 때가있으면 딱는게힘듭니다..ㅠㅠ 
+                                        .revtable
+                                                .revstar
+                                                        span(class="star1 on") 별1왼쪽
+                                                        span.star2 별1오른족
+                                                        span.star1 별2왼쪽
+                                                        span.star2 별2오른쪽
+                                                        span.star1 별3왼쪽
+                                                        span.star2 별3오른쪽
+                                                        span.star1 별4왼쪽
+                                                        span.star2 별4오른쪽
+                                                        span.star1 별5왼쪽
+                                                        span.star2 별5오른쪽
+                                                .revuser
+                                                        span.name name
+                                                        span.date date
+                                                .revopt
+                                                        | [옵션]
+                                                .revtext
+                                                        | 손에맞아서 좋은데 스나이퍼스위치쪽 때가있으면 딱는게힘듭니다..ㅠㅠ 
+
                                 .probuy
                                         .sideoption
                                                 a
-                                                        span 선택하세요
+                                                        span 옵션선택
                                                         img(src="./img/down.png")
                                                 .sideoptiondivno
                                                         .sideoptiontop
@@ -105,12 +145,6 @@ include ../user/top.jade
                                 var procate = $('.procate').offset();
                                 var probuy=$(".probuy").offset();
                                 $(window).scroll(function(){
-                                        //- if($(document).scrollTop() > procate.top) {
-                                        //-         $('.procate').addClass('procateFixed');
-                                        //- }
-                                        //- else if($(document).scrollTop() > procate.top){
-                                        //-         $('.procate').removeClass('procateFixed');
-                                        //- }
                                         if($(document).scrollTop() > probuy.top) {
                                                 $('.probuy').addClass('probuyFixed'); 
                                                 $('.procate').addClass('procateFixed');
@@ -158,17 +192,26 @@ include ../user/top.jade
                                 if(dupl){
                                         alert("이미 선택되어 있는 옵션입니다.");
                                 }else{
-                                        var html="<li class="+name+"><p>"+name+"</p><button class='min' data-price="+price+" onclick=minus(this);></button>";
-                                        var html=html+"<input class='mp_wrap' type='text' data-price="+price+" name='procnt' value='1'  onchange=cntcgn(this);>";
-                                        var html=html+"<button class='plus' data-price="+price+" onclick=plus(this);></button>";
-                                        var html=html+="<button class='delete' onclick=del(this);></button>";
+                                        var html="<li class="+name+" id='op'><p>"+name+"</p><button class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
+                                        var html=html+"<input class='mp_wrap' id='opcnt' type='text' data-price="+price+" data-name="+name+" name='procnt' value='1'  onchange=cntcgn(this);>";
+                                        var html=html+"<button class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
+                                        var html=html+="<button class='delete' data-name="+name+" onclick=del(this);></button>";
                                         var html=html+'<span class=op_price data-tp='+price+'>'+numberWithCommas(price)+'원</span></li>';
+                                        var sidehtml="<li class="+name+" id='siop'><p>"+name+"</p><button class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
+                                        var sidehtml=sidehtml+"<input class='mp_wrap' id='siopcnt' type='text' data-price="+price+" data-name="+name+" name='procnt' value='1'  onchange=cntcgn(this);>";
+                                        var sidehtml=sidehtml+"<button class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
+                                        var sidehtml=sidehtml+="<button class='delete' data-name="+name+" onclick=del(this);></button>";
+                                        var sidehtml=sidehtml+'<span class=siop_price data-tp='+price+'>'+numberWithCommas(price)+'원</span></li>';
                                         $('.optionul').append(html);
+                                        $('.sideoptionul').append(sidehtml);
                                         if($('.optionul').children().length){
                                                 $(".optiontotal").css('display','block');
+                                                $(".sideoptiontotal").css('display','block');
                                         }
                                         $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)+Number(price);
                                         $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
+                                        $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)+Number(price);
+                                        $("#sidettprice")[0].innerHTML=numberWithCommas(Number($("#sidettprice")[0].dataset.total));
                                 }
                         });
                         $("li[class='sidelistsel']").click(function(){ //사이드옵션선택
@@ -186,27 +229,44 @@ include ../user/top.jade
                                 if(dupl){
                                         alert("이미 선택되어 있는 옵션입니다.");
                                 }else{
-                                        var html="<li class="+name+"><p>"+name+"</p><button class='min' data-price="+price+" onclick=minus(this);></button>";
-                                        var html=html+"<input class='mp_wrap' type='text' data-price="+price+" name='procnt' value='1'  onchange=cntcgn(this);>";
-                                        var html=html+"<button class='plus' data-price="+price+" onclick=plus(this);></button>";
-                                        var html=html+="<button class='delete' onclick=del(this);></button>";
+                                        var html="<li class="+name+"><p>"+name+"</p><button class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
+                                        var html=html+"<input class='mp_wrap' id='opcnt' type='text' data-price="+price+" data-name="+name+" name='procnt' value='1'  onchange=cntcgn(this);>";
+                                        var html=html+"<button class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
+                                        var html=html+="<button class='delete' data-name="+name+" onclick=del(this);></button>";
                                         var html=html+'<span class=op_price data-tp='+price+'>'+numberWithCommas(price)+'원</span></li>';
-                                        $('.sideoptionul').append(html);
+                                        var sidehtml="<li class="+name+"><p>"+name+"</p><button class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
+                                        var sidehtml=sidehtml+"<input class='mp_wrap' id='siopcnt' type='text' data-price="+price+" data-name="+name+" name='procnt' value='1'  onchange=cntcgn(this);>";
+                                        var sidehtml=sidehtml+"<button class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
+                                        var sidehtml=sidehtml+="<button class='delete' data-name="+name+" onclick=del(this);></button>";
+                                        var sidehtml=sidehtml+'<span class=siop_price data-tp='+price+'>'+numberWithCommas(price)+'원</span></li>';
+                                        $('.optionul').append(html);
+                                        $('.sideoptionul').append(sidehtml);
                                         if($('.sideoptionul').children().length){
+                                                $(".optiontotal").css('display','block');
                                                 $(".sideoptiontotal").css('display','block');
                                         }
+                                        $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)+Number(price);
+                                        $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
                                         $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)+Number(price);
                                         $("#sidettprice")[0].innerHTML=numberWithCommas(Number($("#sidettprice")[0].dataset.total));
                                 }
                         });
                         function minus(m){ //수량감소
                                 var price=m.dataset.price;
+                                var name=m.dataset.name;
+                                var op=$('li[class='+name+']')[0];
+                                var siop=$('li[class='+name+']')[1];
                                 if($(m).next().val()>1){
-                                        $(m).next()[0].value=Number($(m).next().val())-1;
-                                        $(m).next().next().next().next()[0].dataset.tp=Number($(m).next()[0].value)*Number(price);
-                                        $(m).next().next().next().next()[0].innerHTML=numberWithCommas($(m).next().next().next().next()[0].dataset.tp)+"원";
+                                        op.children[2].value=Number(op.children[2].value)-1;
+                                        siop.children[2].value=Number(siop.children[2].value)-1;
+                                        op.children[5].dataset.tp=Number(op.children[2].value)*Number(price);
+                                        siop.children[5].dataset.tp=Number(siop.children[2].value)*Number(price);
+                                        op.children[5].textContent=numberWithCommas(Number(op.children[5].dataset.tp))+"원";
+                                        siop.children[5].textContent=numberWithCommas(Number(siop.children[5].dataset.tp))+"원" ;
                                         $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)-Number(price);
                                         $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
+                                        $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)-Number(price);
+                                        $("#sidettprice")[0].innerHTML=numberWithCommas(Number($("#sidettprice")[0].dataset.total));
                                 }
                                 else{
                                         alert('최소수량은 1이상입니다');
@@ -214,21 +274,38 @@ include ../user/top.jade
                         }
                         function plus(p){ //수량추가
                                 var price=p.dataset.price;
-                                $(p).prev()[0].value=Number($(p).prev().val())+1;
-                                $(p).next().next()[0].dataset.tp=Number($(p).prev()[0].value)*Number(price);
-                                $(p).next().next()[0].innerHTML=numberWithCommas(Number($(p).next().next()[0].dataset.tp))+"원";
+                                var name=p.dataset.name;
+                                var op=$('li[class='+name+']')[0];
+                                var siop=$('li[class='+name+']')[1];
+                                op.children[2].value=Number(op.children[2].value)+1;
+                                siop.children[2].value=Number(siop.children[2].value)+1;
+                                op.children[5].dataset.tp=Number(op.children[2].value)*Number(price);
+                                siop.children[5].dataset.tp=Number(siop.children[2].value)*Number(price);
+                                op.children[5].textContent=numberWithCommas(Number(op.children[5].dataset.tp))+"원";
+                                siop.children[5].textContent=numberWithCommas(Number(siop.children[5].dataset.tp))+"원" ;
                                 $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)+Number(price);
                                 $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
+                                $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)+Number(price);
+                                $("#sidettprice")[0].innerHTML=numberWithCommas(Number($("#sidettprice")[0].dataset.total));
                         }
                         function del(d){ //옵션삭제
+                                var name=d.dataset.name;
+                                var op=$('li[class='+name+']')[0];
+                                var siop=$('li[class='+name+']')[1];
                                 var total=$(d).next()[0].dataset.tp;
                                 $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)-Number(total);
-                                 $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
-                                $(d).parent().remove();
+                                $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
+                                $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)-Number(total);
+                                $("#sidettprice")[0].innerHTML=numberWithCommas(Number($("#sidettprice")[0].dataset.total));
+                                $(op).remove();
+                                $(siop).remove();
                                 if(!$('.optionul').children().length){
                                         $(".optiontotal").css('display','none');
+                                        $(".sideoptiontotal").css('display','none');
                                         $("#totalprice")[0].dataset.total=0;
                                         $("#totalprice")[0].innerHTML=0;
+                                        $("#sidettprice")[0].dataset.total=0;
+                                        $("#sidettprice")[0].innerHTML=0;
                                 }
                         }
                         function cntcgn(c){ //inputbox 숫자변경
@@ -237,15 +314,43 @@ include ../user/top.jade
                                         $(c)[0].value=1;
                                         return;
                                 }
+                                var name=c.dataset.name;
+                                var op=$('li[class='+name+']')[0];
+                                var siop=$('li[class='+name+']')[1];
                                 var price=c.dataset.price;
                                 var first=$(c).next().next().next()[0].dataset.tp;
                                 var final=Number($(c).val())*Number(price);
                                 var result=Number(final)-Number(first);
-                                $(c).next().next().next()[0].dataset.tp=final;
-                                $(c).next().next().next()[0].innerHTML=numberWithCommas($(c).next().next().next()[0].dataset.tp)+"원";
+                                op.children[5].dataset.tp=final;
+                                siop.children[5].dataset.tp=final;
+                                op.children[5].textContent=numberWithCommas(Number(op.children[5].dataset.tp))+"원";
+                                siop.children[5].textContent=numberWithCommas(Number(siop.children[5].dataset.tp))+"원" ;
                                 $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)+Number(result);
                                 $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
+                                $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)+Number(result);
+                                $("#sidettprice")[0].innerHTML=numberWithCommas(Number($("#sidettprice")[0].dataset.total));
                         };
+                        $(".cateifm").click(function(){
+                                $(".proimg").css("display","block");
+                                $(".review").css("display","none");
+                                $(this).css("color","#F43142");
+                                $(this).css("border-bottom","3px solid #F43142");
+                                $(".caterev").css("color","black");
+                                $(".caterev").css("border","none");
+                        })
+                        $(".caterev").click(function(){
+                                $(".proimg").css("display","none");
+                                $(".review").css("display","block");
+                                $(this).css("color","#F43142");
+                                $(this).css("border-bottom","3px solid #F43142");
+                                $(".cateifm").css("color","black");
+                                $(".cateifm").css("border","none");
+                        })
                         function numberWithCommas(x) { //콤마찍기
                                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         }
+                        $('.revstar span').click(function(){
+                                $(this).parent().children('span').removeClass('on');
+                                $(this).addClass('on').prevAll('span').addClass('on');
+                                return false;
+                        });

@@ -3,7 +3,7 @@ include ../user/top.jade
                 .upload
                         nav.manage
                                 ul#manageMenu
-                                        li: a#user(href="/management") 회원관리
+                                        li: a#user(href="/member") 회원관리
                                         li: a#prod(href="/product") 상품관리
                                         li: a#order(href="/order") 주문관리
                                         li: a#faq(href="/faq") FAQ관리
@@ -111,7 +111,6 @@ include ../user/top.jade
                         })
                 $("a[id='modi']").click(function(){
                         num=$(this)[0].name;
-                        console.log(num);
                         href ="/productmodify?num="+num;
                         location.href =href;
                 });
