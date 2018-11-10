@@ -119,7 +119,7 @@
                                                                         var dname=req.session.displayname;
                                                                         res.render('prodetail',{name:dname,id:req.session.user,pro:result[0],opt:opt,min:min[0]});
                                                                 }else{
-                                                                        res.render('prodetail',{pro:result[0],opt:opt});
+                                                                        res.render('prodetail',{pro:result[0],opt:opt,min:min[0]});
                                                                 }
                                                         }
                                                 })
@@ -128,13 +128,35 @@
                         }
                 })
         })
-        app.get('/help',function(req,res){ //고객센터
-                if(req.session.displayname){
-                        var dname=req.session.displayname;
-                        res.render('help',{name:dname,id:req.session.user});
-                }else{
-                        res.render('help');
-                }
+        app.get(['/help','/help=:pno'],function(req,res){ //고객센터
+                var maxpost=10; //페이지당 상품수
+                var pno=req.params.pno; //페이지넘버
+                if(!pno)  var pno=1;
+                var start=maxpost*pno-maxpost;
+                var sql="select count(*) as postcnt from faq";
+                con.query(sql,function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                var postcnt=result[0].postcnt;
+                                var sql="select * from faq  ORDER by fnum DESC limit ?,?;";
+                                con.query(sql,[start,maxpost],function(err,result){
+                                        if(err) console.log(err);
+                                        else{
+                                                var pager={
+                                                        pagecnt:postcnt%maxpost == 0 ? Math.trunc(postcnt/maxpost) : Math.trunc(postcnt/maxpost) +1, //총페이지수
+                                                        startpost:maxpost*pno-maxpost, //시작상품넘버
+                                                        endpost:maxpost*pno-1< postcnt ?  maxpost*pno-1 : postcnt-1  //마지막상품넘버
+                                                }
+                                                if(req.session.displayname){
+                                                        var dname=req.session.displayname;
+                                                        res.render('help',{name:dname,id:req.session.user,faq:result,pager:pager,pno:pno});
+                                                }else{
+                                                        res.render('help',{faq:result,pager:pager,pno:pno});
+                                                }
+                                        }
+                                })
+                        }
+                })
         })
 }
 {//회원정보###################################회원정보#####################################회원정보
