@@ -1,0 +1,137 @@
+include ../user/top.jade
+                link(rel='stylesheet',href='./css/payment.css')
+                .payment
+                        .paymenttitle
+                                img(src="./img/payment.png")
+                                h2 주문/결제
+                        .paymentlist
+                                table.paymenttable
+                                        thead
+                                                tr
+                                                        th 상품
+                                                        th 수량
+                                                        th 가격
+                                                        th 배송비
+                                        tbody
+                                                tr#num(data-num=pay.num)
+                                                        td
+                                                                img(src="./dbimg/"+pay.simgname)
+                                                                span#name=pay.name
+                                                                span#option(data-optnum=pay.optnum)=pay.optname
+                                                                #hr
+                                                        -var total=pay.optprice*cnt
+                                                        -var price=total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                        td#cnt(data-cnt=cnt)=cnt
+                                                        td#price(data-price=pay.optprice)=price
+                                                        td#deli(data-price="2500") 2500원
+                        .totalprice
+                                table
+                                        tr
+                                                td 주문금액
+                                                td#orderprice
+                                                td 
+                                                        img(src="./img/plus.png")
+                                                td(style="padding-right: 60px;") 배송비
+                                                td#orderdeli
+                                                td 
+                                                        img(src="./img/eq.png")
+                                                td(style="padding-right: 10px;") 최종결제금액
+                                                td#ordertotal
+                        .loctable
+                                h3 배송지 정보 입력
+                                table
+                                        tbody
+                                                tr
+                                                        th(scope='row') 받으시는 분
+                                                        td
+                                                                input#aname(type="text")
+                                                tr
+                                                        th(scope='row') 주소
+                                                        td#loc
+                                                                p 우편번호
+                                                                input.postcodify_postcode5(type="text" readonly)
+                                                                a#postsearch 검색
+                                                                br
+                                                                p 주소
+                                                                input.postcodify_address(type='text', name='' readonly)
+                                                                br
+                                                                p 상세주소
+                                                                input.postcodify_details(type='text', name='', value='' style="margin-bottom:10px")
+                                                tr
+                                                        th(scope='row') 휴대전화
+                                                        td
+                                                                input#aphone(type="text")
+                                                tr
+                                                        th(scope='row') 주문자 이름
+                                                        td
+                                                                input#oname(type="text")
+                                                tr
+                                                        th(scope='row') 주문자 휴대전화
+                                                        td
+                                                                input#ophone(type="text")
+                        .buy
+                                a#order 주문하기
+                                a#close  취소하기
+                script(src='//d1p7wdleee1q2z.cloudfront.net/post/search.min.js')
+                script.
+                        $(window).on( "load", function() {
+                                var leng=$("td[id=price]").length;
+                                var orprice=0;
+                                var ordeli=0;
+                                var total=0;
+                                for(var i=0;i<leng;i++){
+                                        orprice=orprice+Number($("td[id=price]")[i].dataset.price);
+                                }
+                                for(var i=0;i<leng;i++){
+                                        ordeli=ordeli+Number($("td[id=deli]")[i].dataset.price);
+                                }
+                                total=orprice+ordeli;
+                                $("#orderprice")[0].innerText=numberWithCommas(orprice)+"원";
+                                $("#orderdeli")[0].innerText=numberWithCommas(ordeli)+"원";
+                                $("#ordertotal")[0].innerText=numberWithCommas(total)+"원";
+                                $("#ordertotal")[0].dataset.total=total;
+                        })
+                        $(function() {
+                                $("#postsearch").postcodifyPopUp();
+                        });
+                        function numberWithCommas(x) { //콤마찍기
+                                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        }
+                        $("#order").click(function(){
+                                //- console.log($("tr[id=num]")[0].dataset.num);
+                                //- console.log($("span[id=option]")[0].dataset.optnum);
+                                //- console.log($("td[id=cnt]")[0].dataset.cnt);
+                                //- console.log($("td[id=ordertotal")[0].dataset.total);
+                                //- console.log($("#aname")[0].value);
+                                //- console.log($("#aphone")[0].value);
+                                //- console.log($(".postcodify_postcode5")[0].value);
+                                //- console.log($(".postcodify_address")[0].value);
+                                //- console.log($(".postcodify_details")[0].value);
+                                //- console.log($("#oname")[0].value);
+                                //- console.log($("#ophone")[0].value);
+                                var num=$("tr[id=num]")[0].dataset.num;
+                                var optnum=$("span[id=option]")[0].dataset.optnum;
+                                var cnt=$("td[id=cnt]")[0].dataset.cnt;
+                                var total=$("td[id=ordertotal")[0].dataset.total;
+                                var aname=$("#aname")[0].value;
+                                var aphone=$("#aphone")[0].value;
+                                var locnum=$(".postcodify_postcode5")[0].value;
+                                var locadd=$(".postcodify_address")[0].value;
+                                var locdetail=$(".postcodify_details")[0].value;
+                                var oname=$("#oname")[0].value;
+                                var ophone=$("#ophone")[0].value;
+                                $.ajax({
+                                        url:"/orderadd",
+                                        dataType:'json',
+                                        type:"post",
+                                        data:{num:num,optnum:optnum,cnt:cnt,total:total,aname:aname,aphone:aphone,locnum:locnum,locadd:locadd,locdetail:locdetail,oname:oname,ophone:ophone},
+                                        success: function(result){
+                                                if(result){
+                                                        alert("주문이 완료되었습니다.");
+                                                        location.href="/orderifm";
+                                                }else{
+                                                        alert("오류발생!!");
+                                                }
+                                        }
+                                })
+                        })

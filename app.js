@@ -102,7 +102,6 @@
         });
         app.get(['/productDetail','/productDetail?num=:pno'],function(req,res){ //상세정보페이지
                 var pno=req.query.num;
-                console.log(pno);
                 var sql="select * from product join productimg using(num) where num=?"
                 con.query(sql,pno,function(err,result){
                         if(err) console.log(err);
@@ -125,6 +124,23 @@
                                                 })
                                         }
                                 })
+                        }
+                })
+        })
+        app.post("/basketadd",function(req,res){
+                var num=req.body.num;
+                var optnum=req.body.optnum;
+                var cnt=req.body.cnt;
+                var id=req.session.user;
+                var sql="insert into basket(num,optnum,id,cnt) values(?,?,?,?)";
+                con.query(sql,[num,optnum,id,cnt],function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                if(result.affectedRows){
+                                        res.send("true");
+                                }else{
+                                        res.send("false");
+                                }
                         }
                 })
         })
@@ -176,12 +192,33 @@
                 }
         });
         app.get('/basket',function(req,res){ //장바구니
-                if(req.session.displayname){
-                        var dname=req.session.displayname;
-                        res.render('basket',{name:dname,id:req.session.user});
-                }else{
-                        res.render('basket');
-                }
+                var id=req.session.user;
+                var sql="select * from basket join productopt using(optnum),product,productimg where id=? and basket.num=product.num and product.num=productimg.num order by bnum";
+                con.query(sql,id,function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                if(req.session.displayname){
+                                        var dname=req.session.displayname;
+                                        res.render('basket',{name:dname,id:req.session.user,basket:result});
+                                }else{
+                                        res.render('basket');
+                                }
+                        }
+                })
+        })
+        app.post("/basdel",function(req,res){ //장바구니삭제
+                var num=req.body.num;
+                var sql="delete from basket where bnum=?";
+                con.query(sql,num,function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                if(result.affectedRows){
+                                        res.send("true");
+                                }else{
+                                        res.send("false");
+                                }
+                        }
+                })
         })
         app.post("/passchange",function(req,res){ //비밀번호변경
                 var pw={
@@ -207,6 +244,102 @@
                         }
                 });
         })
+        app.get("/payment",function(req,res){
+                if(req.session.displayname){
+                        var dname=req.session.displayname;
+                        res.render('payment',{name:dname,id:req.session.user});
+                }else{
+                        res.render('payment');
+                }
+        })
+        app.post("/payment",function(req,res){
+                var num=0;
+                for(var i=0;i<req.body.optnum.length;i++){
+                        if(req.body.isnum==req.body.optnum[i]){
+                                num=i;
+                                break;
+                        }
+                }
+                var data={
+                        num:req.body.num[num],
+                        cnt:req.body.cnt[num],
+                        optnum:req.body.optnum[num]
+                }
+                console.log(data);
+                var sql="SELECT product.num,name,optnum,optname,optprice,simgname FROM product,productopt,productimg where product.num=productimg.num and product.num=productopt.num and product.num=? and optnum=?";
+                con.query(sql,[data.num,data.optnum],function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                console.log(result);
+                                if(req.session.displayname){
+                                        var dname=req.session.displayname;
+                                        res.render('payment',{name:dname,id:req.session.user,pay:result[0],cnt:data.cnt});
+                                }else{
+                                        res.render('payment');
+                                }
+                        }
+                })
+        })
+        app.post("/orderadd",function(req,res){
+                var data={
+                        num:req.body.num,
+                        id:req.session.user,
+                        optnum:req.body.optnum,
+                        cnt:req.body.cnt,
+                        total:req.body.total,
+                        aname:req.body.aname,
+                        aphone:req.body.aphone,
+                        locnum:req.body.locnum,
+                        locadd:req.body.locadd,
+                        locdetail:req.body.locdetail,
+                        oname:req.body.oname,
+                        ophone:req.body.ophone
+                }
+                var sql="insert into orders(num,id,optnum,cnt,total,a_name,a_phone,oname,ophone,locnum,locadd,locdetail) ";
+                sql=sql+"values(?,?,?,?,?,?,?,?,?,?,?,?)";
+                con.query(sql,[data.num,data.id,data.optnum,data.cnt,data.total,data.aname,data.aphone,data.oname,data.ophone,data.locnum,data.locadd,data.locdetail],function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                if(result.affectedRows){
+                                        res.send("true");
+                                }else{
+                                        res.send("false");
+                                }
+                        }
+                })
+        })
+        app.get(["/orderifm","/orderifm=:pno"],function(req,res){
+                var id=req.session.user;
+                var maxpost=20; //페이지당 주문수
+                var pno=req.params.pno; //페이지넘버
+                if(!pno)  var pno=1;
+                var start=maxpost*pno-maxpost;
+                var sql="select count(*) as mbcnt from orders where id=?";
+                con.query(sql,id,function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                var mbcnt=result[0].mbcnt;
+                                var sql="select orders.num,orders.onum,orders.optnum,orders.cnt,product.name,orders.total,orders.order_date,productimg.simgname,productopt.optprice,productopt.optname from orders join productimg using(num) join product using(num) join productopt using(num) where id=? and productopt.optnum=orders.optnum ORDER BY oname desc limit ?,?";
+                                con.query(sql,[id,start,maxpost],function(err,result){
+                                        if(err) console.log(err);
+                                        else{
+                                                var pager={
+                                                        pagecnt:mbcnt%maxpost == 0 ? Math.trunc(mbcnt/maxpost) : Math.trunc(mbcnt/maxpost) +1, //총페이지수
+                                                        startpost:maxpost*pno-maxpost, //시작주문넘버
+                                                        endpost:maxpost*pno-1< mbcnt ?  maxpost*pno-1 : mbcnt-1  //마지막주문넘버
+                                                }
+                                                console.log(result);
+                                                if(req.session.displayname){
+                                                        var dname=req.session.displayname;
+                                                        res.render('orderifm',{name:dname,id:req.session.user,orders:result,pager:pager,pno:pno});
+                                                }else{
+                                                        res.render('orderifm');
+                                                }
+                                        }
+                                })
+                        }
+                })
+        });
 }
 {//관리자###################################관리자######################################관리자
         app.get(["/member","/member=:pno"],function(req,res){ //회원관리

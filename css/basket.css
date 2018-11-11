@@ -1,0 +1,144 @@
+.basket{
+        position: relative;
+        left: 0;
+        top: 20px;
+        width: 1200px;
+        height: 700px;
+        margin:0px auto;
+        font-family: "Roboto", sans-serif;
+        overflow: hidden;
+}
+.baskettitle{
+        display: inline-block;
+        top: 20px;
+        position: relative;
+        border-bottom: rgb(97, 96, 96) 3px solid;
+        width: 1180px;
+        margin: 0px 10px;
+}
+.baskettitle img{
+        width: 50px;
+        height: 50px;
+        float:left;
+}
+.baskettitle h2{
+        margin:10px;
+        display: inline-block;
+}
+.basketlist{
+        margin:40px 10px;
+}
+.baskettable{
+        width:1180px;
+        border-collapse: collapse;
+}
+.baskettable thead{
+        height: 40px;
+        background: #ebebeb;
+}
+.baskettable th:nth-child(1){
+        width:65%;
+}
+.baskettable th:nth-child(2){
+        width:5%;
+}
+.baskettable th:nth-child(3),.baskettable th:nth-child(4),.baskettable th:nth-child(5){
+        width:10%;
+}
+th{
+        border-top:1px solid rgb(104, 104, 104);
+        border-bottom:1px solid rgb(104, 104, 104);
+}
+tr,td{
+        border-top:1px solid #ebebeb;
+        border-bottom:1px solid #ebebeb;
+}
+td:nth-child(2){
+        border:1px solid #ebebeb;
+}
+td:nth-child(5){
+        border-left:1px solid #ebebeb;
+}
+#check{
+        float: left;
+}
+.baskettable img{
+        width:80px;
+}
+#name{
+        position: absolute;
+        margin-left: 10px;
+        font-size: 14px;
+}
+#option{
+        position: relative;
+        margin-left: 10px;
+        font-size: 11px;
+        top: -20px;
+}
+#hr{
+        border: 1px dotted black;
+        position: relative;
+        left: 105px;
+        top: -50px;
+        width: 650px;
+}
+.baskettable td:nth-child(2),.baskettable td:nth-child(3),.baskettable td:nth-child(4){
+        text-align: center;
+        font-size: 14px;
+}
+.baskettable td:nth-child(3){
+        font-weight: bold;
+        color: red;
+        border: black;
+}
+.buy a{
+        display: inline-block;
+        background: transparent;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-style: normal;
+        font-size: 12px;
+        letter-spacing: 0.3em;
+        color: red;
+        border-radius: 0;
+        padding: 10px 15px;
+        transition: all 0.7s ease-out;
+        background: linear-gradient(270deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0.8), rgba(189, 21, 21, 0), rgba(255, 1, 1, 0));
+        background-position: 1% 50%;
+        background-size: 300% 300%;
+        text-decoration: none;
+        margin: 5px 10px;
+        border: none;
+        border: 1px solid red;
+}
+#order{
+        color:white;
+        border:1px solid white;
+        background-position: 100% !important;
+        background-size: 300% 300% !important;
+        background: linear-gradient(270deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0.8), rgba(189, 21, 21, 0), rgba(255, 1, 1, 0));
+}
+#order:hover{
+        color: red;
+        border: 1px solid white;
+        background-position: 1% !important;
+        background-size: 300% 300% !important;
+}
+#delete:hover{
+        color: #fff;
+        border: 1px solid red;
+        color: white;
+        background-position: 99% 50%;
+}
+/* .buy a:hover{
+        color: #fff;
+        border: 1px solid red;
+        color: white;
+        background-position: 99% 50%;
+} */
+#nobas{
+        text-align: center;
+        padding: 50px;
+        font-weight: bold;
+}

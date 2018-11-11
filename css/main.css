@@ -247,7 +247,7 @@ strong{
         text-align:center;  
         text-decoration:none;  
 }  
-.paging ul li a:hover, ul li a:focus {  
+.paging ul li a:hover, .paging ul li a:focus {  
         color:#fff;  
         border:1px solid #f40;  
         background-color:#f40;  

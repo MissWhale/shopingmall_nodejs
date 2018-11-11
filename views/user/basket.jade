@@ -1,0 +1,64 @@
+include ../user/top.jade
+                link(rel='stylesheet',href='./css/basket.css')
+                .basket
+                        form#test(action="/payment" method="post")
+                                .baskettitle
+                                        img(src="./img/basket.png")
+                                        h2 장바구니
+                                .basketlist
+                                        table.baskettable
+                                                thead
+                                                        tr
+                                                                th 상품
+                                                                th 수량
+                                                                th 가격
+                                                                th 배송비
+                                                                th 주문
+                                                tbody
+                                                        if(basket.length)
+                                                                each bas in basket
+                                                                        tr
+                                                                                td
+                                                                                        input#check(type="checkbox")
+                                                                                        input(type="text"  name="num" value=bas.num style="display:none")
+                                                                                        input(type="text"  name="cnt" value=bas.cnt style="display:none")
+                                                                                        input(type="text"  name="optnum" value=bas.optnum style="display:none")
+                                                                                        img(src="./dbimg/"+bas.simgname)
+                                                                                        span#name=bas.name
+                                                                                        span(name=bas.optnum)#option=bas.optname
+                                                                                        #hr
+                                                                                td=bas.cnt
+                                                                                -var total=bas.cnt*bas.optprice;
+                                                                                -var price=total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                                                td=price+"원"
+                                                                                td 2500원
+                                                                                td.buy
+                                                                                        a#order(name=bas.bnum class=bas.optnum) 주문하기
+                                                                                        a#delete(name=bas.bnum) 삭제하기
+                                                                input#isnum(type="text"  name="isnum" value="0" style="display:none")
+                                                        else
+                                                                tr
+                                                                        td#nobas(colspan="5")
+                                                                                span 장바구니에 담긴 상품이 없습니다.
+                script.
+                        $("a[id=delete]").click(function(){
+                                var num=$(this).attr("name");
+                                $.ajax({
+                                        url:"/basdel",
+                                        dataType:'json',
+                                        type:"post",
+                                        data:{num:num},
+                                        success: function(result){
+                                                if(result){
+                                                        alert("상품이 장바구니에서 삭제되었습니다");
+                                                        location.reload();
+                                                }else{
+                                                        alert("상품을 장바구니에서 삭제하지 못했습니다.");
+                                                }
+                                        }
+                                })
+                        })
+                        $("a[id=order]").click(function(){
+                                $("#isnum")[0].value=$(this).attr("class");
+                                $("#test").submit();
+                        })

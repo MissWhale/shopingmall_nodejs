@@ -1,9 +1,18 @@
-html
-        head 
-                title test페이지
-        body
-                h1 Node.js 예제 페이지
-                hr
-                a=number
+include ../user/top.jade
+                input.postcodify_postcode5(type='text', name='', value='')
+                button#postcodify_search_button 검색
                 br
-                a=name
+                input.postcodify_address(type='text', name='', value='')
+                br
+                input.postcodify_details(type='text', name='', value='')
+                br
+                input.postcodify_extra_info(type='text', name='', value='')
+                br
+                // jQuery와 Postcodify를 로딩한다
+                script(src='//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+                script(src='//d1p7wdleee1q2z.cloudfront.net/post/search.min.js')
+                // "검색" 단추를 누르면 팝업 레이어가 열리도록 설정한다
+                script.
+                        $(function() {
+                        $("#postcodify_search_button").postcodifyPopUp();
+                        });

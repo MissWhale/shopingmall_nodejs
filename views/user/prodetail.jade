@@ -42,10 +42,9 @@ include ../user/top.jade
                                                                                                 .optionlist
                                                                                                         ul
                                                                                                                 each op in opt
-                                                                                                                        li.listsel(data-name=op.optname data-price=op.optprice data-num=op.optnum)
+                                                                                                                        li.listsel(data-name=op.optname data-price=op.optprice data-optnum=op.optnum data-num=pro.num)
                                                                                                                                 a
                                                                                                                                         span=op.optname
-                                                                                                                                        
                                                                                                                                         -var price=op.optprice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                                                                                                                         strong=price
                                                 //- hr
@@ -60,7 +59,7 @@ include ../user/top.jade
                                                                                         strong#totalprice(data-total="0")=0
                                                                                         span 원
                                                 .buydiv
-                                                        a 장바구니
+                                                        a#basket 장바구니
                                                         a 바로구매
                 .detailinfo
                         nav.procate
@@ -122,7 +121,7 @@ include ../user/top.jade
                                                         .sideoptionlist
                                                                 ul
                                                                         each op in opt
-                                                                                li.sidelistsel(data-name=op.optname data-price=op.optprice data-num=op.optnum)
+                                                                                li.sidelistsel(data-name=op.optname data-price=op.optprice data-num=op.num data-optnum=op.optnum)
                                                                                         a
                                                                                                 span=op.optname
                                                                                                 -var price=op.optprice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -138,9 +137,34 @@ include ../user/top.jade
                                                                                         strong#sidettprice(data-total="0")=0
                                                                                         span 원
                                         .sidebuy
-                                                a 장바구니
+                                                a#basket 장바구니
                                                 a 바로구매
                 script.
+                        $("a[id=basket]").click(function(){ //장바구니담기
+                                var len=$(".optionul").children().length;
+                                if(!len){
+                                        alert("상품을 골라주세요.");
+                                        return;
+                                };
+                                for(var i=0;i<len;i++){
+                                        var num=$(".optionul")[0].children[i].dataset.num; //상품번호
+                                        var optnum=$(".optionul")[0].children[i].dataset.optnum; //옵션번호
+                                        var cnt=$(".optionul")[0].children[i].children[2].value; //수량
+                                        $.ajax({
+                                                url:"/basketadd",
+                                                dataType:'json',
+                                                type:"post",
+                                                data:{num:num,optnum:optnum,cnt:cnt},
+                                                success: function(result){
+                                                        if(!result){
+                                                                alert("오류발생");
+                                                                return;
+                                                        }
+                                                }
+                                        })
+                                }
+                                alert("상품이 장바구니에 담겼습니다");
+                        })
                         $(document).ready(function(){
                                 var procate = $('.procate').offset();
                                 var probuy=$(".probuy").offset();
@@ -183,6 +207,7 @@ include ../user/top.jade
                                 var name=$(this)[0].dataset.name;
                                 var price=$(this)[0].dataset.price;
                                 var num=$(this)[0].dataset.num;
+                                var optnum=$(this)[0].dataset.optnum;
                                 var dupl=0;
                                 for(var start=0;start<=$('.optionul').children().length;start++){
                                         if($(this)[0].dataset.name == $('.optionul').children().eq(start).attr('class')){
@@ -192,7 +217,7 @@ include ../user/top.jade
                                 if(dupl){
                                         alert("이미 선택되어 있는 옵션입니다.");
                                 }else{
-                                        var html="<li class="+name+" id='op'><p>"+name+"</p><button class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
+                                        var html="<li class="+name+" id='op' data-num="+num+" data-optnum="+optnum+"><p>"+name+"</p><button class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
                                         var html=html+"<input class='mp_wrap' id='opcnt' type='text' data-price="+price+" data-name="+name+" name='procnt' value='1'  onchange=cntcgn(this);>";
                                         var html=html+"<button class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
                                         var html=html+="<button class='delete' data-name="+name+" onclick=del(this);></button>";
@@ -220,6 +245,7 @@ include ../user/top.jade
                                 var name=$(this)[0].dataset.name;
                                 var price=$(this)[0].dataset.price;
                                 var num=$(this)[0].dataset.num;
+                                var optnum=$(this)[0].dataset.optnum;
                                 var dupl=0;
                                 for(var start=0;start<=$('.sideoptionul').children().length;start++){
                                         if($(this)[0].dataset.name == $('.sideoptionul').children().eq(start).attr('class')){
@@ -229,7 +255,7 @@ include ../user/top.jade
                                 if(dupl){
                                         alert("이미 선택되어 있는 옵션입니다.");
                                 }else{
-                                        var html="<li class="+name+"><p>"+name+"</p><button class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
+                                        var html="<li class="+name+" data-num="+num+" data-optnum="+optnum+"><p>"+name+"</p><button class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
                                         var html=html+"<input class='mp_wrap' id='opcnt' type='text' data-price="+price+" data-name="+name+" name='procnt' value='1'  onchange=cntcgn(this);>";
                                         var html=html+"<button class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
                                         var html=html+="<button class='delete' data-name="+name+" onclick=del(this);></button>";
@@ -321,6 +347,8 @@ include ../user/top.jade
                                 var first=$(c).next().next().next()[0].dataset.tp;
                                 var final=Number($(c).val())*Number(price);
                                 var result=Number(final)-Number(first);
+                                op.children[2].value=$(c).val();
+                                siop.children[2].value=$(c).val();
                                 op.children[5].dataset.tp=final;
                                 siop.children[5].dataset.tp=final;
                                 op.children[5].textContent=numberWithCommas(Number(op.children[5].dataset.tp))+"원";
@@ -330,7 +358,7 @@ include ../user/top.jade
                                 $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)+Number(result);
                                 $("#sidettprice")[0].innerHTML=numberWithCommas(Number($("#sidettprice")[0].dataset.total));
                         };
-                        $(".cateifm").click(function(){
+                        $(".cateifm").click(function(){ //상세정보창
                                 $(".proimg").css("display","block");
                                 $(".review").css("display","none");
                                 $(this).css("color","#F43142");
@@ -338,7 +366,7 @@ include ../user/top.jade
                                 $(".caterev").css("color","black");
                                 $(".caterev").css("border","none");
                         })
-                        $(".caterev").click(function(){
+                        $(".caterev").click(function(){ //리뷰창
                                 $(".proimg").css("display","none");
                                 $(".review").css("display","block");
                                 $(this).css("color","#F43142");
@@ -349,7 +377,7 @@ include ../user/top.jade
                         function numberWithCommas(x) { //콤마찍기
                                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         }
-                        $('.revstar span').click(function(){
+                        $('.revstar span').click(function(){ //별점찍기
                                 $(this).parent().children('span').removeClass('on');
                                 $(this).addClass('on').prevAll('span').addClass('on');
                                 return false;

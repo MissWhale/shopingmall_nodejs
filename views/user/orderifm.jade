@@ -1,0 +1,77 @@
+include ../user/top.jade
+                link(rel='stylesheet',href='./css/payment.css')
+                .payment
+                        .paymenttitle
+                                img(src="./img/check.png")
+                                h2 주문정보확인
+                        .paymentlist
+                                table.orderifmtable
+                                        thead
+                                                tr
+                                                        th 상품
+                                                        th 상품금액(수량)
+                                                        th 주문상태
+                                                        th 주문일자
+                                        tbody
+                                                each order in orders
+                                                        tr(data-num=order.onum)
+                                                                td
+                                                                        img(src="./dbimg/"+order.simgname)
+                                                                        span#name=order.name
+                                                                        span#option=order.optname
+                                                                        #hr
+                                                                td
+                                                                        -var price=order.optprice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                                        p.up=price+"원"
+                                                                        span.down (#{order.cnt})
+                                                                td 배송준비중
+                                                                td
+                                                                        p.up=new Date(order.order_date).format("yyyy-MM-dd")
+                                                                        span.down (#{order.onum})
+                .pagingdiv
+                        .paging
+                                -var pover=Math.trunc(pager.pagecnt/10)
+                                if(pover)
+                                        if(pno<11)
+                                                - var n = 1 //시작페이지
+                                                - var max=10 //끝페이지
+                                                - var next=11 //다음10페이지
+                                                - var check=1 //다음,마지막페이지 체크
+                                        else
+                                                - var n=pno%10 ==0 ? (Math.trunc(pno/10)-1)*10+1 : Math.trunc(pno/10)*10+1 //시작페이지
+                                                - var ip=Math.trunc(n/10) //시작페이지앞자리
+                                                - var fp=Math.trunc(pager.pagecnt/10) //마지막페이지앞자리
+                                                -var pna=pager.pagecnt-n //잔여페이지수
+                                                -var next=(ip+1)*10+1 //다음10페이지
+                                                -var prev=ip*10 //전10페이지
+                                                if(ip == fp)
+                                                        -var max=n+pna
+                                                else
+                                                        -var max=n+9
+                                else
+                                        - var n = 1
+                                        - var max=pager.pagecnt
+                                span
+                                        ul
+                                                if(pno>10)
+                                                        li
+                                                                a#first(href="/" style="height: 14px;")
+                                                                        img(src="./img/dbackb.png")
+                                                if(prev)
+                                                        li
+                                                                a#prev(href="/orderifm="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        img(src="./img/backb.png")
+                                                while n <= max
+                                                        li
+                                                                if(pno==n)
+                                                                        a(href="/orderifm="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                else
+                                                                        a(href="/orderifm="+n)=n++
+
+                                                if(ip != fp || check)
+                                                        li
+                                                                a#next(href="/orderifm="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        img(src="./img/forb.png")
+                                                        li
+                                                                a#final(href="/orderifm="+pager.pagecnt style="height: 14px;")
+                                                                        img(src="./img/dforb.png")

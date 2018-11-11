@@ -1,0 +1,295 @@
+.payment{
+        position: relative;
+        left: 0;
+        top: 20px;
+        width: 1200px;
+        margin:0px auto;
+        font-family: "Roboto", sans-serif;
+        overflow: hidden;
+}
+.paymenttitle{
+        display: inline-block;
+        top: 20px;
+        position: relative;
+        border-bottom: rgb(97, 96, 96) 3px solid;
+        width: 1180px;
+        margin: 0px 10px;
+}
+.paymenttitle img{
+        width: 50px;
+        float:left;
+}
+.paymenttitle h2{
+        margin:10px;
+        display: inline-block;
+}
+.paymentlist{
+        margin:40px 10px;
+}
+.paymenttable{
+        width:1180px;
+        border-collapse: collapse;
+}
+.paymenttable thead{
+        height: 40px;
+        background: #ebebeb;
+}
+.paymenttable th:nth-child(1){
+        width:70%;
+}
+.paymenttable th:nth-child(2),.paymenttable th:nth-child(3),.paymenttable th:nth-child(4){
+        width:10%;
+}
+.paymenttable td:nth-child(2),.paymenttable td:nth-child(3),.paymenttable td:nth-child(4){
+        text-align: center;
+        font-size: 14px;
+}
+.paymenttable th{
+        border-top:1px solid rgb(104, 104, 104);
+        border-bottom:1px solid rgb(104, 104, 104);
+}
+.paymenttable tr,.paymenttable td{
+        border-top:1px solid #ebebeb;
+        border-bottom:1px solid #ebebeb;
+}
+.paymenttable td:nth-child(2){
+        border:1px solid #ebebeb;
+}
+.paymenttable td:nth-child(5){
+        border-left:1px solid #ebebeb;
+}
+.paymenttable img{
+        width:80px;
+}
+#name{
+        position: absolute;
+        margin-left: 10px;
+        font-size: 14px;
+}
+#option{
+        position: relative;
+        margin-left: 10px;
+        font-size: 11px;
+        top: -20px;
+}
+#hr{
+        border: 1px dotted black;
+        position: relative;
+        left: 85px;
+        top: -50px;
+        width: 720px;
+}
+
+.totalprice{
+        margin:40px 10px;
+        border:1px solid #ebebeb;
+        padding:10px;
+}
+.totalprice img{
+        width: 30px;
+        margin-top: 5px;
+}
+.totalprice td:nth-child(1),.totalprice td:nth-child(4),.totalprice td:nth-child(7){
+        width: 10%;
+        text-align: center;
+        font-weight: bold;
+        font-size: 14px;
+}
+.totalprice td:nth-child(2),.totalprice td:nth-child(5),.totalprice td:nth-child(8){
+        width: 250px;
+        text-align: right;
+        padding-right:10px;
+        font-weight: bold;
+        font-size: 22px;
+}
+.totalprice td:nth-child(3),.totalprice td:nth-child(6){
+        width: 3%;
+        text-align: center;
+}
+.totalprice td:nth-child(8){
+        color:red;
+}
+.loctable{
+        margin: 40px 10px;
+}
+.loctable table{
+        width:1180px;
+        border-collapse: collapse;
+}
+.loctable tr{
+        display: table;
+        width:1180px;
+        border-top:#777 1px solid;
+}
+.loctable th{
+        text-align: left;
+        width: 10%;
+        font-size:12px;
+}
+.loctable td{
+        text-align: left;
+        font-size:12px;
+}
+.loctable tr:nth-child(1){
+        border-top: 2px rgb(97, 96, 96) solid;
+}
+.loctable tr:nth-child(5){
+        border-bottom: 2px rgb(97, 96, 96) solid;
+}
+input{
+        width: 300px;
+        border: 2px solid #aaa;
+        border-radius: 4px;
+        margin: 8px 0;
+        outline: none;
+        padding: 8px;
+        box-sizing: border-box;
+        transition: .3s;
+}
+input:focus,textarea:focus{
+        border-color:#ff747d;
+        box-shadow:0 0 8px 0 #ff747d;
+}
+div.postcodify_popup_layer input.keyword{
+        margin:0px;
+}
+div.postcodify_popup_layer input.keyword:focus{
+        box-shadow: none;
+}
+.postcodify_postcode5{
+        width:100px;
+}
+.postcodify_address{
+        width: 300px;
+}
+.postcodify_details{
+        width: 300px;
+}
+#loc p{
+        margin:5px 0px;
+}
+#loc input{
+        margin:0px;
+}
+#postsearch {
+        transition: all 800ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+        margin: 20px 10px;
+        border-radius: 4px;
+        padding: 10px 15px;
+        text-decoration: none;
+        font-weight: bold;
+}
+#postsearch  {
+        color: rgba(30, 22, 54, 0.6);
+        box-shadow: rgba(30, 22, 54, 0.4) 0 0px 0px 2px inset;
+    }
+    #postsearch:hover {
+        color: rgba(255, 255, 255, 0.85);
+        box-shadow: red 0 0px 0px 40px inset;
+}
+.buy{
+        float: right;
+        margin-bottom: 30px;
+}
+.buy a{
+        display: inline-block;
+        background: transparent;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-style: normal;
+        font-size: 12px;
+        letter-spacing: 0.3em;
+        color: red;
+        border-radius: 0;
+        padding: 20px 35px;
+        transition: all 0.7s ease-out;
+        background: linear-gradient(270deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0.8), rgba(189, 21, 21, 0), rgba(255, 1, 1, 0));
+        background-position: 1% 50%;
+        background-size: 300% 300%;
+        text-decoration: none;
+        margin: 5px 10px;
+        border: none;
+        border: 1px solid red;
+}
+#order{
+        color:white;
+        border:1px solid white;
+        background-position: 100% !important;
+        background-size: 300% 300% !important;
+        background: linear-gradient(270deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0.8), rgba(189, 21, 21, 0), rgba(255, 1, 1, 0));
+}
+#order:hover{
+        color: red;
+        border: 1px solid white;
+        background-position: 1% !important;
+        background-size: 300% 300% !important;
+}
+#close:hover{
+        color: #fff;
+        border: 1px solid red;
+        color: white;
+        background-position: 99% 50%;
+}
+
+.orderifmtable{
+        width:1180px;
+        border-collapse: collapse;
+}
+.orderifmtable thead{
+        height: 40px;
+        background: #ebebeb;
+}
+.orderifmtable th:nth-child(1){
+        width:70%;
+}
+.orderifmtable th:nth-child(2),.orderifmtable th:nth-child(3),.orderifmtable th:nth-child(4){
+        width:10%;
+}
+.orderifmtable td:nth-child(2),.orderifmtable td:nth-child(3),.orderifmtable td:nth-child(4){
+        text-align: center;
+        font-size: 14px;
+}
+.orderifmtable th{
+        border-top:1px solid rgb(104, 104, 104);
+        border-bottom:1px solid rgb(104, 104, 104);
+}
+.orderifmtable tr,.orderifmtable td{
+        border-top:1px solid #ebebeb;
+        border-bottom:1px solid #ebebeb;
+}
+.orderifmtable td:nth-child(2){
+        border:1px solid #ebebeb;
+}
+.orderifmtable td:nth-child(5){
+        border-left:1px solid #ebebeb;
+}
+.orderifmtable img{
+        width:80px;
+}
+.orderifmtable #name{
+        position: absolute;
+        margin-left: 10px;
+        font-size: 14px;
+}
+.orderifmtable #option{
+        position: relative;
+        margin-left: 10px;
+        font-size: 11px;
+        top: -20px;
+}
+.orderifmtable #hr{
+        border: 1px dotted black;
+        position: relative;
+        left: 85px;
+        top: -50px;
+        width: 720px;
+}
+.orderifmtable .up{
+        font-weight: bold;
+        font-size: 14px;
+}
+.orderifmtable .down{
+        position: relative;
+        top: -15px;
+        font-size: 12px;
+}
