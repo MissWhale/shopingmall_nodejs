@@ -1,3 +1,7 @@
+.mgback{
+        background: rgb(235, 233, 233);
+        min-height: 720px;
+}
 .upload {
         position: relative;
         left: 0;
@@ -6,7 +10,6 @@
         height: auto;
         margin:0px auto;
         font-family: "Roboto", sans-serif;
-        border:1px solid;
 }
 .manage{
         width: auto;
@@ -38,7 +41,6 @@
 .container-table100{
         display: block;
         width: 1120px;
-        border: 1px solid;
         margin: 10px 40px;
         /* height: 700px; */
 }
@@ -338,4 +340,12 @@ textarea{
 .optul input{
         margin-right: 10px;
         margin-left: 10px;
+}
+.up{
+        font-size: 14px;
+        margin:0px;
+}
+.down{
+        position: relative;
+        font-size: 12px;
 }

@@ -1,0 +1,416 @@
+include ../user/top.jade
+                link(rel='stylesheet', href='./css/selectbox.min.css')
+                script(type='text/javascript', src='./js/selectbox.min.js')
+                script.
+                .upload(style="display: flex;")
+                        .prct_simple
+                                .prct_imgbox
+                                        img(src="./dbimg/"+pro.simgname)
+                                        .prct_wbox
+                                                a 별점
+                                                a 리뷰
+                                .prct_infobox
+                                        .prct_defalut_info
+                                                .prct_defalut_area
+                                                        label="상품코드 : "+min.optcode
+                                                        h3=pro.name
+                                                //- hr
+                                                .prct_defalut_table
+                                                        table
+                                                                tbody
+                                                                        tr
+                                                                                th 가격
+                                                                                td
+                                                                                        strong(style="color:black")=min.min+"원" 
+                                                                        tr
+                                                                                th 배송비
+                                                                                td#deli 
+                                                                                        span#deliprice 2500원
+                                                                                        select#color.justselect(name='kind')
+                                                                                                option(value='ok') 주문시결제(선결제)
+                                                                                                option(value='no') 상품수령시결제(착불)     
+                                                                        tr
+                                                                                th 옵션
+                                                                                td.option
+                                                                                        a
+                                                                                                span 선택하세요
+                                                                                                img(src="./img/down.png")
+                                                                                        .optiondivno
+                                                                                                .optiontop
+                                                                                                        span 옵션선택
+                                                                                                        img.opcls(src="./img/exit.png")
+                                                                                                .optionlist
+                                                                                                        ul
+                                                                                                                each op in opt
+                                                                                                                        li.listsel(data-name=op.optname data-price=op.optprice data-optnum=op.optnum data-num=pro.num)
+                                                                                                                                a
+                                                                                                                                        span=op.optname
+                                                                                                                                        -var price=op.optprice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                                                                                                        strong=price
+                                                //- hr
+                                                .optionprice
+                                                        ul.optionul
+                                                .optiontotal(style="display:none")
+                                                        table
+                                                                tbody
+                                                                        tr
+                                                                                th 총 합계금액
+                                                                                td
+                                                                                        strong#totalprice(data-total="0")=0
+                                                                                        span 원
+                                                .buydiv
+                                                        a#basket 장바구니
+                                                        a#nowbuy 바로구매
+                .detailinfo
+                        nav.procate
+                                ul#cateMenu
+                                        li: a.cateifm(style="color: #F43142;border-bottom: 3px solid #F43142;") 상품정보
+                                        li: a.caterev 상품리뷰
+                        .proimgdiv
+                                .proimg
+                                        a#ptext(style="display:none")=pro.ptext
+                                .review(style="display:none")
+                                        .revtable
+                                                .revstar
+                                                        span(class="star1 on") 별1왼쪽
+                                                        span.star2 별1오른족
+                                                        span.star1 별2왼쪽
+                                                        span.star2 별2오른쪽
+                                                        span.star1 별3왼쪽
+                                                        span.star2 별3오른쪽
+                                                        span.star1 별4왼쪽
+                                                        span.star2 별4오른쪽
+                                                        span.star1 별5왼쪽
+                                                        span.star2 별5오른쪽
+                                                .revuser
+                                                        span.name name
+                                                        span.date date
+                                                .revopt
+                                                        | [옵션]
+                                                .revtext
+                                                        | 손에맞아서 좋은데 스나이퍼스위치쪽 때가있으면 딱는게힘듭니다..ㅠㅠ 
+                                        .revtable
+                                                .revstar
+                                                        span(class="star1 on") 별1왼쪽
+                                                        span.star2 별1오른족
+                                                        span.star1 별2왼쪽
+                                                        span.star2 별2오른쪽
+                                                        span.star1 별3왼쪽
+                                                        span.star2 별3오른쪽
+                                                        span.star1 별4왼쪽
+                                                        span.star2 별4오른쪽
+                                                        span.star1 별5왼쪽
+                                                        span.star2 별5오른쪽
+                                                .revuser
+                                                        span.name name
+                                                        span.date date
+                                                .revopt
+                                                        | [옵션]
+                                                .revtext
+                                                        | 손에맞아서 좋은데 스나이퍼스위치쪽 때가있으면 딱는게힘듭니다..ㅠㅠ 
+
+                                .probuy
+                                        .sideoption
+                                                a
+                                                        span 옵션선택
+                                                        img(src="./img/down.png")
+                                                .sideoptiondivno
+                                                        .sideoptiontop
+                                                                span 옵션선택
+                                                                img.sideopcls(src="./img/exit.png")
+                                                        .sideoptionlist
+                                                                ul
+                                                                        each op in opt
+                                                                                li.sidelistsel(data-name=op.optname data-price=op.optprice data-num=op.num data-optnum=op.optnum)
+                                                                                        a
+                                                                                                span=op.optname
+                                                                                                -var price=op.optprice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                                                                strong=price
+                                        .sideoptionprice
+                                                        ul.sideoptionul
+                                        .sideoptiontotal(style="display:none")
+                                                        table
+                                                                tbody
+                                                                        tr
+                                                                                th 총 합계금액
+                                                                                td
+                                                                                        strong#sidettprice(data-total="0")=0
+                                                                                        span 원
+                                        .sidebuy
+                                                a#basket 장바구니
+                                                a#nowbuy 바로구매
+                script.
+                        $("a[id=nowbuy]").click(function(){
+                                var xhr = new XMLHttpRequest();
+                                var formData = new FormData();
+                                formData.append('name', 'zerocho');
+                                formData.append('birth', 1994);
+                                xhr.onload = function() {
+                                        if (xhr.status === 200 || xhr.status === 201) {
+                                                console.log(xhr.responseText);
+                                        } else {
+                                                console.error(xhr.responseText);
+                                        }
+                                };
+                                xhr.open('POST', '/payment');
+                                xhr.send(formData);
+                                //- var formdata=new FormData();
+                                //- formdata.append("num","123");
+                                //- formdata.append("num","456");
+                                //- var xhr = new XMLHttpRequest();
+                                //- xhr.onload = function() {
+                                //-         if (xhr.status === 200 || xhr.status === 201) {
+                                //-                 console.log(xhr.responseText);
+                                //-         } else {
+                                //-                 console.error(xhr.responseText);
+                                //-         }
+                                //- };
+                                //- xhr.open('post', '/payment'); // 메소드와 주소 설정
+                                //- xhr.send(formdata);
+                                //- for (var pair of formdata.entries())
+                                //- {
+                                //-         console.log(pair[0]+ ', '+ pair[1]); 
+                                //- }
+                        })
+                        $("a[id=basket]").click(function(){ //장바구니담기
+                                var len=$(".optionul").children().length;
+                                if(!len){
+                                        alert("상품을 골라주세요.");
+                                        return;
+                                };
+                                for(var i=0;i<len;i++){
+                                        var num=$(".optionul")[0].children[i].dataset.num; //상품번호
+                                        var optnum=$(".optionul")[0].children[i].dataset.optnum; //옵션번호
+                                        var cnt=$(".optionul")[0].children[i].children[2].value; //수량
+                                        $.ajax({
+                                                url:"/basketadd",
+                                                dataType:'json',
+                                                type:"post",
+                                                data:{num:num,optnum:optnum,cnt:cnt},
+                                                success: function(result){
+                                                        if(!result){
+                                                                alert("오류발생");
+                                                                return;
+                                                        }
+                                                }
+                                        })
+                                }
+                                alert("상품이 장바구니에 담겼습니다");
+                        })
+                        $(document).ready(function(){
+                                var procate = $('.procate').offset();
+                                var probuy=$(".probuy").offset();
+                                $(window).scroll(function(){
+                                        if($(document).scrollTop() > probuy.top) {
+                                                $('.probuy').addClass('probuyFixed'); 
+                                                $('.procate').addClass('procateFixed');
+                                                $('.sideoptiondiv').css("top","0px");
+                                        }
+                                        else if($(document).scrollTop() < procate.top){
+                                                $('.probuy').removeClass('probuyFixed');
+                                                $('.procate').removeClass('procateFixed');
+                                                $('.sideoptiondiv').css("top","20px");
+                                        }
+                                });
+                        });
+                        $( window ).on( "load", function() {
+                                $(".justwrap").css("display","inline-grid");
+                                $(".proimg").append($("#ptext")[0].innerText);
+                        })
+                        $(".option").click(function(){ //옵션창활성화
+                                $(".optiondiv").css("display","block");
+                                $(".optiondivno").attr("class","optiondiv");
+                        })
+                        $(".opcls").click(function(){ //옵션창닫기
+                                $(".optiondiv").css("display","none");
+                                $(".optiondiv").attr("class","optiondivno");
+                        })
+                        $(".sideoption").click(function(){ //사이드옵션창활성화
+                                $(".sideoptiondiv").css("display","block");
+                                $(".sideoptiondivno").attr("class","sideoptiondiv");
+                        })
+                        $(".sideopcls").click(function(){ //사이드옵션창닫기
+                                $(".sideoptiondiv").css("display","none");
+                                $(".sideoptiondiv").attr("class","sideoptiondivno");
+                        })
+                        $("li[class='listsel']").click(function(){ //옵션선택
+                                $(".optiondiv").css("display","none");
+                                $(".optiondiv").attr("class","optiondivno");
+                                var name=$(this)[0].dataset.name;
+                                var price=$(this)[0].dataset.price;
+                                var num=$(this)[0].dataset.num;
+                                var optnum=$(this)[0].dataset.optnum;
+                                var dupl=0;
+                                for(var start=0;start<=$('.optionul').children().length;start++){
+                                        if($(this)[0].dataset.name == $('.optionul').children().eq(start).attr('class')){
+                                                dupl=1;
+                                        }
+                                }
+                                if(dupl){
+                                        alert("이미 선택되어 있는 옵션입니다.");
+                                }else{
+                                        var html="<li class="+name+" id='op' data-num="+num+" data-optnum="+optnum+"><p>"+name+"</p><button class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
+                                        var html=html+"<input class='mp_wrap' id='opcnt' type='text' data-price="+price+" data-name="+name+" name='procnt' value='1'  onchange=cntcgn(this);>";
+                                        var html=html+"<button class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
+                                        var html=html+="<button class='delete' data-name="+name+" onclick=del(this);></button>";
+                                        var html=html+'<span class=op_price data-tp='+price+'>'+numberWithCommas(price)+'원</span></li>';
+                                        var sidehtml="<li class="+name+" id='siop'><p>"+name+"</p><button class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
+                                        var sidehtml=sidehtml+"<input class='mp_wrap' id='siopcnt' type='text' data-price="+price+" data-name="+name+" name='procnt' value='1'  onchange=cntcgn(this);>";
+                                        var sidehtml=sidehtml+"<button class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
+                                        var sidehtml=sidehtml+="<button class='delete' data-name="+name+" onclick=del(this);></button>";
+                                        var sidehtml=sidehtml+'<span class=siop_price data-tp='+price+'>'+numberWithCommas(price)+'원</span></li>';
+                                        $('.optionul').append(html);
+                                        $('.sideoptionul').append(sidehtml);
+                                        if($('.optionul').children().length){
+                                                $(".optiontotal").css('display','block');
+                                                $(".sideoptiontotal").css('display','block');
+                                        }
+                                        $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)+Number(price);
+                                        $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
+                                        $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)+Number(price);
+                                        $("#sidettprice")[0].innerHTML=numberWithCommas(Number($("#sidettprice")[0].dataset.total));
+                                }
+                        });
+                        $("li[class='sidelistsel']").click(function(){ //사이드옵션선택
+                                $(".sideoptiondiv").css("display","none");
+                                $(".sideoptiondiv").attr("class","sideoptiondivno");
+                                var name=$(this)[0].dataset.name;
+                                var price=$(this)[0].dataset.price;
+                                var num=$(this)[0].dataset.num;
+                                var optnum=$(this)[0].dataset.optnum;
+                                var dupl=0;
+                                for(var start=0;start<=$('.sideoptionul').children().length;start++){
+                                        if($(this)[0].dataset.name == $('.sideoptionul').children().eq(start).attr('class')){
+                                                dupl=1;
+                                        }
+                                }
+                                if(dupl){
+                                        alert("이미 선택되어 있는 옵션입니다.");
+                                }else{
+                                        var html="<li class="+name+" data-num="+num+" data-optnum="+optnum+"><p>"+name+"</p><button class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
+                                        var html=html+"<input class='mp_wrap' id='opcnt' type='text' data-price="+price+" data-name="+name+" name='procnt' value='1'  onchange=cntcgn(this);>";
+                                        var html=html+"<button class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
+                                        var html=html+="<button class='delete' data-name="+name+" onclick=del(this);></button>";
+                                        var html=html+'<span class=op_price data-tp='+price+'>'+numberWithCommas(price)+'원</span></li>';
+                                        var sidehtml="<li class="+name+"><p>"+name+"</p><button class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
+                                        var sidehtml=sidehtml+"<input class='mp_wrap' id='siopcnt' type='text' data-price="+price+" data-name="+name+" name='procnt' value='1'  onchange=cntcgn(this);>";
+                                        var sidehtml=sidehtml+"<button class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
+                                        var sidehtml=sidehtml+="<button class='delete' data-name="+name+" onclick=del(this);></button>";
+                                        var sidehtml=sidehtml+'<span class=siop_price data-tp='+price+'>'+numberWithCommas(price)+'원</span></li>';
+                                        $('.optionul').append(html);
+                                        $('.sideoptionul').append(sidehtml);
+                                        if($('.sideoptionul').children().length){
+                                                $(".optiontotal").css('display','block');
+                                                $(".sideoptiontotal").css('display','block');
+                                        }
+                                        $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)+Number(price);
+                                        $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
+                                        $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)+Number(price);
+                                        $("#sidettprice")[0].innerHTML=numberWithCommas(Number($("#sidettprice")[0].dataset.total));
+                                }
+                        });
+                        function minus(m){ //수량감소
+                                var price=m.dataset.price;
+                                var name=m.dataset.name;
+                                var op=$('li[class='+name+']')[0];
+                                var siop=$('li[class='+name+']')[1];
+                                if($(m).next().val()>1){
+                                        op.children[2].value=Number(op.children[2].value)-1;
+                                        siop.children[2].value=Number(siop.children[2].value)-1;
+                                        op.children[5].dataset.tp=Number(op.children[2].value)*Number(price);
+                                        siop.children[5].dataset.tp=Number(siop.children[2].value)*Number(price);
+                                        op.children[5].textContent=numberWithCommas(Number(op.children[5].dataset.tp))+"원";
+                                        siop.children[5].textContent=numberWithCommas(Number(siop.children[5].dataset.tp))+"원" ;
+                                        $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)-Number(price);
+                                        $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
+                                        $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)-Number(price);
+                                        $("#sidettprice")[0].innerHTML=numberWithCommas(Number($("#sidettprice")[0].dataset.total));
+                                }
+                                else{
+                                        alert('최소수량은 1이상입니다');
+                                }
+                        }
+                        function plus(p){ //수량추가
+                                var price=p.dataset.price;
+                                var name=p.dataset.name;
+                                var op=$('li[class='+name+']')[0];
+                                var siop=$('li[class='+name+']')[1];
+                                op.children[2].value=Number(op.children[2].value)+1;
+                                siop.children[2].value=Number(siop.children[2].value)+1;
+                                op.children[5].dataset.tp=Number(op.children[2].value)*Number(price);
+                                siop.children[5].dataset.tp=Number(siop.children[2].value)*Number(price);
+                                op.children[5].textContent=numberWithCommas(Number(op.children[5].dataset.tp))+"원";
+                                siop.children[5].textContent=numberWithCommas(Number(siop.children[5].dataset.tp))+"원" ;
+                                $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)+Number(price);
+                                $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
+                                $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)+Number(price);
+                                $("#sidettprice")[0].innerHTML=numberWithCommas(Number($("#sidettprice")[0].dataset.total));
+                        }
+                        function del(d){ //옵션삭제
+                                var name=d.dataset.name;
+                                var op=$('li[class='+name+']')[0];
+                                var siop=$('li[class='+name+']')[1];
+                                var total=$(d).next()[0].dataset.tp;
+                                $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)-Number(total);
+                                $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
+                                $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)-Number(total);
+                                $("#sidettprice")[0].innerHTML=numberWithCommas(Number($("#sidettprice")[0].dataset.total));
+                                $(op).remove();
+                                $(siop).remove();
+                                if(!$('.optionul').children().length){
+                                        $(".optiontotal").css('display','none');
+                                        $(".sideoptiontotal").css('display','none');
+                                        $("#totalprice")[0].dataset.total=0;
+                                        $("#totalprice")[0].innerHTML=0;
+                                        $("#sidettprice")[0].dataset.total=0;
+                                        $("#sidettprice")[0].innerHTML=0;
+                                }
+                        }
+                        function cntcgn(c){ //inputbox 숫자변경
+                                if(Number($(c).val())<1){
+                                        alert("1이하는 입력할 수 없습니다");
+                                        $(c)[0].value=1;
+                                        return;
+                                }
+                                var name=c.dataset.name;
+                                var op=$('li[class='+name+']')[0];
+                                var siop=$('li[class='+name+']')[1];
+                                var price=c.dataset.price;
+                                var first=$(c).next().next().next()[0].dataset.tp;
+                                var final=Number($(c).val())*Number(price);
+                                var result=Number(final)-Number(first);
+                                op.children[2].value=$(c).val();
+                                siop.children[2].value=$(c).val();
+                                op.children[5].dataset.tp=final;
+                                siop.children[5].dataset.tp=final;
+                                op.children[5].textContent=numberWithCommas(Number(op.children[5].dataset.tp))+"원";
+                                siop.children[5].textContent=numberWithCommas(Number(siop.children[5].dataset.tp))+"원" ;
+                                $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)+Number(result);
+                                $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
+                                $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)+Number(result);
+                                $("#sidettprice")[0].innerHTML=numberWithCommas(Number($("#sidettprice")[0].dataset.total));
+                        };
+                        $(".cateifm").click(function(){ //상세정보창
+                                $(".proimg").css("display","block");
+                                $(".review").css("display","none");
+                                $(this).css("color","#F43142");
+                                $(this).css("border-bottom","3px solid #F43142");
+                                $(".caterev").css("color","black");
+                                $(".caterev").css("border","none");
+                        })
+                        $(".caterev").click(function(){ //리뷰창
+                                $(".proimg").css("display","none");
+                                $(".review").css("display","block");
+                                $(this).css("color","#F43142");
+                                $(this).css("border-bottom","3px solid #F43142");
+                                $(".cateifm").css("color","black");
+                                $(".cateifm").css("border","none");
+                        })
+                        function numberWithCommas(x) { //콤마찍기
+                                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        }
+                        $('.revstar span').click(function(){ //별점찍기
+                                $(this).parent().children('span').removeClass('on');
+                                $(this).addClass('on').prevAll('span').addClass('on');
+                                return false;
+                        });

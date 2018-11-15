@@ -13,17 +13,31 @@ include ../user/top.jade
                                                         th 가격
                                                         th 배송비
                                         tbody
-                                                tr#num(data-num=pay.num)
-                                                        td
-                                                                img(src="./dbimg/"+pay.simgname)
-                                                                span#name=pay.name
-                                                                span#option(data-optnum=pay.optnum)=pay.optname
-                                                                #hr
-                                                        -var total=pay.optprice*cnt
-                                                        -var price=total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                                        td#cnt(data-cnt=cnt)=cnt
-                                                        td#price(data-price=pay.optprice)=price
-                                                        td#deli(data-price="2500") 2500원
+                                                if(isnum=="1")
+                                                        tr#num(data-num=pay.num)
+                                                                td
+                                                                        img(src="./dbimg/"+pay.simgname)
+                                                                        span#name=pay.name
+                                                                        span#option(data-optnum=pay.optnum)=pay.optname
+                                                                        #hr
+                                                                -var total=pay.optprice*cnt
+                                                                -var price=total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                                td#cnt(data-cnt=cnt)=cnt
+                                                                td#price(data-price=pay.optprice)=price
+                                                                td#deli(data-price="2500") 2500원
+                                                else
+                                                        each pro,i in pay
+                                                                tr#num(data-num=pro.num)
+                                                                td
+                                                                        img(src="./dbimg/"+pro.simgname)
+                                                                        span#name=pro.name
+                                                                        span#option(data-optnum=pro.optnum)=pro.optname
+                                                                        #hr
+                                                                -var total=pro.optprice*cnt[i]
+                                                                -var price=total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                                td#cnt(data-cnt=cnt[i])=cnt[i]
+                                                                td#price(data-price=pro.optprice)=price
+                                                                td#deli(data-price="2500") 2500원
                         .totalprice
                                 table
                                         tr

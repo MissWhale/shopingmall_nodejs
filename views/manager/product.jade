@@ -1,90 +1,91 @@
 include ../user/top.jade 
                 link(rel='stylesheet',href='./css/management.css')
-                .upload
-                        nav.manage
-                                ul#manageMenu
-                                        li: a#user(href="/member") 회원관리
-                                        li: a#prod(href="/product") 상품관리
-                                        li: a#order(href="/order") 주문관리
-                                        li: a#faq(href="/faq") FAQ관리
-                        a.rainbtn#upload(href="/productupload" alt="상품등록" style="margin: 10px 0px;")
-                        .prodmg
-                                .container-table100
-                                        .wrap-table100
-                                                .table100
-                                                        table
-                                                                thead
-                                                                        tr.table100-head
-                                                                                th.column1 제품분류
-                                                                                th.column2 제품코드
-                                                                                th.column3 제품명
-                                                                                th.column4 제조사
-                                                                                th.column5 판매가
-                                                                                th.column6 수량
-                                                                                th.column7 등록일
-                                                                                th.column8 수정
-                                                                                th.column9 삭제
-                                                                tbody
-                                                                        ul
-                                                                                if(result)
-                                                                                        each pro in result     
-                                                                                                tr
-                                                                                                        td.column1=pro.pkind
-                                                                                                        td.column2=pro.pnum
-                                                                                                        td.column3=pro.name
-                                                                                                        td.column4=pro.comp
-                                                                                                        td.column5=pro.price
-                                                                                                        td.column6=pro.count
-                                                                                                        td.column7=new Date(pro.pdate).format("yyyy-MM-dd")
-                                                                                                        td.column8: a.rainbtnlist#modi(alt="수정" name=pro.num)
-                                                                                                        td.column9: a.rainbtnlist#delete(alt="삭제" name=pro.num)
-                .pagingdiv
-                        .paging
-                                -var pover=Math.trunc(pager.pagecnt/10)
-                                if(pover)
-                                        if(pno<11)
-                                                - var n = 1 //시작페이지
-                                                - var max=10 //끝페이지
-                                                - var next=11 //다음10페이지
-                                                - var check=1 //다음,마지막페이지 체크
-                                        else
-                                                - var n=pno%10 ==0 ? (Math.trunc(pno/10)-1)*10+1 : Math.trunc(pno/10)*10+1 //시작페이지
-                                                - var ip=Math.trunc(n/10) //시작페이지앞자리
-                                                - var fp=Math.trunc(pager.pagecnt/10) //마지막페이지앞자리
-                                                -var pna=pager.pagecnt-n //잔여페이지수
-                                                -var next=(ip+1)*10+1 //다음10페이지
-                                                -var prev=ip*10 //전10페이지
-                                                if(ip == fp)
-                                                        -var max=n+pna
+                .mgback
+                        .upload
+                                nav.manage
+                                        ul#manageMenu
+                                                li: a#user(href="/member") 회원관리
+                                                li: a#prod(href="/product") 상품관리
+                                                li: a#order(href="/order") 주문관리
+                                                li: a#faq(href="/faq") FAQ관리
+                                a.rainbtn#upload(href="/productupload" alt="상품등록" style="margin: 10px 0px;")
+                                .prodmg
+                                        .container-table100
+                                                .wrap-table100
+                                                        .table100
+                                                                table
+                                                                        thead
+                                                                                tr.table100-head
+                                                                                        th.column1 제품분류
+                                                                                        th.column2 제품코드
+                                                                                        th.column3 제품명
+                                                                                        th.column4 제조사
+                                                                                        th.column5 판매가
+                                                                                        th.column6 수량
+                                                                                        th.column7 등록일
+                                                                                        th.column8 수정
+                                                                                        th.column9 삭제
+                                                                        tbody
+                                                                                ul
+                                                                                        if(result)
+                                                                                                each pro in result     
+                                                                                                        tr
+                                                                                                                td.column1=pro.pkind
+                                                                                                                td.column2=pro.optcode
+                                                                                                                td.column3=pro.name
+                                                                                                                td.column4=pro.comp
+                                                                                                                td.column5=pro.optprice
+                                                                                                                td.column6=pro.optcnt
+                                                                                                                td.column7=new Date(pro.pdate).format("yyyy-MM-dd")
+                                                                                                                td.column8: a.rainbtnlist#modi(alt="수정" name=pro.num)
+                                                                                                                td.column9: a.rainbtnlist#delete(alt="삭제" name=pro.num)
+                        .pagingdiv
+                                .paging
+                                        -var pover=Math.trunc(pager.pagecnt/10)
+                                        if(pover)
+                                                if(pno<11)
+                                                        - var n = 1 //시작페이지
+                                                        - var max=10 //끝페이지
+                                                        - var next=11 //다음10페이지
+                                                        - var check=1 //다음,마지막페이지 체크
                                                 else
-                                                        -var max=n+9
-                                else
-                                        - var n = 1
-                                        - var max=pager.pagecnt
-                                span
-                                        ul
-                                                if(pno>10)
-                                                        li
-                                                                a#first(href="/product" style="height: 14px;")
-                                                                        img(src="./img/dbackb.png")
-                                                if(prev)
-                                                        li
-                                                                a#prev(href="/product="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
-                                                                        img(src="./img/backb.png")
-                                                while n <= max
-                                                        li
-                                                                if(pno==n)
-                                                                        a(href="/product="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
-                                                                else
-                                                                        a(href="/product="+n)=n++
+                                                        - var n=pno%10 ==0 ? (Math.trunc(pno/10)-1)*10+1 : Math.trunc(pno/10)*10+1 //시작페이지
+                                                        - var ip=Math.trunc(n/10) //시작페이지앞자리
+                                                        - var fp=Math.trunc(pager.pagecnt/10) //마지막페이지앞자리
+                                                        -var pna=pager.pagecnt-n //잔여페이지수
+                                                        -var next=(ip+1)*10+1 //다음10페이지
+                                                        -var prev=ip*10 //전10페이지
+                                                        if(ip == fp)
+                                                                -var max=n+pna
+                                                        else
+                                                                -var max=n+9
+                                        else
+                                                - var n = 1
+                                                - var max=pager.pagecnt
+                                        span
+                                                ul
+                                                        if(pno>10)
+                                                                li
+                                                                        a#first(href="/product" style="height: 14px;")
+                                                                                img(src="./img/dbackb.png")
+                                                        if(prev)
+                                                                li
+                                                                        a#prev(href="/product="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                                img(src="./img/backb.png")
+                                                        while n <= max
+                                                                li
+                                                                        if(pno==n)
+                                                                                a(href="/product="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                        else
+                                                                                a(href="/product="+n)=n++
 
-                                                if(ip != fp || check)
-                                                        li
-                                                                a#next(href="/product="+next style="padding: 6px 4px 4px 4px;height: 12px;")
-                                                                        img(src="./img/forb.png")
-                                                        li
-                                                                a#final(href="/product="+pager.pagecnt style="height: 14px;")
-                                                                        img(src="./img/dforb.png")
+                                                        if(ip != fp || check)
+                                                                li
+                                                                        a#next(href="/product="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                                img(src="./img/forb.png")
+                                                                li
+                                                                        a#final(href="/product="+pager.pagecnt style="height: 14px;")
+                                                                                img(src="./img/dforb.png")
 
         script.
                 $("#prod").css("border-bottom","5px solid white");

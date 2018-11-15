@@ -48,8 +48,10 @@ include ../user/top.jade
                                                                                                                                         -var price=op.optprice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                                                                                                                         strong=price
                                                 //- hr
-                                                .optionprice
-                                                        ul.optionul
+                                                form#option(action="/payment" method="post")
+                                                        input#lcnt(name="lcnt" style="display:none" type="text" value=0)
+                                                        .optionprice
+                                                                ul.optionul
                                                 .optiontotal(style="display:none")
                                                         table
                                                                 tbody
@@ -60,7 +62,7 @@ include ../user/top.jade
                                                                                         span 원
                                                 .buydiv
                                                         a#basket 장바구니
-                                                        a 바로구매
+                                                        a#nowbuy 바로구매
                 .detailinfo
                         nav.procate
                                 ul#cateMenu
@@ -138,8 +140,11 @@ include ../user/top.jade
                                                                                         span 원
                                         .sidebuy
                                                 a#basket 장바구니
-                                                a 바로구매
+                                                a#nowbuy 바로구매
                 script.
+                        $("a[id=nowbuy]").click(function(){
+                                $("#option").submit();
+                        })
                         $("a[id=basket]").click(function(){ //장바구니담기
                                 var len=$(".optionul").children().length;
                                 if(!len){
@@ -217,15 +222,16 @@ include ../user/top.jade
                                 if(dupl){
                                         alert("이미 선택되어 있는 옵션입니다.");
                                 }else{
-                                        var html="<li class="+name+" id='op' data-num="+num+" data-optnum="+optnum+"><p>"+name+"</p><button class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
+                                        var html="<li class="+name+" id='op' data-num="+num+" data-optnum="+optnum+"><p>"+name+"</p><button type='button' class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
                                         var html=html+"<input class='mp_wrap' id='opcnt' type='text' data-price="+price+" data-name="+name+" name='procnt' value='1'  onchange=cntcgn(this);>";
-                                        var html=html+"<button class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
-                                        var html=html+="<button class='delete' data-name="+name+" onclick=del(this);></button>";
-                                        var html=html+'<span class=op_price data-tp='+price+'>'+numberWithCommas(price)+'원</span></li>';
-                                        var sidehtml="<li class="+name+" id='siop'><p>"+name+"</p><button class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
+                                        var html=html+"<button type='button' class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
+                                        var html=html+="<button type='button' class='delete' data-name="+name+" onclick=del(this);></button>";
+                                        var html=html+'<span class=op_price data-tp='+price+'>'+numberWithCommas(price)+'원</span>';
+                                        var html=html+"<input type='text' name='num' value="+num+" style='display:none'><input id='buycnt' type='text' value='1' name='cnt' style='display:none'><input type='text' name='optnum' value="+optnum+" style='display:none'></li>";
+                                        var sidehtml="<li class="+name+" id='siop'><p>"+name+"</p><button type='button' class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
                                         var sidehtml=sidehtml+"<input class='mp_wrap' id='siopcnt' type='text' data-price="+price+" data-name="+name+" name='procnt' value='1'  onchange=cntcgn(this);>";
-                                        var sidehtml=sidehtml+"<button class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
-                                        var sidehtml=sidehtml+="<button class='delete' data-name="+name+" onclick=del(this);></button>";
+                                        var sidehtml=sidehtml+"<button type='button' class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
+                                        var sidehtml=sidehtml+="<button type='button' class='delete' data-name="+name+" onclick=del(this);></button>";
                                         var sidehtml=sidehtml+'<span class=siop_price data-tp='+price+'>'+numberWithCommas(price)+'원</span></li>';
                                         $('.optionul').append(html);
                                         $('.sideoptionul').append(sidehtml);
@@ -233,6 +239,7 @@ include ../user/top.jade
                                                 $(".optiontotal").css('display','block');
                                                 $(".sideoptiontotal").css('display','block');
                                         }
+                                        $("#lcnt")[0].value=Number($("#lcnt")[0].value)+1;
                                         $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)+Number(price);
                                         $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
                                         $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)+Number(price);
@@ -255,15 +262,16 @@ include ../user/top.jade
                                 if(dupl){
                                         alert("이미 선택되어 있는 옵션입니다.");
                                 }else{
-                                        var html="<li class="+name+" data-num="+num+" data-optnum="+optnum+"><p>"+name+"</p><button class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
+                                        var html="<li class="+name+" data-num="+num+" data-optnum="+optnum+"><p>"+name+"</p><button type='button' class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
                                         var html=html+"<input class='mp_wrap' id='opcnt' type='text' data-price="+price+" data-name="+name+" name='procnt' value='1'  onchange=cntcgn(this);>";
-                                        var html=html+"<button class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
-                                        var html=html+="<button class='delete' data-name="+name+" onclick=del(this);></button>";
-                                        var html=html+'<span class=op_price data-tp='+price+'>'+numberWithCommas(price)+'원</span></li>';
-                                        var sidehtml="<li class="+name+"><p>"+name+"</p><button class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
+                                        var html=html+"<button type='button' class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
+                                        var html=html+="<button type='button' class='delete' data-name="+name+" onclick=del(this);></button>";
+                                        var html=html+'<span class=op_price data-tp='+price+'>'+numberWithCommas(price)+'원</span>';
+                                        var html=html+"<input type='text' name='num' value="+num+" style='display:none'><input id='buycnt' type='text' value='1' name='cnt' style='display:none'><input type='text' name='optnum' value="+optnum+" style='display:none'></li>";
+                                        var sidehtml="<li class="+name+"><p>"+name+"</p><button type='button' class='min' data-price="+price+" data-name="+name+" onclick=minus(this);></button>";
                                         var sidehtml=sidehtml+"<input class='mp_wrap' id='siopcnt' type='text' data-price="+price+" data-name="+name+" name='procnt' value='1'  onchange=cntcgn(this);>";
-                                        var sidehtml=sidehtml+"<button class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
-                                        var sidehtml=sidehtml+="<button class='delete' data-name="+name+" onclick=del(this);></button>";
+                                        var sidehtml=sidehtml+"<button type='button' class='plus' data-price="+price+" data-name="+name+" onclick=plus(this);></button>";
+                                        var sidehtml=sidehtml+="<button type='button' class='delete' data-name="+name+" onclick=del(this);></button>";
                                         var sidehtml=sidehtml+'<span class=siop_price data-tp='+price+'>'+numberWithCommas(price)+'원</span></li>';
                                         $('.optionul').append(html);
                                         $('.sideoptionul').append(sidehtml);
@@ -271,6 +279,7 @@ include ../user/top.jade
                                                 $(".optiontotal").css('display','block');
                                                 $(".sideoptiontotal").css('display','block');
                                         }
+                                        $("#lcnt")[0].value=Number($("#lcnt")[0].value)+1;
                                         $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)+Number(price);
                                         $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
                                         $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)+Number(price);
@@ -282,6 +291,7 @@ include ../user/top.jade
                                 var name=m.dataset.name;
                                 var op=$('li[class='+name+']')[0];
                                 var siop=$('li[class='+name+']')[1];
+                                console.log(op.children[7]);
                                 if($(m).next().val()>1){
                                         op.children[2].value=Number(op.children[2].value)-1;
                                         siop.children[2].value=Number(siop.children[2].value)-1;
@@ -289,6 +299,7 @@ include ../user/top.jade
                                         siop.children[5].dataset.tp=Number(siop.children[2].value)*Number(price);
                                         op.children[5].textContent=numberWithCommas(Number(op.children[5].dataset.tp))+"원";
                                         siop.children[5].textContent=numberWithCommas(Number(siop.children[5].dataset.tp))+"원" ;
+                                        op.children[7].value=Number(op.children[7].value)-1;
                                         $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)-Number(price);
                                         $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
                                         $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)-Number(price);
@@ -309,6 +320,7 @@ include ../user/top.jade
                                 siop.children[5].dataset.tp=Number(siop.children[2].value)*Number(price);
                                 op.children[5].textContent=numberWithCommas(Number(op.children[5].dataset.tp))+"원";
                                 siop.children[5].textContent=numberWithCommas(Number(siop.children[5].dataset.tp))+"원" ;
+                                op.children[7].value=Number(op.children[7].value)+1;
                                 $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)+Number(price);
                                 $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
                                 $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)+Number(price);
@@ -323,6 +335,7 @@ include ../user/top.jade
                                 $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
                                 $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)-Number(total);
                                 $("#sidettprice")[0].innerHTML=numberWithCommas(Number($("#sidettprice")[0].dataset.total));
+                                $("#lcnt")[0].value=Number($("#lcnt")[0].value)-1;
                                 $(op).remove();
                                 $(siop).remove();
                                 if(!$('.optionul').children().length){
@@ -353,6 +366,7 @@ include ../user/top.jade
                                 siop.children[5].dataset.tp=final;
                                 op.children[5].textContent=numberWithCommas(Number(op.children[5].dataset.tp))+"원";
                                 siop.children[5].textContent=numberWithCommas(Number(siop.children[5].dataset.tp))+"원" ;
+                                op.children[7].value=$(c).val();
                                 $("#totalprice")[0].dataset.total=Number($("#totalprice")[0].dataset.total)+Number(result);
                                 $("#totalprice")[0].innerHTML=numberWithCommas(Number($("#totalprice")[0].dataset.total));
                                 $("#sidettprice")[0].dataset.total=Number($("#sidettprice")[0].dataset.total)+Number(result);

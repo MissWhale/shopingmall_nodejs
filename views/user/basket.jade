@@ -40,6 +40,14 @@ include ../user/top.jade
                                                                 tr
                                                                         td#nobas(colspan="5")
                                                                                 span 장바구니에 담긴 상품이 없습니다.
+                                if(basket.length)
+                                        .checkcl
+                                                input#check(type="checkbox")
+                                                span 선택상품
+                                                a 삭제하기
+                                        .allbuy
+                                                a.choose 선택상품주문
+                                                a.all 전체주문
                 script.
                         $("a[id=delete]").click(function(){
                                 var num=$(this).attr("name");

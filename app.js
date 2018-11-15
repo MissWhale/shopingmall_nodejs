@@ -6,6 +6,7 @@
         var session=require('express-session');
         var multer=require('multer');
         var fs=require('fs');
+        var async = require('async');
         var upload=multer({storage: multer.diskStorage({
                 destination: function (req, file, cb) {
                   cb(null, __dirname+'/dbimg/');
@@ -65,6 +66,7 @@
                 saveUninitialized:true,
                 store:sstore
         }));
+        app.use('/', require('./route/index'));
         app.listen(3000,function(){
                 console.log('Conneted 3000 port');
         });
@@ -254,31 +256,63 @@
         })
         app.post("/payment",function(req,res){
                 var num=0;
-                for(var i=0;i<req.body.optnum.length;i++){
-                        if(req.body.isnum==req.body.optnum[i]){
-                                num=i;
-                                break;
-                        }
-                }
-                var data={
-                        num:req.body.num[num],
-                        cnt:req.body.cnt[num],
-                        optnum:req.body.optnum[num]
-                }
-                console.log(data);
-                var sql="SELECT product.num,name,optnum,optname,optprice,simgname FROM product,productopt,productimg where product.num=productimg.num and product.num=productopt.num and product.num=? and optnum=?";
-                con.query(sql,[data.num,data.optnum],function(err,result){
-                        if(err) console.log(err);
-                        else{
-                                console.log(result);
-                                if(req.session.displayname){
-                                        var dname=req.session.displayname;
-                                        res.render('payment',{name:dname,id:req.session.user,pay:result[0],cnt:data.cnt});
-                                }else{
-                                        res.render('payment');
+                if(req.body.isnum){
+                        for(var i=0;i<req.body.optnum.length;i++){
+                                if(req.body.isnum==req.body.optnum[i]){
+                                        num=i;
+                                        break;
                                 }
                         }
-                })
+                        if(num || req.body.optnum.length){
+                                var data={
+                                        num:req.body.num[num],
+                                        cnt:req.body.cnt[num],
+                                        optnum:req.body.optnum[num]
+                                }
+                        }else{
+                                var data={
+                                        num:req.body.num,
+                                        cnt:req.body.cnt,
+                                        optnum:req.body.optnum
+                                }
+                        }
+                        var sql="SELECT product.num,name,optnum,optname,optprice,simgname FROM product,productopt,productimg where product.num=productimg.num and product.num=productopt.num and product.num=? and optnum=?";
+                        con.query(sql,[data.num,data.optnum],function(err,result){
+                                if(err) console.log(err);
+                                else{
+                                        if(req.session.displayname){
+                                                var dname=req.session.displayname;
+                                                res.render('payment',{name:dname,id:req.session.user,pay:result[0],cnt:data.cnt,isnum:"1"});
+                                        }else{
+                                                res.render('payment');
+                                        }
+                                }
+                        })
+                }else{
+                        var sql="SELECT product.num,name,optnum,optname,optprice,simgname FROM product,productopt,productimg where product.num=productimg.num and product.num=productopt.num and ";
+                        var sql2="";
+                        if(req.body.lcnt>1){
+                                for(var i=0;i<req.body.optnum.length;i++){
+                                        sql2=sql2+"(product.num="+req.body.num[i]+" and optnum="+req.body.optnum[i]+") or ";
+                                }
+                                sql2=sql2.slice(0,-3);
+                                sql=sql+"("+sql2+")";
+                        }else{
+                                sql=sql+"product.num="+req.body.num+" and optnum="+req.body.optnum;
+                        }
+                        con.query(sql,function(err,result){
+                                if(err) console.log(err);
+                                else{
+                                        if(req.session.displayname){
+                                                var dname=req.session.displayname;
+                                                console.log(result);
+                                                res.render('payment',{name:dname,id:req.session.user,pay:result,cnt:req.body.cnt,isnum:"2"});
+                                        }else{
+                                                res.render('payment');
+                                        }
+                                }
+                        })
+                }
         })
         app.post("/orderadd",function(req,res){
                 var data={
@@ -295,18 +329,35 @@
                         oname:req.body.oname,
                         ophone:req.body.ophone
                 }
-                var sql="insert into orders(num,id,optnum,cnt,total,a_name,a_phone,oname,ophone,locnum,locadd,locdetail) ";
-                sql=sql+"values(?,?,?,?,?,?,?,?,?,?,?,?)";
-                con.query(sql,[data.num,data.id,data.optnum,data.cnt,data.total,data.aname,data.aphone,data.oname,data.ophone,data.locnum,data.locadd,data.locdetail],function(err,result){
+                var sql="insert into orders(id,total) values(?,?)";
+                con.query(sql,[data.id,data.total],function(err,result){
                         if(err) console.log(err);
                         else{
-                                if(result.affectedRows){
-                                        res.send("true");
-                                }else{
-                                        res.send("false");
-                                }
+                                var innum=result.insertId;
+                                var sql="insert into ordersdetail(num,onum,optnum,cnt,a_name,a_phone,oname,ophone,locnum,locadd,locdetail)";
+                                var sql=sql+"values(?,?,?,?,?,?,?,?,?,?,?)";
+                                con.query(sql,[data.num,innum,data.optnum,data.cnt,data.aname,data.aphone,data.oname,data.ophone,data.locnum,data.locadd,data.locdetail],function(err,result){
+                                        if(err) console.log(err);
+                                        else{
+                                                if(result.affectedRows){
+                                                        res.send("true");
+                                                }else{
+                                                        res.send("false");
+                                                }
+                                        }
+                                })
                         }
                 })
+                // con.query(sql,[data.num,data.id,data.optnum,data.cnt,data.total,data.aname,data.aphone,data.oname,data.ophone,data.locnum,data.locadd,data.locdetail],function(err,result){
+                //         if(err) console.log(err);
+                //         else{
+                //                 if(result.affectedRows){
+                //                         res.send("true");
+                //                 }else{
+                //                         res.send("false");
+                //                 }
+                //         }
+                // })
         })
         app.get(["/orderifm","/orderifm=:pno"],function(req,res){
                 var id=req.session.user;
@@ -319,7 +370,10 @@
                         if(err) console.log(err);
                         else{
                                 var mbcnt=result[0].mbcnt;
-                                var sql="select orders.num,orders.onum,orders.optnum,orders.cnt,product.name,orders.total,orders.order_date,productimg.simgname,productopt.optprice,productopt.optname from orders join productimg using(num) join product using(num) join productopt using(num) where id=? and productopt.optnum=orders.optnum ORDER BY oname desc limit ?,?";
+                                var sql
+                                var sql="select orders.onum,ordersdetail.optnum,ordersdetail.cnt,product.name,orders.total,orders.order_date,productimg.simgname,productopt.optprice,productopt.optname";
+                                var sql=sql+" from orders,ordersdetail,product,productimg,productopt where id=? and orders.onum=ordersdetail.onum and ordersdetail.num=product.num and product.num=productimg.num and ordersdetail.optnum=productopt.optnum ORDER BY onum desc limit ?,?;";
+                                console.log(sql);
                                 con.query(sql,[id,start,maxpost],function(err,result){
                                         if(err) console.log(err);
                                         else{
@@ -361,7 +415,6 @@
                                                         startpost:maxpost*pno-maxpost, //시작상품넘버
                                                         endpost:maxpost*pno-1< mbcnt ?  maxpost*pno-1 : mbcnt-1  //마지막상품넘버
                                                 }
-                                                console.log(result);
                                                 if(req.session.displayname){
                                                         var dname=req.session.displayname;
                                                         res.render('member',{name:dname,id:req.session.user,result:result,pager:pager,pno:pno});
@@ -420,7 +473,7 @@
                         if(err) console.log(err);
                         else{
                                 var postcnt=result[0].postcnt;
-                                var sql="select * from product order by num desc limit ?,?";
+                                var sql="select product.*,optcode,optcnt,min(optprice) as optprice from product join productopt using(num) group by product.num ORDER by product.num DESC limit ?,?";
                                 con.query(sql,[start,maxpost],function(err,result){
                                         if(err) console.log(err);
                                         else{
@@ -709,13 +762,35 @@
                         }
                 })
         })
-        app.get("/order",function(req,res){ //주문관리
-                if(req.session.displayname){
-                        var dname=req.session.displayname;
-                        res.render('order',{name:dname,id:req.session.user});
-                }else{
-                        res.render('order');
-                }
+        app.get(["/order",'/order=:pno'],function(req,res){ //주문관리
+                var maxpost=20; //페이지당 상품수
+                var pno=req.params.pno; //페이지넘버
+                if(!pno)  var pno=1;
+                var start=maxpost*pno-maxpost;
+                var sql="select count(*) as postcnt from orders";
+                con.query(sql,function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                var postcnt=result[0].postcnt;
+                                var sql="select orders.onum,ordersdetail.num,order_date,cnt,total,name,optname,optprice,status from orders join ordersdetail using(onum) join product using(num) join productopt using(num) group by orders.onum desc limit ?,?";
+                                con.query(sql,[start,maxpost],function(err,result){
+                                        if(err) console.log(err);
+                                        else{
+                                                var pager={
+                                                        pagecnt:postcnt%maxpost == 0 ? Math.trunc(postcnt/maxpost) : Math.trunc(postcnt/maxpost) +1, //총페이지수
+                                                        startpost:maxpost*pno-maxpost, //시작상품넘버
+                                                        endpost:maxpost*pno-1< postcnt ?  maxpost*pno-1 : postcnt-1  //마지막상품넘버
+                                                }
+                                                if(req.session.displayname){
+                                                        var dname=req.session.displayname;
+                                                        res.render('order',{name:dname,id:req.session.user,orders:result,pager:pager,pno:pno});
+                                                }else{
+                                                        res.render('order',{result:result,pager:pager,pno:pno});
+                                                }
+                                        }
+                                })
+                        }
+                })
         })
         app.get(["/faq","/faq=:pno"],function(req,res){ //faq페이지
                 var maxpost=20; //페이지당 상품수
@@ -823,42 +898,42 @@
         })
 }
 { //로그인###################################로그인######################################로그인
-        app.get('/login',function(req,res){ //로그인페이지
-                if(req.session.displayname){
-                        var dname=req.session.displayname;
-                        res.render('login',{name:dname,id:req.session.user});
-                }else{
-                        res.render('login');
-                }
-        });
-        app.post('/login',function(req,res){ //로그인
-        var user={
-                id:req.body.id,
-                pw:req.body.pw
-        }
-        var sql='select count(*) as ok,name from login where id=? and pw=?';
-                con.query(sql,[user.id,user.pw],function(err,result){
-                if(err) console.log(err);
-                else{
-                        var ok=result[0].ok;
-                        if(ok==1){
-                                req.session.displayname=result[0].name;
-                                req.session.user=user.id;
-                                req.session.save(function(){
-                                        res.redirect('/');
-                                })
-                        }else{
-                                res.send('<script>alert("아이디나 비밀번호가 일치하지 않습니다");location.href="/login"</script>');
-                        }
-                }
-                })
-        });
-        app.get('/logout',function(req,res){ //로그아웃
-                delete req.session.displayname;
-                req.session.save(function(){
-                        res.redirect('/');
-                })
-        })
+        // app.get('/login',function(req,res){ //로그인페이지
+        //         if(req.session.displayname){
+        //                 var dname=req.session.displayname;
+        //                 res.render('login',{name:dname,id:req.session.user});
+        //         }else{
+        //                 res.render('login');
+        //         }
+        // });
+        // app.post('/login',function(req,res){ //로그인
+        // var user={
+        //         id:req.body.id,
+        //         pw:req.body.pw
+        // }
+        // var sql='select count(*) as ok,name from login where id=? and pw=?';
+        //         con.query(sql,[user.id,user.pw],function(err,result){
+        //         if(err) console.log(err);
+        //         else{
+        //                 var ok=result[0].ok;
+        //                 if(ok==1){
+        //                         req.session.displayname=result[0].name;
+        //                         req.session.user=user.id;
+        //                         req.session.save(function(){
+        //                                 res.redirect('/');
+        //                         })
+        //                 }else{
+        //                         res.send('<script>alert("아이디나 비밀번호가 일치하지 않습니다");location.href="/login"</script>');
+        //                 }
+        //         }
+        //         })
+        // });
+        // app.get('/logout',function(req,res){ //로그아웃
+        //         delete req.session.displayname;
+        //         req.session.save(function(){
+        //                 res.redirect('/');
+        //         })
+        // })
 }
 {//회원가입###################################회원가입#####################################회원가입
         app.get('/register',function(req,res){ //회원가입

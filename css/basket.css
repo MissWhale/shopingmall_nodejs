@@ -92,7 +92,7 @@ td:nth-child(5){
         color: red;
         border: black;
 }
-.buy a{
+.buy a,.checkcl a,.allbuy a{
         display: inline-block;
         background: transparent;
         text-transform: uppercase;
@@ -112,20 +112,20 @@ td:nth-child(5){
         border: none;
         border: 1px solid red;
 }
-#order{
-        color:white;
+#order,.all{
+        color:white !important;
         border:1px solid white;
         background-position: 100% !important;
         background-size: 300% 300% !important;
         background: linear-gradient(270deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0.8), rgba(189, 21, 21, 0), rgba(255, 1, 1, 0));
 }
-#order:hover{
-        color: red;
+#order:hover,.all:hover{
+        color: red !important;
         border: 1px solid white;
         background-position: 1% !important;
         background-size: 300% 300% !important;
 }
-#delete:hover{
+#delete:hover,.checkcl a:hover,.choose:hover{
         color: #fff;
         border: 1px solid red;
         color: white;
@@ -141,4 +141,20 @@ td:nth-child(5){
         text-align: center;
         padding: 50px;
         font-weight: bold;
+}
+.checkcl span{
+        position: absolute;
+        margin-left: 20px;
+        font-size: 13px;
+}
+.checkcl a{
+        margin-left: 90px;
+        margin-top: -25px;
+}
+.checkcl input{
+        margin-left: 16px;
+}
+.allbuy{
+        float: right;
+        margin-right: 10px;
 }
