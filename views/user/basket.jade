@@ -1,9 +1,12 @@
 include ../user/top.jade
                 link(rel='stylesheet',href='./css/basket.css')
+                link(rel='stylesheet',href='../css/basket.css')
                 .basket
-                        form#test(action="/payment" method="post")
+                        form#test(action="/user/payment" method="post")
+                                input#postt(type="text"  name="post" value="0" style="display:none")
+                                input#all(type="text"  name="all" value="0" style="display:none")
                                 .baskettitle
-                                        img(src="./img/basket.png")
+                                        img(src="../img/basket.png")
                                         h2 장바구니
                                 .basketlist
                                         table.baskettable
@@ -17,13 +20,13 @@ include ../user/top.jade
                                                 tbody
                                                         if(basket.length)
                                                                 each bas in basket
-                                                                        tr
+                                                                        tr(name=bas.bnum)
                                                                                 td
-                                                                                        input#check(type="checkbox")
+                                                                                        input#check(type="checkbox" name="check")
                                                                                         input(type="text"  name="num" value=bas.num style="display:none")
                                                                                         input(type="text"  name="cnt" value=bas.cnt style="display:none")
                                                                                         input(type="text"  name="optnum" value=bas.optnum style="display:none")
-                                                                                        img(src="./dbimg/"+bas.simgname)
+                                                                                        img(src="../dbimg/"+bas.simgname)
                                                                                         span#name=bas.name
                                                                                         span(name=bas.optnum)#option=bas.optname
                                                                                         #hr
@@ -42,17 +45,52 @@ include ../user/top.jade
                                                                                 span 장바구니에 담긴 상품이 없습니다.
                                 if(basket.length)
                                         .checkcl
-                                                input#check(type="checkbox")
+                                                input#allcheck(type="checkbox")
                                                 span 선택상품
-                                                a 삭제하기
+                                                a#ckdel 삭제하기
                                         .allbuy
                                                 a.choose 선택상품주문
                                                 a.all 전체주문
                 script.
-                        $("a[id=delete]").click(function(){
+                        $(window).on( "load", function() {
+                                $("#all")[0].value=0;
+                        })
+                        $(".choose").click(function(){ //선택상품구매
+                                var tolist=new Object();
+                                var list=new Array();
+                                for(var i=0;i<$("input[id=check]").length;i++){
+                                        if($("input[id=check]")[i].checked){
+                                                list.push($("input[id=check]")[i].parentNode.parentNode.attributes[0].value);
+                                        }
+                                }if(!list.length){
+                                        alert("상품을 선택해주세요");
+                                        return;
+                                }
+                                tolist.bnum=list;
+                                tolist.cnt=list.length;
+                                $("#postt")[0].value=JSON.stringify(tolist);
+                                $("#all")[0].value=1;
+                                $("#test").submit();
+                        })
+                        $(".all").click(function(){ //전체구매
+                                var tolist=new Object();
+                                var list=new Array();
+                                for(var i=0;i<$("input[id=check]").length;i++){
+                                        list.push($("input[id=check]")[i].parentNode.parentNode.attributes[0].value);
+                                }if(!list.length){
+                                        alert("상품을 선택해주세요");
+                                        return;
+                                }
+                                tolist.bnum=list;
+                                tolist.cnt=list.length;
+                                $("#postt")[0].value=JSON.stringify(tolist);
+                                $("#all")[0].value=1;
+                                $("#test").submit();
+                        })
+                        $("a[id=delete]").click(function(){ //각 상품 삭제
                                 var num=$(this).attr("name");
                                 $.ajax({
-                                        url:"/basdel",
+                                        url:"/user/basdel",
                                         dataType:'json',
                                         type:"post",
                                         data:{num:num},
@@ -66,7 +104,54 @@ include ../user/top.jade
                                         }
                                 })
                         })
-                        $("a[id=order]").click(function(){
+                        $("a[id=order]").click(function(){ //각 상품 주문
                                 $("#isnum")[0].value=$(this).attr("class");
                                 $("#test").submit();
+                        })
+                        $("input[id=check]").click(function(){ //각 상품 체크 확인후 전체 상품 체크
+                                var cnt=0;
+                                for(var i=0;i<$("input[id=check]").length;i++){
+                                        if($("input[id=check]")[i].checked){
+                                                cnt++;
+                                        }
+                                }
+                                if(cnt==$("input[id=check]").length){
+                                        $("#allcheck").prop('checked',true);
+                                }else{
+                                        $("#allcheck").prop('checked',false);
+                                }
+                        })
+                        $("#allcheck").click(function(){ //전체상품 체크
+                                var chk=$(this).is(":checked");
+                                if(chk) $("input[id=check]").prop('checked',true);
+                                else $("input[id=check]").prop('checked',false);
+                        })
+                        $("#ckdel").click(function(){ //체크한상품 삭제
+                                var list=[];
+                                var i=0;
+                                while(i<$("input[id=check]").length){
+                                        if($("input[id=check]")[i].checked){
+                                                list.push($("input[id=check]")[i].parentNode.parentNode.attributes[0].value);
+                                                $("input[id=check]")[i].parentNode.parentNode.remove();
+                                        }else{
+                                                i++;
+                                        }
+                                }if(!list.length){
+                                        alert("상품을 선택해주세요");
+                                        return;
+                                }
+                                $.ajax({
+                                        url:"/user/basdel",
+                                        dataType:'json',
+                                        type:"post",
+                                        data:{num:list,length:list.length},
+                                        success: function(result){
+                                                if(result){
+                                                        alert("선택한 상품이 장바구니에서 삭제되었습니다");
+                                                        location.reload();
+                                                }else{
+                                                        alert("선택한 상품을 장바구니에서 삭제하지 못했습니다.");
+                                                }
+                                        }
+                                })
                         })

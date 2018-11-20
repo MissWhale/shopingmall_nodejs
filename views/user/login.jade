@@ -1,5 +1,6 @@
 include top.jade 
                 link(rel='stylesheet',href='./css/login.css')
+                link(rel='stylesheet',href='../css/login.css')
                 .loginbody
                         .container
                                 .box
@@ -31,7 +32,7 @@ include top.jade
                                                                                 | Log in
                                                 .form-item.sign-up
                                                         .table
-                                                                form.table-cell#register(method="POST" action="/register")
+                                                                form.table-cell#register(method="POST" action="/login/register")
                                                                         label#idlbl 아이디
                                                                         input#idcheck(name='id', type='text' style="width: 137px;display: inline;margin-left: 26px;ime-mode:disabled;" autocomplete="off" onkeyup="trim(this);")
                                                                         button#idck(type="button") 중복확인
@@ -87,7 +88,7 @@ include top.jade
                                 }}
                                 var id=$("#idcheck").val();
                                 $.ajax({
-                                        url:"/idcheck",
+                                        url:"/login/idcheck",
                                         dataType:'json',
                                         type:"post",
                                         data:{'id':id},
@@ -189,7 +190,7 @@ include top.jade
                                         return;
                                 }
                                 $.ajax({
-                                url : "/emailcheck",
+                                url : "/login/emailcheck",
                                 type : "POST",
                                 cache : false,
                                 data : {'email':email},

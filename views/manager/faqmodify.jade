@@ -1,9 +1,9 @@
 include ../user/top.jade 
-                link(rel='stylesheet',href='./css/management.css')
-                link(rel='stylesheet', href='./css/selectbox.min.css')
-                script(type='text/javascript', src='./js/selectbox.min.js')
-                script(type='text/javascript', src='./js/autosize.js')
-                script(type='text/javascript', src='./js/ckeditor/ckeditor.js')
+                link(rel='stylesheet',href='../css/management.css')
+                link(rel='stylesheet', href='../css/selectbox.min.css')
+                script(type='text/javascript', src='../js/selectbox.min.js')
+                script(type='text/javascript', src='../js/autosize.js')
+                script(type='text/javascript', src='../js/ckeditor/ckeditor.js')
                 .upload
                         nav.manage
                                 ul#manageMenu
@@ -13,7 +13,7 @@ include ../user/top.jade
                                         li: a#faq(href="/faq") FAQ관리
                         .prodmg(style="border:0px;margin-left:30px;margin-bottom: 50px;")
                                 h2 FAQ등록
-                                form#frm(action="/faqmodify" method="post")
+                                form#frm(action="/admin/faqmodify" method="post")
                                         .table
                                                 table
                                                         tbody

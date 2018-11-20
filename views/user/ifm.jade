@@ -1,5 +1,6 @@
 include top.jade 
                 link(rel='stylesheet',href='./css/ifm.css')
+                link(rel='stylesheet',href='../css/ifm.css')
                 .ifm
                         .grade
                                 a test
@@ -16,14 +17,14 @@ include top.jade
                                                 li
                                                         a(href='#') 장바구니
                                                 li
-                                                        a(href='/orderifm') 주문/배송 조회
+                                                        a(href='/user/orderifm') 주문/배송 조회
                                                 li
                                                         a(href='#') 취소/반품/ 신청
                                 .link-container
                                         h2 회원정보
                                         ul
                                                 li
-                                                        a(href='/information' style="color:black;font-weight:bold") 회원정보 변경
+                                                        a(href='/user/information' style="color:black;font-weight:bold") 회원정보 변경
                                                 li
                                                         a(href='#') 배송지 관리
                                                 li
@@ -96,7 +97,7 @@ include top.jade
                                         alert("기존 비밀번호와 새로운 비밀번호가 같습니다.");
                                 }else{
                                         $.ajax({
-                                                url:"/passchange",
+                                                url:"/user/passchange",
                                                 dataType:'json',
                                                 type:"post",
                                                 data:{'pw':pw,'newpw':npw},

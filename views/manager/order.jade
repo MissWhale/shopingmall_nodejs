@@ -1,13 +1,13 @@
 include ../user/top.jade 
-                link(rel='stylesheet',href='./css/management.css')
+                link(rel='stylesheet',href='../css/management.css')
                 .mgback
                         .upload
                                 nav.manage
                                         ul#manageMenu
-                                                li: a#user(href="/member") 회원관리
-                                                li: a#prod(href="/product") 상품관리
-                                                li: a#order(href="/order") 주문관리
-                                                li: a#faq(href="/faq") FAQ관리
+                                                li: a#user(href="/admin/member") 회원관리
+                                                li: a#prod(href="/admin/product") 상품관리
+                                                li: a#order(href="/admin/order") 주문관리
+                                                li: a#faq(href="/admin/faq") FAQ관리
                                 .prodmg
                                         .container-table100
                                                 .wrap-table100
@@ -67,26 +67,26 @@ include ../user/top.jade
                                                 ul
                                                         if(pno>10)
                                                                 li
-                                                                        a#first(href="/order" style="height: 14px;")
-                                                                                img(src="./img/dbackb.png")
+                                                                        a#first(href="/admin/order" style="height: 14px;")
+                                                                                img(src="../img/dbackb.png")
                                                         if(prev)
                                                                 li
-                                                                        a#prev(href="/order="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
-                                                                                img(src="./img/backb.png")
+                                                                        a#prev(href="/admin/order="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                                img(src="../img/backb.png")
                                                         while n <= max
                                                                 li
                                                                         if(pno==n)
-                                                                                a(href="/order="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                                a(href="/admin/order="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
                                                                         else
-                                                                                a(href="/order="+n)=n++
+                                                                                a(href="/admin/order="+n)=n++
 
                                                         if(ip != fp || check)
                                                                 li
-                                                                        a#next(href="/order="+next style="padding: 6px 4px 4px 4px;height: 12px;")
-                                                                                img(src="./img/forb.png")
+                                                                        a#next(href="/admin/order="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                                img(src="../img/forb.png")
                                                                 li
-                                                                        a#final(href="/order="+pager.pagecnt style="height: 14px;")
-                                                                                img(src="./img/dforb.png")
+                                                                        a#final(href="/admin/order="+pager.pagecnt style="height: 14px;")
+                                                                                img(src="../img/dforb.png")
         script.
                 $("#order").css("border-bottom","5px solid white");
                 $("#order").css("color","white");

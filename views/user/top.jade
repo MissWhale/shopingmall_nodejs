@@ -3,6 +3,7 @@ html
         head
                 meta(charset='utf-8')
                 link(rel='stylesheet',href='./css/main.css')
+                link(rel='stylesheet',href='../css/main.css')
                 script(src='https://code.jquery.com/jquery-2.2.4.min.js')
         body
                 .topimp
@@ -11,15 +12,15 @@ html
                                         nav
                                                 ul.login
                                                         if(name)
-                                                                li: a(href="/logout") 로그아웃
-                                                                li: a(href="/information") 회원정보
+                                                                li: a(href="/login/logout") 로그아웃
+                                                                li: a(href="/user/information") 회원정보
                                                         else
                                                                 li: a(href="/login") 로그인
-                                                                li: a(href="/register") 회원가입
+                                                                li: a(href="/login/register") 회원가입
                                                         if(id=="root")
-                                                                li: a(href="/member") 종합관리
+                                                                li: a(href="/admin/member") 종합관리
                                                         else
-                                                                li: a(href="/basket") 장바구니
+                                                                li: a(href="/user/basket") 장바구니
                                                         li: a(href="/help") 고객센터
                 .topdiv
                         .search

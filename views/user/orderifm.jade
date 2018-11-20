@@ -1,8 +1,8 @@
 include ../user/top.jade
-                link(rel='stylesheet',href='./css/payment.css')
+                link(rel='stylesheet',href='../css/payment.css')
                 .payment
                         .paymenttitle
-                                img(src="./img/check.png")
+                                img(src="../img/check.png")
                                 h2 주문정보확인
                         .paymentlist
                                 table.orderifmtable
@@ -16,7 +16,7 @@ include ../user/top.jade
                                                 each order in orders
                                                         tr(data-num=order.onum)
                                                                 td
-                                                                        img(src="./dbimg/"+order.simgname)
+                                                                        img(src="../dbimg/"+order.simgname)
                                                                         span#name=order.name
                                                                         span#option=order.optname
                                                                         #hr
@@ -55,23 +55,23 @@ include ../user/top.jade
                                         ul
                                                 if(pno>10)
                                                         li
-                                                                a#first(href="/" style="height: 14px;")
-                                                                        img(src="./img/dbackb.png")
+                                                                a#first(href="/user/" style="height: 14px;")
+                                                                        img(src="../img/dbackb.png")
                                                 if(prev)
                                                         li
-                                                                a#prev(href="/orderifm="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
-                                                                        img(src="./img/backb.png")
+                                                                a#prev(href="/user/orderifm="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        img(src="../img/backb.png")
                                                 while n <= max
                                                         li
                                                                 if(pno==n)
-                                                                        a(href="/orderifm="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                        a(href="/user/orderifm="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
                                                                 else
-                                                                        a(href="/orderifm="+n)=n++
+                                                                        a(href="/user/orderifm="+n)=n++
 
                                                 if(ip != fp || check)
                                                         li
-                                                                a#next(href="/orderifm="+next style="padding: 6px 4px 4px 4px;height: 12px;")
-                                                                        img(src="./img/forb.png")
+                                                                a#next(href="/user/orderifm="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        img(src="../img/forb.png")
                                                         li
-                                                                a#final(href="/orderifm="+pager.pagecnt style="height: 14px;")
-                                                                        img(src="./img/dforb.png")
+                                                                a#final(href="/user/orderifm="+pager.pagecnt style="height: 14px;")
+                                                                        img(src="../img/dforb.png")

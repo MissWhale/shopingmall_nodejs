@@ -1,16 +1,16 @@
 include ../user/top.jade 
-                link(rel='stylesheet',href='./css/management.css')
-                link(rel='stylesheet', href='./css/selectbox.min.css')
-                script(type='text/javascript', src='./js/selectbox.min.js')
-                script(type='text/javascript', src='./js/autosize.js')
-                script(type='text/javascript', src='./js/ckeditor/ckeditor.js')
+                link(rel='stylesheet',href='../css/management.css')
+                link(rel='stylesheet', href='../css/selectbox.min.css')
+                script(type='text/javascript', src='../js/selectbox.min.js')
+                script(type='text/javascript', src='../js/autosize.js')
+                script(type='text/javascript', src='../js/ckeditor/ckeditor.js')
                 .upload
                         nav.manage
                                 ul#manageMenu
-                                        li: a#user(href="/management") 회원관리
-                                        li: a#prod(href="/product") 상품관리
-                                        li: a#order(href="/order") 주문관리
-                                        li: a#faq(href="/faq") FAQ관리
+                                        li: a#user(href="/admin/member") 회원관리
+                                        li: a#prod(href="/admin/product") 상품관리
+                                        li: a#order(href="/admin/order") 주문관리
+                                        li: a#faq(href="/admin/faq") FAQ관리
                         .prodmg(style="border:0px;margin-left:30px;margin-bottom: 50px;")
                                 h2 상품등록
                                 form#sfrm(method="post" enctype="multipart/form-data" )
@@ -20,10 +20,10 @@ include ../user/top.jade
                                                                 tr
                                                                         th 썸네일
                                                                         td
-                                                                                img#thumb(src="./img/thumbnail.png" style="border:1px solid;width:144px;height:144px")
+                                                                                img#thumb(src="../img/thumbnail.png" style="border:1px solid;width:144px;height:144px")
                                                                                 input#simg(type='file' name="simg" accept=".jpg,.jpeg,.png,.gif,.bmp")
                                                                 input(name="no" style="display:none;")
-                                form#frm(action="/productupload" method="post")
+                                form#frm(action="/admin/productupload" method="post")
                                         .table
                                                 table
                                                         tbody
@@ -55,10 +55,10 @@ include ../user/top.jade
                                                                         input(name="no" style="display:none;")
                                 .uploadbtn
                                         a.rainbtn#upload(alt="등록" style="margin: 10px 0px;")
-                                        a.rainbtn(href="/product" alt="취소" style="margin-left: 110px;margin-top: -40px;")
+                                        a.rainbtn(href="/admin/product" alt="취소" style="margin-left: 110px;margin-top: -40px;")
         script.
                 $.ajax({
-                        url:"/getnum",
+                        url:"/admin/getnum",
                         type:"post",
                         success: function(result){
                                 var no=result.num;
@@ -70,7 +70,7 @@ include ../user/top.jade
                 $("#upload").click(function(){
                         if(!$("#simg").val()){
                                 $.ajax({
-                                        url:"/noimg",
+                                        url:"/admin/noimg",
                                         type:"post",
                                         dataType:"json",
                                         data:{no:$("#sfrm")[0][0].value},
@@ -88,7 +88,7 @@ include ../user/top.jade
                         var form=$('#sfrm')[0];
                         var data = new FormData(form);
                         $.ajax({
-                                url:"/simgdb",
+                                url:"/admin/simgdb",
                                 type:"post",
                                 processData: false,
                                 contentType: false,
@@ -98,18 +98,18 @@ include ../user/top.jade
                                                 alert("사진 업로드가 실패했습니다.");
                                         }else{
                                                 console.log(result.src);
-                                                $("#thumb").attr('src','./dbimg/'+result.src);
+                                                $("#thumb").attr('src','../dbimg/'+result.src);
                                         }
                                 }
                         })
                 })
                 CKEDITOR.replace( 'explan',{
                         extraPlugins: 'autogrow',
-                        filebrowserUploadUrl: '/bimgdb',
+                        filebrowserUploadUrl: '/admin/bimgdb',
                 });
                 $("#optadd").click(function(){
                         $.ajax({
-                                url:"/getoptnum",
+                                url:"/admin/getoptnum",
                                 type:"post",
                                 success: function(result){
                                         var num=result.num;
@@ -149,7 +149,7 @@ include ../user/top.jade
                                 return;
                         }
                        $.ajax({
-                                url:"/optadd",
+                                url:"/admin/optadd",
                                 type:"post",
                                 dataType:'json',
                                 data:{code:code,name:name,cnt:cnt,price:price,num:no},
@@ -193,7 +193,7 @@ include ../user/top.jade
                         var price=$('.optprice').val();
                         var li=$("li[class="+no+"]");
                         $.ajax({
-                                url:"/optmodi",
+                                url:"/admin/optmodi",
                                 type:"post",
                                 dataType:'json',
                                 data:{code:code,name:name,cnt:cnt,price:price,num:no},
@@ -232,7 +232,7 @@ include ../user/top.jade
                 }
                 function optdel(a){
                         $.ajax({
-                                url:"/optdel",
+                                url:"/admin/optdel",
                                 type:"post",
                                 data:{num:a.dataset.num},
                                 success: function(result){

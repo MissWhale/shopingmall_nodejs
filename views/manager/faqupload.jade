@@ -1,9 +1,9 @@
 include ../user/top.jade 
-                link(rel='stylesheet',href='./css/management.css')
-                link(rel='stylesheet', href='./css/selectbox.min.css')
-                script(type='text/javascript', src='./js/selectbox.min.js')
-                script(type='text/javascript', src='./js/autosize.js')
-                script(type='text/javascript', src='./js/ckeditor/ckeditor.js')
+                link(rel='stylesheet',href='../css/management.css')
+                link(rel='stylesheet', href='../css/selectbox.min.css')
+                script(type='text/javascript', src='../js/selectbox.min.js')
+                script(type='text/javascript', src='../js/autosize.js')
+                script(type='text/javascript', src='../js/ckeditor/ckeditor.js')
                 .upload
                         nav.manage
                                 ul#manageMenu
@@ -13,7 +13,7 @@ include ../user/top.jade
                                         li: a#faq(href="/faq") FAQ관리
                         .prodmg(style="border:0px;margin-left:30px;margin-bottom: 50px;")
                                 h2 FAQ등록
-                                form#frm(action="/faqupload" method="post")
+                                form#frm(action="/admin/faqupload" method="post")
                                         .table
                                                 table
                                                         tbody
@@ -25,7 +25,7 @@ include ../user/top.jade
                                                                         td: textarea#explan(name="text" )
                                 .uploadbtn
                                         a.rainbtn#upload(alt="등록" style="margin: 10px 0px;")
-                                        a.rainbtn(href="/faq" alt="취소" style="margin-left: 110px;margin-top: -40px;")
+                                        a.rainbtn(href="/admin/faq" alt="취소" style="margin-left: 110px;margin-top: -40px;")
         script.
                 $("#faq").css("border-bottom","5px solid white");
                 $("#faq").css("color","white");

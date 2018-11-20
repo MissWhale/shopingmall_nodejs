@@ -1,13 +1,13 @@
 include ../user/top.jade 
-                link(rel='stylesheet',href='./css/management.css')
+                link(rel='stylesheet',href='../css/management.css')
                 .mgback
                         .upload
                                 nav.manage
                                         ul#manageMenu
-                                                li: a#user(href="/member") 회원관리
-                                                li: a#prod(href="/product") 상품관리
-                                                li: a#order(href="/order") 주문관리
-                                                li: a#faq(href="/faq") FAQ관리
+                                                li: a#user(href="/admin/member") 회원관리
+                                                li: a#prod(href="/admin/product") 상품관리
+                                                li: a#order(href="/admin/order") 주문관리
+                                                li: a#faq(href="/admin/faq") FAQ관리
                                 .prodmg
                                         .container-table100
                                                 .wrap-table100
@@ -77,26 +77,26 @@ include ../user/top.jade
                                                 ul
                                                         if(pno>10)
                                                                 li
-                                                                        a#first(href="/member" style="height: 14px;")
-                                                                                img(src="./img/dbackb.png")
+                                                                        a#first(href="/admin/member" style="height: 14px;")
+                                                                                img(src="../img/dbackb.png")
                                                         if(prev)
                                                                 li
-                                                                        a#prev(href="/member="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
-                                                                                img(src="./img/backb.png")
+                                                                        a#prev(href="/admin/member="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                                img(src="../img/backb.png")
                                                         while n <= max
                                                                 li
                                                                         if(pno==n)
-                                                                                a(href="/member="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                                a(href="/admin/member="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
                                                                         else
-                                                                                a(href="/member="+n)=n++
+                                                                                a(href="/admin/member="+n)=n++
 
                                                         if(ip != fp || check)
                                                                 li
-                                                                        a#next(href="/member="+next style="padding: 6px 4px 4px 4px;height: 12px;")
-                                                                                img(src="./img/forb.png")
+                                                                        a#next(href="/admin/member="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                                img(src="../img/forb.png")
                                                                 li
-                                                                        a#final(href="/member="+pager.pagecnt style="height: 14px;")
-                                                                                img(src="./img/dforb.png")
+                                                                        a#final(href="/admin/member="+pager.pagecnt style="height: 14px;")
+                                                                                img(src="../img/dforb.png")
         script.
                 $("#user").css("border-bottom","5px solid white");
                 $("#user").css("color","white");
@@ -112,7 +112,7 @@ include ../user/top.jade
                 });
                 $("a[id=delete]").click(function(){
                         $.ajax({
-                                url:"/memdel",
+                                url:"/admin/memdel",
                                 type:"post",
                                 dataType:'json',
                                 data:{'id':$(this).attr("name")},
@@ -135,7 +135,7 @@ include ../user/top.jade
                         var email=$(this).parent().parent().children(1).children("input")[4].value;
                         var birth=$(this).parent().parent().children(1).children("input")[5].value;
                         $.ajax({
-                                url:"/memmodi",
+                                url:"/admin/memmodi",
                                 type:"post",
                                 dataType:'json',
                                 data:{pid:pid,id:id,pw:pw,name:name,phone:phone,email:email,birth:birth},

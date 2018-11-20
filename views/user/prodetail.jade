@@ -1,6 +1,6 @@
 include ../user/top.jade
-                link(rel='stylesheet', href='./css/selectbox.min.css')
-                script(type='text/javascript', src='./js/selectbox.min.js')
+                link(rel='stylesheet', href='../css/selectbox.min.css')
+                script(type='text/javascript', src='../js/selectbox.min.js')
                 script.
                 .upload(style="display: flex;")
                         .prct_simple
@@ -48,7 +48,7 @@ include ../user/top.jade
                                                                                                                                         -var price=op.optprice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                                                                                                                         strong=price
                                                 //- hr
-                                                form#option(action="/payment" method="post")
+                                                form#option(action="/user/payment" method="post")
                                                         input#lcnt(name="lcnt" style="display:none" type="text" value=0)
                                                         .optionprice
                                                                 ul.optionul
