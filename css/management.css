@@ -169,7 +169,7 @@ textarea{
         position: relative;
       }
       .container-table100 table * {
-        position: relative;
+        /* position: relative; */
       }
       .container-table100 table td, .container-table100 table th {
         padding-left: 8px;
@@ -256,9 +256,15 @@ textarea{
         width: 50px;
         text-align: center;
       }
+      td.column7{
+        padding-left: 20px !important;
+      }
       .column8 {
         width: 50px;
         text-align: center;
+      }
+      td.column8{
+        padding-left: 20px !important;
       }
       .column9 {
         width: 50px;
@@ -348,4 +354,49 @@ textarea{
 .down{
         position: relative;
         font-size: 12px;
+}
+.selectbox-options{
+        position: absolute !important;
+}
+#ordertbl td{
+        border-bottom:1px #e5e5e5  solid;
+}
+.mansearch{
+        width: auto;
+        height: 30px;
+        padding-top: 15px;
+}
+.mansearch a{
+        display: inline-block;
+        background: transparent;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-style: normal;
+        font-size: 15px;
+        letter-spacing: 0.3em;
+        /* color: red; */
+        color:white;
+        border:1px solid white;
+        border-radius: 5px;
+        padding: 3px 10px 3px 15px;
+        transition: all 0.7s ease-out;
+        /* background: linear-gradient(270deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0.8), rgba(189, 21, 21, 0), rgba(255, 1, 1, 0)); */
+        background: linear-gradient(270deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0.8), rgba(189, 21, 21, 0), rgba(255, 1, 1, 0));
+        background-position: 100% !important;
+        background-size: 300% 300% !important;
+        /* background-position: 1% 50%;
+        background-size: 300% 300%; */
+        text-decoration: none;
+        margin: 0.625rem;
+        border: none;
+        /* border: 1px solid red; */
+        margin-left: 160px;
+        position: absolute;
+        top: 60px;
+}
+.mansearch a:hover{
+        color: red;
+        border: 1px solid rgb(235, 233, 233);
+        background-position: 1% !important;
+        background-size: 300% 300% !important;
 }

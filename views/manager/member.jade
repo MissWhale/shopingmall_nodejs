@@ -1,5 +1,7 @@
 include ../user/top.jade 
                 link(rel='stylesheet',href='../css/management.css')
+                link(rel='stylesheet', href='../css/selectbox.min.css')
+                script(type='text/javascript', src='../js/selectbox.min.js')
                 .mgback
                         .upload
                                 nav.manage
@@ -8,6 +10,15 @@ include ../user/top.jade
                                                 li: a#prod(href="/admin/product") 상품관리
                                                 li: a#order(href="/admin/order") 주문관리
                                                 li: a#faq(href="/admin/faq") FAQ관리
+                                .mansearch(style="padding-left: 780px;")
+                                        select#searchtype.justselect(name='kind')
+                                                option(value='id') ID
+                                                option(value='pw') 비밀번호
+                                                option(value='name') 이름
+                                                option(value='phone') 휴대전화
+                                                option(value='email') 이메일
+                                        input#searchval(type='text' style="position: absolute;height: 25px;top: 63px;width: 150px;margin-left: 5px;")
+                                        a#searchbtn(style="margin-left:160px") 검색
                                 .prodmg
                                         .container-table100
                                                 .wrap-table100

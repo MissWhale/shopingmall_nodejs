@@ -8,7 +8,11 @@ include ../user/top.jade
                                                 li: a#prod(href="/admin/product") 상품관리
                                                 li: a#order(href="/admin/order") 주문관리
                                                 li: a#faq(href="/admin/faq") FAQ관리
-                                a.rainbtn#upload(href="/admin/faqupload" alt="faq등록" style="margin: 10px 0px;")
+                                .mansearch(style="padding-left: 850px;")
+                                        input#searchval(type='text' style="position: absolute;height: 25px;top: 63px;width: 150px;margin-left: 5px;")
+                                        a#searchbtn(style="margin-left:158px") 검색
+                                        a#upload(href="/admin/faqupload" style="margin-left: 225px;") 글등록
+                                //- a.rainbtn#upload(href="/admin/faqupload" alt="faq등록" style="margin: 10px 0px;")
                                 .prodmg
                                         .container-table100
                                                 .wrap-table100
@@ -29,8 +33,8 @@ include ../user/top.jade
                                                                                                                 td.column1(style="width: 7%;")=faq.fnum
                                                                                                                 td.column2(style="width: 63%;text-align:left;")=faq.ftitle
                                                                                                                 td.column3(style="width: 15%")=new Date(faq.freg_date).format("yyyy-MM-dd")
-                                                                                                                td.column4(style="width: 7.5%"): a.rainbtnlist#modi(alt="수정" name=faq.fnum)
-                                                                                                                td.column5(style="width: 7.5%"): a.rainbtnlist#delete(alt="삭제" name=faq.fnum)
+                                                                                                                td.column4(style="width: 7.5%;padding-left:20px;"): a.rainbtnlist#modi(alt="수정" name=faq.fnum)
+                                                                                                                td.column5(style="width: 7.5%;padding-left:20px;"): a.rainbtnlist#delete(alt="삭제" name=faq.fnum)
                         .pagingdiv
                                 .paging
                                         -var pover=Math.trunc(pager.pagecnt/10)

@@ -1,5 +1,7 @@
 include ../user/top.jade 
                 link(rel='stylesheet',href='../css/management.css')
+                link(rel='stylesheet', href='../css/selectbox.min.css')
+                script(type='text/javascript', src='../js/selectbox.min.js')
                 .mgback
                         .upload
                                 nav.manage
@@ -8,6 +10,23 @@ include ../user/top.jade
                                                 li: a#prod(href="/admin/product") 상품관리
                                                 li: a#order(href="/admin/order") 주문관리
                                                 li: a#faq(href="/admin/faq") FAQ관리
+                                .mansearch(style="padding-left: 630px;")
+                                        select#searchtype1.justselect(name='kind')
+                                                option(value='키보드') 제품명
+                                                option(value='마우스') 마우스
+                                                option(value='헤드셋') 헤드셋
+                                                option(value='게이밍의자') 게이밍의자
+                                                option(value='패드') 패드
+                                                option(value='PC악세사리') PC악세사리
+                                        select#searchtype2.justselect(name='kind')
+                                                option(value='0') 입금전
+                                                option(value='1') 입금완료
+                                                option(value='2') 배송준비
+                                                option(value='3') 배송중
+                                                option(value='4') 배송완료
+                                                option(value='5') 주문취소
+                                        input#searchval(type='text' style="position: absolute;height: 25px;top: 63px;width: 150px;margin-left: 5px;")
+                                        a#searchbtn(style="margin-left:158px") 검색
                                 .prodmg
                                         .container-table100
                                                 .wrap-table100
@@ -17,29 +36,56 @@ include ../user/top.jade
                                                                                 tr.table100-head
                                                                                         th.column1 주문번호
                                                                                         th.column2 주문일
-                                                                                        th.column3 제품명
+                                                                                        th.column3 제품명(옵션명)
                                                                                         th.column4 총금액
                                                                                         th.column5 
                                                                                                 |상품금액
                                                                                                 |(수량)
                                                                                         th.column6 상태
                                                                                         th.column7 수정
-                                                                                        th.column8 삭제
-                                                                        tbody
+                                                                        tbody#ordertbl
                                                                                 ul
                                                                                         if(orders)
-                                                                                                each order in orders   
+                                                                                                -var test="";
+                                                                                                -var test2="";
+                                                                                                each order,index in orders   
                                                                                                         tr
                                                                                                                 td.column1(style="width: 7%;")=order.onum
                                                                                                                 td.column2(style="width: 9%;")=new Date(order.order_date).format("yyyy-MM-dd")
-                                                                                                                td.column3=order.name
-                                                                                                                td.column4(style="width: 8%;")=order.total
+                                                                                                                td.column3(style="width: 46%;")=order.name+"("+order.optname+")"
+                                                                                                                -var total=order.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                                                                                td.column4(style="width: 8%;")=total+"원"
                                                                                                                 td.column5(style="width: 8%;")
-                                                                                                                        p.up=order.optprice
+                                                                                                                        -var optprice=order.optprice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                                                                                        p.up=optprice+"원"
                                                                                                                         span.down (#{order.cnt})
-                                                                                                                td.column6(style="width: 10%;")=order.status
-                                                                                                                td.column7(style="width: 7%;"): a.rainbtnlist#modi(alt="수정")
-                                                                                                                td.column8(style="width: 7%;"): a.rainbtnlist#delete(alt="삭제")
+                                                                                                                td.column6(style="width: 170px;position: absolute;padding-top: 10px;padding-bottom: 9px;")
+                                                                                                                        select#color.justselect(name='status' data-status=order.status)
+                                                                                                                                if(order.status==0)
+                                                                                                                                        option(value=0 selected) 입금전
+                                                                                                                                else
+                                                                                                                                        option(value=0) 입금전
+                                                                                                                                if(order.status==1)
+                                                                                                                                        option(value=1 selected) 입금완료
+                                                                                                                                else
+                                                                                                                                        option(value=1) 입금완료
+                                                                                                                                if(order.status==2)
+                                                                                                                                        option(value=2 selected) 배송준비
+                                                                                                                                else
+                                                                                                                                        option(value=2) 배송준비
+                                                                                                                                if(order.status==3)
+                                                                                                                                        option(value=3 selected) 배송중
+                                                                                                                                else
+                                                                                                                                        option(value=3) 배송중
+                                                                                                                                if(order.status==4)
+                                                                                                                                        option(value=4 selected) 배송완료
+                                                                                                                                else
+                                                                                                                                        option(value=4) 배송완료
+                                                                                                                                if(order.status==5)
+                                                                                                                                        option(value=5 selected) 주문취소
+                                                                                                                                else
+                                                                                                                                        option(value=5) 주문취소
+                                                                                                                td.column7(style="width: 7%;padding-left: 17px;"): a.rainbtnlist#modi(alt="수정" data-opnum=order.opnum)
                         .pagingdiv
                                 .paging
                                         -var pover=Math.trunc(pager.pagecnt/10)
@@ -90,3 +136,48 @@ include ../user/top.jade
         script.
                 $("#order").css("border-bottom","5px solid white");
                 $("#order").css("color","white");
+                $(".column1").each(function() {
+                        var rows = $(".column1:contains('" + $(this).text() + "')");
+                        if (rows.length > 1) {
+                                rows.eq(0).attr("rowspan", rows.length);
+                                rows.not(":eq(0)").remove();
+                        }
+                });
+                $(".column2").each(function() {
+                        var rows = $(".column2:contains('" + $(this).text() + "')");
+                        if (rows.length > 1) {
+                                rows.eq(0).attr("rowspan", rows.length);
+                                rows.not(":eq(0)").remove();
+                        }
+                });
+                 $(".column4").each(function() {
+                        var rows = $(".column4:contains('" + $(this).text() + "')");
+                        if (rows.length > 1) {
+                                rows.eq(0).attr("rowspan", rows.length);
+                                rows.not(":eq(0)").remove();
+                        }
+                });
+                $("a[id=modi]").click(function(){
+                        var opnum=$(this)[0].dataset.opnum;
+                        var selbox=$(this)[0].offsetParent.previousElementSibling.children[0].children[0];
+                        var before=selbox.dataset.status;
+                        var after=selbox.options[selbox.selectedIndex].value;
+                        if(before!=after){
+                                $.ajax({
+                                        url:"/admin/statusch",
+                                        type:"post",
+                                        dataType:'json',
+                                        data:{opnum:opnum,after:after},
+                                        success: function(result){
+                                                if(result){
+                                                        alert("수정되었습니다");
+                                                        location.reload();
+                                                }else{
+                                                        alert("오류 발생");
+                                                }
+                                        }
+                                })
+                        }else{
+                                alert("상태를 수정하세요.");
+                        }
+                })

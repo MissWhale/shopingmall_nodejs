@@ -15,7 +15,6 @@ include ../user/top.jade
                                                                         th 배송비
                                                         tbody#probody
                                                                 if(isnum=="1")
-                                                                        p test
                                                                         tr#num(data-num=pay.num)
                                                                                 td
                                                                                         img(src="../dbimg/"+pay.simgname)
@@ -31,7 +30,6 @@ include ../user/top.jade
                                                                                 input(type="text" name="optnum" value=pay.optnum style="display:none")
                                                                                 input(type="text" name="cnt"  value=pay.cnt style="display:none")
                                                                 else
-                                                                        p test1
                                                                         each pro,i in pay
                                                                                 tr#num(data-num=pro.num)
                                                                                         td
@@ -78,31 +76,31 @@ include ../user/top.jade
                                                         tr
                                                                 th(scope='row') 받으시는 분
                                                                 td
-                                                                        input#aname(type="text" name="aname")
+                                                                        input#aname(type="text" autocomplete="off"  name="aname")
                                                         tr
                                                                 th(scope='row') 주소
                                                                 td#loc
                                                                         p 우편번호
-                                                                        input.postcodify_postcode5(type="text" readonly name="locnum")
+                                                                        input.postcodify_postcode5(type="text"  readonly name="locnum")
                                                                         a#postsearch 검색
                                                                         br
                                                                         p 주소
                                                                         input.postcodify_address(type='text' readonly name="locadd")
                                                                         br
                                                                         p 상세주소
-                                                                        input.postcodify_details(type='text' name="locdetail" style="margin-bottom:10px")
+                                                                        input.postcodify_details(type='text' autocomplete="off"  name="locdetail" style="margin-bottom:10px")
                                                         tr
                                                                 th(scope='row') 휴대전화
                                                                 td
-                                                                        input#aphone(type="text" name="aphone")
+                                                                        input#aphone(type="text" placeholder="010-0000-0000" autocomplete="off"  name="aphone")
                                                         tr
                                                                 th(scope='row') 주문자 이름
                                                                 td
-                                                                        input#oname(type="text" name="oname")
+                                                                        input#oname(type="text" autocomplete="off"  name="oname")
                                                         tr
                                                                 th(scope='row') 주문자 휴대전화
                                                                 td
-                                                                        input#ophone(type="text" name="ophone")
+                                                                        input#ophone(type="text" placeholder="010-0000-0000" autocomplete="off"  name="ophone")
                         .buy
                                 a#order 주문하기
                                 a#close  취소하기
@@ -134,5 +132,50 @@ include ../user/top.jade
                                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         }
                         $("#order").click(function(){
-                                $("#form").submit();
-                        })
+                                if($("#aname")[0].value==""){
+                                        alert("받으시는 분을 입력하세요.");
+                                        $("#aname").focus();
+                                        return;
+                                }else if($(".postcodify_postcode5")[0].value==""){
+                                        alert("우편 번호를 검색하세요.");
+                                        $(".postcodify_postcode5").focus();
+                                        return;
+                                }else if($(".postcodify_address")[0].value==""){
+                                        alert("우편 번호를 검색하세요.");
+                                        $(".postcodify_address").focus();
+                                        return;
+                                }else if($(".postcodify_details")[0].value==""){
+                                        alert("상세주소를 입력하세요.");
+                                        $(".postcodify_details").focus();
+                                        return;
+                                }else if($("#aphone")[0].value==""){
+                                        alert("휴대전화를 입력하세요.");
+                                        $("#aphone").focus();
+                                        return;
+                                }else if(!checkPhone($("#aphone")[0].value)){
+                                        alert("휴대폰 번호가 유효하지 않습니다.");
+                                        $("#aphone").focus();
+                                        return;
+                                }else if($("#oname")[0].value==""){
+                                        alert("주문자이름을 입력하세요.");
+                                        $("#oname").focus();
+                                        return;
+                                }else if($("#ophone")[0].value==""){
+                                        alert("주문자 휴대전화를 입력하세요.");
+                                        $("#ophone").focus();
+                                        return;
+                                }else if(!checkPhone($("#ophone")[0].value)){
+                                        alert("휴대폰 번호가 유효하지 않습니다.");
+                                        $("#ophone").focus();
+                                        return;
+                                }else{
+                                        $("#form").submit();
+                                }
+                        });
+                        function checkPhone(number){
+                                var regExp=/^\d{3}-\d{4}-\d{4}$/;
+                                if(regExp.test(number)) {
+                                        return true;
+                                } else {
+                                        return false;
+                        }};

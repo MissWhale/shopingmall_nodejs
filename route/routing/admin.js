@@ -384,7 +384,9 @@ exports.order=function(req,res){ //주문관리
                 if(err) console.log(err);
                 else{
                         var postcnt=result[0].postcnt;
-                        var sql="select orders.onum,ordersdetail.num,order_date,cnt,total,name,optname,optprice,status from orders join ordersdetail using(onum) join product using(num) join productopt using(num) group by orders.onum desc limit ?,?";
+                        // var sql="select orders.onum,ordersdetail.num,order_date,cnt,total,name,optname,optprice,status from orders join ordersdetail using(onum) join product using(num) join productopt using(num) group by orders.onum desc limit ?,?";
+                        // var sql="select distinct orders.onum,ordersdetail.num,order_date,cnt,total,name,status,optname,optprice from orders join ordersdetail using(onum) join product using(num) join productopt using(num) order by 1 desc limit ?,?"
+                        var sql="select distinct orders.onum,ordersdetail.num,opnum,order_date,cnt,total,name,status,optname,optprice from orders join ordersdetail using(onum) join product using(num) join productopt using(num) where ordersdetail.optnum = productopt.optnum order by 1 desc limit ?,?";
                         con.query(sql,[start,maxpost],function(err,result){
                                 if(err) console.log(err);
                                 else{
@@ -404,6 +406,20 @@ exports.order=function(req,res){ //주문관리
                 }
         })
 };
+exports.statusch=function(req,res){ //주문상태 체인지
+        console.log(req.body);
+        var sql="update ordersdetail set status=? where opnum=?";
+        con.query(sql,[req.body.after,req.body.opnum],function(err,result){
+                if(err) console.log(err);
+                else{
+                        if(result.affectedRows){
+                                res.send('true');
+                        }else{
+                                res.send('false')
+                        }
+                }
+        })
+}
 exports.faq=function(req,res){ //faq페이지
         var maxpost=20; //페이지당 상품수
         var pno=req.params.pno; //페이지넘버

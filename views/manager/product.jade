@@ -1,5 +1,7 @@
 include ../user/top.jade 
                 link(rel='stylesheet',href='../css/management.css')
+                link(rel='stylesheet', href='../css/selectbox.min.css')
+                script(type='text/javascript', src='../js/selectbox.min.js')
                 .mgback
                         .upload
                                 nav.manage
@@ -8,7 +10,20 @@ include ../user/top.jade
                                                 li: a#prod(href="/admin/product") 상품관리
                                                 li: a#order(href="/admin/order") 주문관리
                                                 li: a#faq(href="/admin/faq") FAQ관리
-                                a.rainbtn#upload(href="/admin/productupload" alt="상품등록" style="margin: 10px 0px;")
+                                .mansearch(style="padding-left: 525px;")
+                                        select#searchtype1.justselect(name='kind')
+                                                option(value='키보드') 키보드
+                                                option(value='마우스') 마우스
+                                                option(value='헤드셋') 헤드셋
+                                                option(value='게이밍의자') 게이밍의자
+                                                option(value='패드') 패드
+                                                option(value='PC악세사리') PC악세사리
+                                        select#searchtype2.justselect(name='kind')
+                                                option(value='ASUS') ASUS
+                                                option(value='맥스틸') 맥스틸
+                                        input#searchval(type='text' style="position: absolute;height: 25px;top: 63px;width: 150px;margin-left: 5px;")
+                                        a#searchbtn(style="margin-left:158px") 검색
+                                        a#upload(href="/admin/productupload" style="margin-left: 225px;") 상품등록
                                 .prodmg
                                         .container-table100
                                                 .wrap-table100
@@ -32,13 +47,13 @@ include ../user/top.jade
                                                                                                         tr
                                                                                                                 td.column1=pro.pkind
                                                                                                                 td.column2=pro.optcode
-                                                                                                                td.column3=pro.name
+                                                                                                                td.column3(style="width: 350px;")=pro.name
                                                                                                                 td.column4=pro.comp
                                                                                                                 td.column5=pro.optprice
-                                                                                                                td.column6=pro.optcnt
+                                                                                                                td.column6(style="width: 40px;")=pro.optcnt
                                                                                                                 td.column7=new Date(pro.pdate).format("yyyy-MM-dd")
                                                                                                                 td.column8: a.rainbtnlist#modi(alt="수정" name=pro.num)
-                                                                                                                td.column9: a.rainbtnlist#delete(alt="삭제" name=pro.num)
+                                                                                                                td.column9(style="padding-left: 20px;"): a.rainbtnlist#delete(alt="삭제" name=pro.num)
                         .pagingdiv
                                 .paging
                                         -var pover=Math.trunc(pager.pagecnt/10)

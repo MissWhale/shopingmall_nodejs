@@ -28,6 +28,7 @@ router.post('/optdel',admin.optdel); //옵션삭제
 router.post('/getoptnum',admin.getoptnum); //Auto_increment Option Get
 router.post('/getnum',admin.getnum); // Auto_increment Get
 router.get(["/order",'/order=:pno'],admin.order); //주문관리페이지
+router.post('/statusch',admin.statusch);//주문상태 체인지
 router.get(["/faq","/faq=:pno"],admin.faq);  //faq페이지
 router.get('/faqupload',admin.faqupload); //faq등록페이지
 router.post('/faquplaod',admin.faquploadpost); //faq등록
