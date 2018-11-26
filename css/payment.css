@@ -26,6 +26,9 @@
 .paymentlist{
         margin:40px 10px;
 }
+.orderlist{
+        margin:40px 10px;
+}
 .paymenttable{
         width:1180px;
         border-collapse: collapse;
@@ -232,7 +235,8 @@ div.postcodify_popup_layer input.keyword:focus{
 }
 
 .orderifmtable{
-        width:1180px;
+        margin: 40px 0px 40px 170px;
+        width:1010px;
         border-collapse: collapse;
 }
 .orderifmtable thead{
@@ -242,8 +246,14 @@ div.postcodify_popup_layer input.keyword:focus{
 .orderifmtable th:nth-child(1){
         width:70%;
 }
-.orderifmtable th:nth-child(2),.orderifmtable th:nth-child(3),.orderifmtable th:nth-child(4){
-        width:10%;
+.orderifmtable th:nth-child(2){
+        width:18%;
+}
+.orderifmtable th:nth-child(3){
+        width:12%;
+}
+.orderifmtable th:nth-child(4){
+        width:10%
 }
 .orderifmtable td:nth-child(2),.orderifmtable td:nth-child(3),.orderifmtable td:nth-child(4){
         text-align: center;
@@ -282,7 +292,7 @@ div.postcodify_popup_layer input.keyword:focus{
         position: relative;
         left: 85px;
         top: -50px;
-        width: 720px;
+        width: 590px;
 }
 .orderifmtable .up{
         font-weight: bold;
@@ -292,4 +302,70 @@ div.postcodify_popup_layer input.keyword:focus{
         position: relative;
         top: -15px;
         font-size: 12px;
+        display: block;
+}
+.list{
+        position: fixed;
+        top: 300px;
+}
+.link-container {
+        width: 150px;
+        font-family: Maplestory_OTF; 
+}
+      
+.link-container h2 {
+        background-color: rgb(235, 80, 92);
+        color: black;
+        font-size: 18px;
+        line-height: 30px;
+        margin: 0;
+        padding-left: 10px;
+}
+
+.link-container ul {
+        font-size: 13px;
+        list-style-type: none;
+        padding-left: 0;
+        margin: 0;
+}
+
+.link-container ul li{
+        background-image: url('https://i.msdn.microsoft.com/dynimg/IC688534.png');
+        background-repeat: no-repeat;
+        background-position: center left;
+        border-left: #777 1px solid;
+        border-right: #777 1px solid;
+        padding-left: 20px;
+        line-height: 30px;
+}
+.link-container ul li:last-child{
+        border-bottom: #777 1px solid;
+}
+.link-container ul li a {
+        text-decoration: none;
+        color:#777;
+}
+.link-container ul li a:hover {
+        text-decoration:underline;
+        color:black;
+}
+
+#orderinfo {
+        transition: all 800ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+        margin: 20px 10px;
+        border-radius: 4px;
+        padding: 5px 5px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size:11px;
+        position: relative;
+        top: -10px;
+}
+#orderinfo  {
+        color: rgba(30, 22, 54, 0.6);
+        box-shadow: rgba(30, 22, 54, 0.4) 0 0px 0px 2px inset;
+    }
+#orderinfo:hover {
+        color: rgba(255, 255, 255, 0.85);
+        box-shadow: red 0 0px 0px 40px inset;
 }

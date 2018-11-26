@@ -400,3 +400,54 @@ textarea{
         background-position: 1% !important;
         background-size: 300% 300% !important;
 }
+.orderpro{
+        display: block;
+        width: 1120px;
+        
+}
+.orderpro table{
+        text-align: center;
+        border-top: 1px rgb(97, 96, 96) solid;
+        border-bottom: 1px rgb(97, 96, 96) solid;
+}
+.
+.orderpro .col1{
+        width: 30px;
+}
+.orderpro .col2{
+        width: 755px;
+}
+.orderpro .col3{
+        width: 60px;
+}
+.orderpro .col4{
+        width: 90px;
+}
+.orderpro .col5{
+        width: 70px;
+}
+.orderpro .col6{
+        width: 200px;
+}
+#postsearch {
+        transition: all 800ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+        margin: 20px 10px;
+        border-radius: 4px;
+        padding: 10px 15px;
+        text-decoration: none;
+        font-weight: bold;
+}
+#postsearch  {
+        color: rgba(30, 22, 54, 0.6);
+        box-shadow: rgba(30, 22, 54, 0.4) 0 0px 0px 2px inset;
+    }
+#postsearch:hover {
+        color: rgba(255, 255, 255, 0.85);
+        box-shadow: red 0 0px 0px 40px inset;
+}
+div.postcodify_popup_layer input.keyword{
+        margin:0px;
+}
+div.postcodify_popup_layer input.keyword:focus{
+        box-shadow: none;
+}

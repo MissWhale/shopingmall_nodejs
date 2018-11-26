@@ -1,0 +1,140 @@
+include ../user/top.jade 
+                link(rel='stylesheet',href='../css/management.css')
+                link(rel='stylesheet', href='../css/selectbox.min.css')
+                script(type='text/javascript', src='../js/selectbox.min.js')
+                script(type='text/javascript', src='../js/autosize.js')
+                script(type='text/javascript', src='../js/ckeditor/ckeditor.js')
+                .upload
+                        nav.manage
+                                ul#manageMenu
+                                        li: a#user(href="/admin/member") 회원관리
+                                        li: a#prod(href="/admin/product") 상품관리
+                                        li: a#order(href="/admin/order") 주문관리
+                                        li: a#faq(href="/admin/faq") FAQ관리
+                        .prodmg(style="border:0px;margin-left:30px;margin-bottom: 50px;")
+                                h2(style="border-bottom: 2px solid;width: 1130px;") 주문상세페이지
+                                each order in orders
+                                        form#frm(data-onum=order.onum)
+                                                .table
+                                                        h4(style="margin-bottom: 0px;") 주문 정보
+                                                        table
+                                                                tbody
+                                                                        tr(style="border-top: 1px rgb(97, 96, 96) solid;")
+                                                                                th 주문자 아이디
+                                                                                td=order.id
+                                                                        tr
+                                                                                th 주문자
+                                                                                td: input#oname(type='text' style="width: 250px;" name="oname" value=order.oname)
+                                                                        tr(style="border-bottom: 1px rgb(97, 96, 96) solid;")
+                                                                                th 주문금액
+                                                                                td=order.total
+                                        .orderpro
+                                                h4(style="margin-bottom: 0px;") 주문 상품 정보
+                                                table
+                                                        thead
+                                                                tr(style="border-top: 1px rgb(97, 96, 96) solid;")
+                                                                        th.col1 no
+                                                                        th.col2 상품/옵션정보
+                                                                        th.col3 수량
+                                                                        th.col4 상품금액
+                                                                        th.col5 배송비
+                                                                        th.col6 주문/배송상태
+                                                        tbody
+                                                                each detail,index in details
+                                                                        tr
+                                                                                -var idx=index+1
+                                                                                td=idx
+                                                                                td=detail.name
+                                                                                td=detail.cnt
+                                                                                td=detail.optprice
+                                                                                td 2500원
+                                                                                if(detail.status==0)
+                                                                                        td  입금전
+                                                                                if(detail.status==1)
+                                                                                        td 입금완료
+                                                                                if(detail.status==2)
+                                                                                        td 배송준비
+                                                                                if(detail.status==3)
+                                                                                        td 배송중
+                                                                                if(detail.status==4)
+                                                                                        td 배송완료
+                                                                                if(detail.status==5)
+                                                                                        td 주문취소
+                                        .table
+                                                h4(style="margin-bottom: 0px;") 배송지 정보
+                                                table
+                                                        tbody
+                                                                each order in orders
+                                                                        tr(style="border-top: 1px rgb(97, 96, 96) solid;")
+                                                                                th 받는사람
+                                                                                td: input#aname(type='text' style="width: 250px;" name="aname" value=order.a_name)
+                                                                        tr
+                                                                                th 휴대폰번호
+                                                                                td: input#aphone(type='text' style="width: 250px;" name="aphone" value=order.a_phone)
+                                                                        tr
+                                                                                th 배송지 우편번호
+                                                                                td
+                                                                                        input#locnum.postcodify_postcode5(type='text' style="width: 250px;" name="locnum" value=order.locnum)
+                                                                                        a#postsearch 검색
+                                                                        tr
+                                                                                th 배송지 주소
+                                                                                td: input#locadd.postcodify_address(type='text' style="width: 250px;" name="locadd" readonly value=order.locadd)
+                                                                        tr(style="border-bottom: 1px rgb(97, 96, 96) solid;")
+                                                                                th 배송지 상세주소
+                                                                                td: input#locdetail.postcodify_details(type='text' style="width: 250px;" name="locdetail" readonly value=order.locdetail)
+                                .uploadbtn
+                                        a.rainbtn#update(alt="수정" style="margin: 10px 0px;")
+                                        a.rainbtn(href="/admin/order" alt="목록" style="margin-left: 110px;margin-top: -40px;")
+        script.
+                $("#postsearch").postcodifyPopUp();
+                $("#order").css("border-bottom","5px solid white");
+                $("#order").css("color","white");
+                $("#update").click(function(){
+                        var onum=$("#frm")[0].dataset.onum;
+                        var oname=$("#oname").val();
+                        var aname=$("#aname").val();
+                        var aphone=$("#aphone").val();
+                        var locnum=$("#locnum").val();
+                        var locadd=$("#locadd").val();
+                        var locdetail=$("#locdetail").val();
+                        if(oname==""){
+                                alert("주문자이름을 입력하세요");
+                                $("#oname").focus();
+                                return;
+                        }else if(aname==""){
+                                alert("받는사람이름을 입력하세요");
+                                $("#aname").focus();
+                                return;
+                        }else if(aphone==""){
+                                alert("받는사람휴대폰을 입력하세요");
+                                $("#aphone").focus();
+                                return;
+                        }else if(!checkPhone(aphone)){
+                                alert("휴대폰 번호가 유효하지 않습니다.");
+                                $("#aphone").focus();
+                                return;
+                        }else if(locdetail==""){
+                                alert("상세주소를 입력하세요.");
+                                $("#locdetail").focus();
+                                return;
+                        }else{
+                                $.ajax({
+                                        url:"/admin/orderupdate",
+                                        type:"post",
+                                        data:{onum:onum,oname:oname,aname:aname,aphone:aphone,locnum:locnum,locadd:locadd,locdetail:locdetail},
+                                        success: function(result){
+                                                if(result=='true'){
+                                                        alert("해당 주문정보가 수정되었습니다.");
+                                                        location.href="/admin/order";
+                                                }
+                                        }
+                                })
+                        }
+                });
+                function checkPhone(number){
+                        var regExp=/^\d{3}-\d{4}-\d{4}$/;
+                        if(regExp.test(number)) {
+                                return true;
+                        } else {
+                                return false;
+                }};

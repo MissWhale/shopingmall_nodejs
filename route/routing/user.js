@@ -231,6 +231,27 @@ exports.orderadd=function(req,res){ //주문정보삽입
                 }
         })
 };
+exports.orderinfo=function(req,res){ //주문상세페이지
+        var onum=req.query.no;
+        var sql="select * from orders where onum=?";
+        con.query(sql,onum,function(err,order){
+                if(err) console.log(err);
+                else{
+                        var sql="select distinct orders.onum,ordersdetail.num,opnum,order_date,cnt,pkind,total,name,status,optname,optprice from orders join ordersdetail using(onum) join product using(num) join productopt using(num) where ordersdetail.optnum = productopt.optnum and onum=?";
+                        con.query(sql,onum,function(err,detail){
+                                if(err) console.log(err);
+                                else{
+                                        if(req.session.displayname){
+                                                var dname=req.session.displayname;
+                                                res.render('orderinfo',{name:dname,id:req.session.user,orders:order,details:detail});
+                                        }else{
+                                                res.render('orderinfo',{orders:order,details:detail});
+                                        }
+                                }
+                        })
+                }
+        })
+}
 exports.orderifm=function(req,res){ //주문정보페이지
         var id=req.session.user;
         var maxpost=20; //페이지당 주문수

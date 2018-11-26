@@ -131,6 +131,9 @@ include ../user/top.jade
                         function numberWithCommas(x) { //콤마찍기
                                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         }
+                        $("#close").click(function(){
+                                history.back();
+                        })
                         $("#order").click(function(){
                                 if($("#aname")[0].value==""){
                                         alert("받으시는 분을 입력하세요.");

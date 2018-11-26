@@ -12,6 +12,7 @@ include ../user/top.jade
                                                 li: a#faq(href="/admin/faq") FAQ관리
                                 .mansearch(style="padding-left: 525px;")
                                         select#searchtype1.justselect(name='kind')
+                                                option(value='all') 전체
                                                 option(value='키보드') 키보드
                                                 option(value='마우스') 마우스
                                                 option(value='헤드셋') 헤드셋
@@ -19,8 +20,9 @@ include ../user/top.jade
                                                 option(value='패드') 패드
                                                 option(value='PC악세사리') PC악세사리
                                         select#searchtype2.justselect(name='kind')
-                                                option(value='ASUS') ASUS
-                                                option(value='맥스틸') 맥스틸
+                                                option(value='all') 제조사전체
+                                                each pro in result  
+                                                        option(value=pro.comp)=pro.comp
                                         input#searchval(type='text' style="position: absolute;height: 25px;top: 63px;width: 150px;margin-left: 5px;")
                                         a#searchbtn(style="margin-left:158px") 검색
                                         a#upload(href="/admin/productupload" style="margin-left: 225px;") 상품등록
@@ -85,26 +87,36 @@ include ../user/top.jade
                                                                                 img(src="../img/dbackb.png")
                                                         if(prev)
                                                                 li
-                                                                        a#prev(href="/admin/product="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        a#prev(href="/admin/product?page="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
                                                                                 img(src="../img/backb.png")
                                                         while n <= max
                                                                 li
                                                                         if(pno==n)
-                                                                                a(href="/admin/product="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                                a(href="/admin/product?page="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
                                                                         else
-                                                                                a(href="/product="+n)=n++
+                                                                                a(href="/admin/product?page="+n)=n++
 
                                                         if(ip != fp || check)
                                                                 li
-                                                                        a#next(href="/admin/product="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        a#next(href="/admin/product?page="+next style="padding: 6px 4px 4px 4px;height: 12px;")
                                                                                 img(src="../img/forb.png")
                                                                 li
-                                                                        a#final(href="/admin/product="+pager.pagecnt style="height: 14px;")
+                                                                        a#final(href="/admin/product?page="+pager.pagecnt style="height: 14px;")
                                                                                 img(src="../img/dforb.png")
 
         script.
                 $("#prod").css("border-bottom","5px solid white");
                 $("#prod").css("color","white");
+                $("#searchbtn").click(function(){
+                        var type1=$("#searchtype1 option:selected").val();
+                        var type2=$("#searchtype2 option:selected").val();
+                        var val=$("#searchval").val();
+                        if(!val){
+                                alert("검색어를 입력해주세요");
+                                return;
+                        }
+                        location.href=location.href+"?type1="+type1+"&type2="+type2+"&val="+val;
+                })
                 $("#first").hover(function(){
                                 $("#first").children().attr('src','./img/dbackw.png');
                         },function(){

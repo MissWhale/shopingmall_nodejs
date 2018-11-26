@@ -10,10 +10,10 @@ var upload=multer({storage: multer.diskStorage({
           cb(null, Date.now()+"-"+file.originalname);
         }
 }),});
-router.get(["/member","/member=:pno"],admin.member); //회원관리페이지
+router.get("/member",admin.member); //회원관리페이지
 router.post('/memdel',admin.memdel); //회원삭제
 router.post('/memmodi',admin.memmodi); //회원정보수정
-router.get(["/product","/product=:pno"],admin.product);//상품관리페이지
+router.get("/product",admin.product);//상품관리페이지
 router.post('/productdelete',admin.prodel); //상품삭제
 router.get(["/productmodify",'/productmodify?:num'],admin.promodi); //상품수정페이지
 router.post('/productmodify',admin.promodify); //상품수정
@@ -27,9 +27,11 @@ router.post('/optmodi',admin.optmodi); //옵션수정
 router.post('/optdel',admin.optdel); //옵션삭제
 router.post('/getoptnum',admin.getoptnum); //Auto_increment Option Get
 router.post('/getnum',admin.getnum); // Auto_increment Get
-router.get(["/order",'/order=:pno'],admin.order); //주문관리페이지
+router.get("/order",admin.order); //주문관리페이지
+router.get(["/orderdetail","/orderdetail?=:num"],admin.orderdetail); //주문상세페이지
 router.post('/statusch',admin.statusch);//주문상태 체인지
-router.get(["/faq","/faq=:pno"],admin.faq);  //faq페이지
+router.post('/orderupdate',admin.orderupdate); //주문정보 수정
+router.get("/faq",admin.faq);  //faq페이지
 router.get('/faqupload',admin.faqupload); //faq등록페이지
 router.post('/faquplaod',admin.faquploadpost); //faq등록
 router.get(["/faqmodify","/faqmodify=:num"],admin.faqmodi); //faq수정페이지

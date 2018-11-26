@@ -8,17 +8,30 @@ var con=mysql.createConnection({
         charset:'utf8'
 })
 con.connect();
-exports.member=function(req,res){ //회원관리
+exports.member=function(req,res){ //회원관리페이지
         var maxpost=20; //페이지당 회원수
-        var pno=req.params.pno; //페이지넘버
+        var pno=req.query.page; //페이지넘버
+        var type=req.query.type;
+        var val=req.query.val;
         if(!pno)  var pno=1;
         var start=maxpost*pno-maxpost;
         var sql="select count(*) as mbcnt from login";
+        if(type){
+                if(type!='all'){
+                        sql=sql+" where "+type+" like '%"+val+"%'";
+                }
+        }
         con.query(sql,function(err,result){
                 if(err) console.log(err);
                 else{
                         var mbcnt=result[0].mbcnt;
-                        var sql="select * from login order by id desc limit ?,?";
+                        var sql="select * from login";
+                        if(type){
+                                if(type!='all'){
+                                        sql=sql+" where "+type+" like '%"+val+"%'";
+                                }
+                        }
+                        var sql=sql+" order by id desc limit ?,?";
                         con.query(sql,[start,maxpost],function(err,result){
                                 if(err) console.log(err);
                                 else{
@@ -77,15 +90,49 @@ exports.memmodi=function(req,res){ //회원정보수정
 };
 exports.product=function(req,res){ //상품관리페이지
         var maxpost=20; //페이지당 상품수
-        var pno=req.params.pno; //페이지넘버
+        var pno=req.query.page; //페이지넘버
+        var type1=req.query.type1;
+        var type2=req.query.type2;
+        var val=req.query.val;
         if(!pno)  var pno=1;
         var start=maxpost*pno-maxpost;
         var sql="select count(*) as postcnt from product";
+        if(type1){
+                if(type1!='all'){
+                        sql=sql+" where pkind ='"+type1+"'";
+                        if(type2){
+                                if(type2!='all'){
+                                        sql=sql+" and comp ='"+type2+"'";
+                        }}if(val){
+                                sql=sql+" and name like '%"+val+"%'";
+                }}else{
+                        if(type2){
+                                if(type2!='all'){
+                                        sql=sql+" where comp ='"+type2+"'";
+                        }}if(val){
+                                sql=sql+" and name like '%"+val+"%'";
+        }}}
         con.query(sql,function(err,result){
                 if(err) console.log(err);
                 else{
                         var postcnt=result[0].postcnt;
-                        var sql="select product.*,optcode,optcnt,min(optprice) as optprice from product join productopt using(num) group by product.num ORDER by product.num DESC limit ?,?";
+                        var sql="select product.*,optcode,optcnt,min(optprice) as optprice from product join productopt using(num)";
+                        if(type1){
+                                if(type1!='all'){
+                                        sql=sql+" where pkind ='"+type1+"'";
+                                        if(type2){
+                                                if(type2!='all'){
+                                                        sql=sql+" and comp ='"+type2+"'";
+                                        }}if(val){
+                                                sql=sql+" and name like '%"+val+"%'";
+                                }}else{
+                                        if(type2){
+                                                if(type2!='all'){
+                                                        sql=sql+" where comp ='"+type2+"'";
+                                        }}if(val){
+                                                sql=sql+" and name like '%"+val+"%'";
+                        }}}
+                        var sql=sql+"group by product.num ORDER by product.num DESC limit ?,?";
                         con.query(sql,[start,maxpost],function(err,result){
                                 if(err) console.log(err);
                                 else{
@@ -376,17 +423,53 @@ exports.getnum=function(req,res){ //Auto_increment Get
 };
 exports.order=function(req,res){ //주문관리
         var maxpost=20; //페이지당 상품수
-        var pno=req.params.pno; //페이지넘버
+        var pno=req.query.page; //페이지넘버
+        var type1=req.query.type1;
+        var type2=req.query.type2;
+        var val=req.query.val;
         if(!pno)  var pno=1;
         var start=maxpost*pno-maxpost;
-        var sql="select count(*) as postcnt from orders";
+        var sql="select count(*) as postcnt from orders natural join ordersdetail natural join product";
+        if(type1){
+                if(type1!='all'){
+                        sql=sql+" where pkind ='"+type1+"'";
+                        if(type2){
+                                if(type2!='all'){
+                                        sql=sql+" and status ='"+type2+"'";
+                        }}if(val){
+                                sql=sql+" and name like '%"+val+"%'";
+                }}else{
+                        if(type2){
+                                if(type2!='all'){
+                                        sql=sql+" where status ='"+type2+"'";
+                                        if(val){
+                                                sql=sql+" and name like '%"+val+"%'";
+                        }}}if(val){
+                                sql=sql+" where name like '%"+val+"%'";
+        }}}
         con.query(sql,function(err,result){
                 if(err) console.log(err);
                 else{
                         var postcnt=result[0].postcnt;
                         // var sql="select orders.onum,ordersdetail.num,order_date,cnt,total,name,optname,optprice,status from orders join ordersdetail using(onum) join product using(num) join productopt using(num) group by orders.onum desc limit ?,?";
                         // var sql="select distinct orders.onum,ordersdetail.num,order_date,cnt,total,name,status,optname,optprice from orders join ordersdetail using(onum) join product using(num) join productopt using(num) order by 1 desc limit ?,?"
-                        var sql="select distinct orders.onum,ordersdetail.num,opnum,order_date,cnt,total,name,status,optname,optprice from orders join ordersdetail using(onum) join product using(num) join productopt using(num) where ordersdetail.optnum = productopt.optnum order by 1 desc limit ?,?";
+                        var sql="select distinct orders.onum,ordersdetail.num,opnum,order_date,cnt,pkind,total,name,status,optname,optprice from orders join ordersdetail using(onum) join product using(num) join productopt using(num) where ordersdetail.optnum = productopt.optnum";
+                        if(type1){
+                                if(type1!='all'){
+                                        sql=sql+" and pkind ='"+type1+"'";
+                                        if(type2){
+                                                if(type2!='all'){
+                                                        sql=sql+" and status ='"+type2+"'";
+                                        }}if(val){
+                                                sql=sql+" and name like '%"+val+"%'";
+                                }}else{
+                                        if(type2){
+                                                if(type2!='all'){
+                                                        sql=sql+" and status ='"+type2+"'";
+                                        }}if(val){
+                                                sql=sql+" and name like '%"+val+"%'";
+                        }}}
+                        sql=sql+" order by 1 desc limit ?,?";
                         con.query(sql,[start,maxpost],function(err,result){
                                 if(err) console.log(err);
                                 else{
@@ -406,8 +489,42 @@ exports.order=function(req,res){ //주문관리
                 }
         })
 };
+exports.orderdetail=function(req,res){ //주문상세페이지
+        console.log(req.query.num);
+        var onum=req.query.num;
+        var sql="select * from orders where onum=?";
+        con.query(sql,onum,function(err,order){
+                if(err) console.log(err);
+                else{
+                        var sql="select distinct orders.onum,ordersdetail.num,opnum,order_date,cnt,pkind,total,name,status,optname,optprice from orders join ordersdetail using(onum) join product using(num) join productopt using(num) where ordersdetail.optnum = productopt.optnum and onum=?";
+                        con.query(sql,onum,function(err,detail){
+                                if(err) console.log(err);
+                                else{
+                                        if(req.session.displayname){
+                                                var dname=req.session.displayname;
+                                                res.render('orderdetail',{name:dname,id:req.session.user,orders:order,details:detail});
+                                        }else{
+                                                res.render('orderdetail',{orders:order,details:detail});
+                                        }
+                                }
+                        })
+                }
+        })
+}
+exports.orderupdate=function(req,res){//주문정보수정
+        var sql="update orders set oname=?,a_name=?,a_phone=?,locnum=?,locadd=?,locdetail=? where onum=?";
+        con.query(sql,[req.body.oname,req.body.aname,req.body.aphone,req.body.locnum,req.body.locadd,req.body.locdetail,req.body.onum],function(err,result){
+                if(err) console.log(err);
+                else{
+                        if(result.affectedRows){
+                                res.send('true');
+                        }else{
+                                res.send("false");
+                        }
+                }
+        })
+}
 exports.statusch=function(req,res){ //주문상태 체인지
-        console.log(req.body);
         var sql="update ordersdetail set status=? where opnum=?";
         con.query(sql,[req.body.after,req.body.opnum],function(err,result){
                 if(err) console.log(err);
@@ -423,14 +540,21 @@ exports.statusch=function(req,res){ //주문상태 체인지
 exports.faq=function(req,res){ //faq페이지
         var maxpost=20; //페이지당 상품수
         var pno=req.params.pno; //페이지넘버
+        var val=req.query.val;
         if(!pno)  var pno=1;
         var start=maxpost*pno-maxpost;
         var sql="select count(*) as postcnt from faq";
+        if(val){
+                sql=sql+" where ftitle like '%"+val+"%'";
+        }
         con.query(sql,function(err,result){
                 if(err) console.log(err);
                 else{
                         var postcnt=result[0].postcnt;
-                        var sql="select * from faq order by fnum desc limit ?,?";
+                        var sql="select * from faq";
+                        if(val){
+                                sql=sql+" where ftitle like '%"+val+"%'";
+                        }sql=sql+" order by fnum desc limit ?,?"
                         con.query(sql,[start,maxpost],function(err,result){
                                 if(err) console.log(err);
                                 else{

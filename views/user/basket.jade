@@ -8,6 +8,25 @@ include ../user/top.jade
                                 .baskettitle
                                         img(src="../img/basket.png")
                                         h2 장바구니
+                                .list
+                                        .link-container
+                                                h2 나의 쇼핑내역
+                                                ul
+                                                        li
+                                                                a(href='/user/basket' style="color:black;font-weight:bold") 장바구니
+                                                        li
+                                                                a(href='/user/orderifm') 주문/배송 조회
+                                                        li
+                                                                a(href='#') 취소/반품/ 신청
+                                        .link-container
+                                                h2 회원정보
+                                                ul
+                                                        li
+                                                                a(href='/user/information') 회원정보 변경
+                                                        li
+                                                                a(href='#') 배송지 관리
+                                                        li
+                                                                a(href='#') 나의 상품 평가/리뷰
                                 .basketlist
                                         table.baskettable
                                                 thead
@@ -44,7 +63,7 @@ include ../user/top.jade
                                                                         td#nobas(colspan="5")
                                                                                 span 장바구니에 담긴 상품이 없습니다.
                                 if(basket.length)
-                                        .checkcl
+                                        .checkcl 
                                                 input#allcheck(type="checkbox")
                                                 span 선택상품
                                                 a#ckdel 삭제하기

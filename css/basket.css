@@ -13,8 +13,9 @@
         top: 20px;
         position: relative;
         border-bottom: rgb(97, 96, 96) 3px solid;
-        width: 1180px;
+        width: 1020px;
         margin: 0px 10px;
+        margin-left: 170px;
 }
 .baskettitle img{
         width: 50px;
@@ -26,10 +27,10 @@
         display: inline-block;
 }
 .basketlist{
-        margin:40px 10px;
+        margin: 40px 0px 40px 170px;
 }
 .baskettable{
-        width:1180px;
+        width:1020px;
         border-collapse: collapse;
 }
 .baskettable thead{
@@ -42,8 +43,11 @@
 .baskettable th:nth-child(2){
         width:5%;
 }
-.baskettable th:nth-child(3),.baskettable th:nth-child(4),.baskettable th:nth-child(5){
+.baskettable th:nth-child(3),.baskettable th:nth-child(4),{
         width:10%;
+}
+.baskettable th:nth-child(5){
+        width:14%;
 }
 th{
         border-top:1px solid rgb(104, 104, 104);
@@ -81,7 +85,7 @@ td:nth-child(5){
         position: relative;
         left: 105px;
         top: -50px;
-        width: 650px;
+        width: 550px;
 }
 .baskettable td:nth-child(2),.baskettable td:nth-child(3),.baskettable td:nth-child(4){
         text-align: center;
@@ -111,6 +115,7 @@ td:nth-child(5){
         margin: 5px 10px;
         border: none;
         border: 1px solid red;
+        margin-left:20px;
 }
 #order,.all{
         color:white !important;
@@ -157,4 +162,53 @@ td:nth-child(5){
 .allbuy{
         float: right;
         margin-right: 10px;
+}
+
+.list{
+        position: fixed;
+        top: 300px;
+}
+.link-container {
+        width: 150px;
+        font-family: Maplestory_OTF; 
+}
+      
+.link-container h2 {
+        background-color: rgb(235, 80, 92);
+        color: black;
+        font-size: 18px;
+        line-height: 30px;
+        margin: 0;
+        padding-left: 10px;
+}
+
+.link-container ul {
+        font-size: 13px;
+        list-style-type: none;
+        padding-left: 0;
+        margin: 0;
+}
+
+.link-container ul li{
+        background-image: url('https://i.msdn.microsoft.com/dynimg/IC688534.png');
+        background-repeat: no-repeat;
+        background-position: center left;
+        border-left: #777 1px solid;
+        border-right: #777 1px solid;
+        padding-left: 20px;
+        line-height: 30px;
+}
+.link-container ul li:last-child{
+        border-bottom: #777 1px solid;
+}
+.link-container ul li a {
+        text-decoration: none;
+        color:#777;
+}
+.link-container ul li a:hover {
+        text-decoration:underline;
+        color:black;
+}
+.checkcl{
+        padding-left: 160px;
 }

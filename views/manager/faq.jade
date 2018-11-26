@@ -85,6 +85,14 @@ include ../user/top.jade
        script.
                 $("#faq").css("border-bottom","5px solid white");
                 $("#faq").css("color","white");
+                $("#searchbtn").click(function(){
+                        var val=$("#searchval").val();
+                        if(!val){
+                                alert("검색어를 입력해주세요");
+                                return;
+                        }
+                        location.href=location.href+"?val="+val;
+                })
                 $("a[id=modi]").click(function(){
                         var num=$(this).attr("name");
                         href ="/faqmodify?num="+num;

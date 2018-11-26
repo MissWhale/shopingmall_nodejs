@@ -12,13 +12,15 @@ include ../user/top.jade
                                                 li: a#faq(href="/admin/faq") FAQ관리
                                 .mansearch(style="padding-left: 630px;")
                                         select#searchtype1.justselect(name='kind')
-                                                option(value='키보드') 제품명
+                                                option(value='all') 전체
+                                                option(value='키보드') 키보드
                                                 option(value='마우스') 마우스
                                                 option(value='헤드셋') 헤드셋
                                                 option(value='게이밍의자') 게이밍의자
                                                 option(value='패드') 패드
                                                 option(value='PC악세사리') PC악세사리
                                         select#searchtype2.justselect(name='kind')
+                                                option(value='all') 전체상태
                                                 option(value='0') 입금전
                                                 option(value='1') 입금완료
                                                 option(value='2') 배송준비
@@ -50,7 +52,8 @@ include ../user/top.jade
                                                                                                 -var test2="";
                                                                                                 each order,index in orders   
                                                                                                         tr
-                                                                                                                td.column1(style="width: 7%;")=order.onum
+                                                                                                                td.column1(style="width: 7%;")
+                                                                                                                        a(href="/admin/orderdetail?num="+order.onum)=order.onum
                                                                                                                 td.column2(style="width: 9%;")=new Date(order.order_date).format("yyyy-MM-dd")
                                                                                                                 td.column3(style="width: 46%;")=order.name+"("+order.optname+")"
                                                                                                                 -var total=order.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -117,25 +120,35 @@ include ../user/top.jade
                                                                                 img(src="../img/dbackb.png")
                                                         if(prev)
                                                                 li
-                                                                        a#prev(href="/admin/order="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        a#prev(href="/admin/order?page="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
                                                                                 img(src="../img/backb.png")
                                                         while n <= max
                                                                 li
                                                                         if(pno==n)
-                                                                                a(href="/admin/order="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                                a(href="/admin/order?page="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
                                                                         else
-                                                                                a(href="/admin/order="+n)=n++
+                                                                                a(href="/admin/order?page="+n)=n++
 
                                                         if(ip != fp || check)
                                                                 li
-                                                                        a#next(href="/admin/order="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        a#next(href="/admin/order?page="+next style="padding: 6px 4px 4px 4px;height: 12px;")
                                                                                 img(src="../img/forb.png")
                                                                 li
-                                                                        a#final(href="/admin/order="+pager.pagecnt style="height: 14px;")
+                                                                        a#final(href="/admin/order?page="+pager.pagecnt style="height: 14px;")
                                                                                 img(src="../img/dforb.png")
         script.
                 $("#order").css("border-bottom","5px solid white");
                 $("#order").css("color","white");
+                $("#searchbtn").click(function(){
+                        var type1=$("#searchtype1 option:selected").val();
+                        var type2=$("#searchtype2 option:selected").val();
+                        var val=$("#searchval").val();
+                        if(!val){
+                                alert("검색어를 입력해주세요");
+                                return;
+                        }
+                        location.href=location.href+"?type1="+type1+"&type2="+type2+"&val="+val;
+                })
                 $(".column1").each(function() {
                         var rows = $(".column1:contains('" + $(this).text() + "')");
                         if (rows.length > 1) {

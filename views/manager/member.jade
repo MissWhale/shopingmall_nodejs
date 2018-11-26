@@ -12,6 +12,7 @@ include ../user/top.jade
                                                 li: a#faq(href="/admin/faq") FAQ관리
                                 .mansearch(style="padding-left: 780px;")
                                         select#searchtype.justselect(name='kind')
+                                                option(value='all') 전체
                                                 option(value='id') ID
                                                 option(value='pw') 비밀번호
                                                 option(value='name') 이름
@@ -92,25 +93,34 @@ include ../user/top.jade
                                                                                 img(src="../img/dbackb.png")
                                                         if(prev)
                                                                 li
-                                                                        a#prev(href="/admin/member="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        a#prev(href="/admin/member?page="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
                                                                                 img(src="../img/backb.png")
                                                         while n <= max
                                                                 li
                                                                         if(pno==n)
-                                                                                a(href="/admin/member="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                                a(href="/admin/member?page="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
                                                                         else
-                                                                                a(href="/admin/member="+n)=n++
+                                                                                a(href="/admin/member?page="+n)=n++
 
                                                         if(ip != fp || check)
                                                                 li
-                                                                        a#next(href="/admin/member="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        a#next(href="/admin/member?page="+next style="padding: 6px 4px 4px 4px;height: 12px;")
                                                                                 img(src="../img/forb.png")
                                                                 li
-                                                                        a#final(href="/admin/member="+pager.pagecnt style="height: 14px;")
+                                                                        a#final(href="/admin/member?page="+pager.pagecnt style="height: 14px;")
                                                                                 img(src="../img/dforb.png")
         script.
                 $("#user").css("border-bottom","5px solid white");
                 $("#user").css("color","white");
+                $("#searchbtn").click(function(){
+                        var type=$("#searchtype option:selected").val();
+                        var val=$("#searchval").val();
+                        if(!val){
+                                alert("검색어를 입력해주세요");
+                                return;
+                        }
+                        location.href=location.href+"?type="+type+"&val="+val;
+                })
                 $("a[id=modi]").click(function(){
                         console.log($(this).parent().parent().children());
                         var tr=$(this).parent().parent().children();

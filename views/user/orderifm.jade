@@ -1,10 +1,29 @@
 include ../user/top.jade
                 link(rel='stylesheet',href='../css/payment.css')
                 .payment
-                        .paymenttitle
+                        .paymenttitle(style="margin-left: 180px;width: 1010px;")
                                 img(src="../img/check.png")
                                 h2 주문정보확인
-                        .paymentlist
+                        .list
+                                        .link-container
+                                                h2 나의 쇼핑내역
+                                                ul
+                                                        li
+                                                                a(href='/user/basket') 장바구니
+                                                        li
+                                                                a(href='/user/orderifm' style="color:black;font-weight:bold") 주문/배송 조회
+                                                        li
+                                                                a(href='#') 취소/반품/ 신청
+                                        .link-container
+                                                h2 회원정보
+                                                ul
+                                                        li
+                                                                a(href='/user/information' ) 회원정보 변경
+                                                        li
+                                                                a(href='#') 배송지 관리
+                                                        li
+                                                                a(href='#') 나의 상품 평가/리뷰
+                        .orderlist
                                 table.orderifmtable
                                         thead
                                                 tr
@@ -25,9 +44,10 @@ include ../user/top.jade
                                                                         p.up=price+"원"
                                                                         span.down (#{order.cnt})
                                                                 td 배송준비중
-                                                                td
+                                                                td.col4
                                                                         p.up=new Date(order.order_date).format("yyyy-MM-dd")
                                                                         span.down (#{order.onum})
+                                                                        a#orderinfo(class=order.onum) 주문정보
                 .pagingdiv
                         .paging
                                 -var pover=Math.trunc(pager.pagecnt/10)
@@ -75,3 +95,15 @@ include ../user/top.jade
                                                         li
                                                                 a#final(href="/user/orderifm="+pager.pagecnt style="height: 14px;")
                                                                         img(src="../img/dforb.png")
+                script.
+                        $("a[id=orderinfo]").click(function(){
+                                var num=$(this).attr('class');
+                                location.href="/user/orderinfo?no="+num;
+                        })
+                        $(".col4").each(function() {
+                                var rows = $(".col4:contains('" + $(this).text() + "')");
+                                if (rows.length > 1) {
+                                        rows.eq(0).attr("rowspan", rows.length);
+                                        rows.not(":eq(0)").remove();
+                                }
+                        });
