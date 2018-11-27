@@ -252,6 +252,20 @@ exports.orderinfo=function(req,res){ //주문상세페이지
                 }
         })
 }
+exports.orderupdate=function(req,res){ //주문정보수정
+        var sql="update orders set oname=?,a_name=?,a_phone=?,locnum=?,locadd=?,locdetail=? where onum=?";
+        con.query(sql,[req.body.oname,req.body.aname,req.body.aphone,req.body.locnum,req.body.locadd,req.body.locdetail,req.body.onum],function(err,result){
+                if(err) console.log(err);
+                else{
+                        console.log(result);
+                        if(result.affectedRows){
+                                res.send('true');
+                        }else{
+                                res.send("false");
+                        }
+                }
+        })
+}
 exports.orderifm=function(req,res){ //주문정보페이지
         var id=req.session.user;
         var maxpost=20; //페이지당 주문수
@@ -264,9 +278,8 @@ exports.orderifm=function(req,res){ //주문정보페이지
                 else{
                         var mbcnt=result[0].mbcnt;
                         var sql
-                        var sql="select orders.onum,ordersdetail.optnum,ordersdetail.cnt,product.name,orders.total,orders.order_date,productimg.simgname,productopt.optprice,productopt.optname";
+                        var sql="select ordersdetail.num,orders.onum,opnum,ordersdetail.optnum,ordersdetail.cnt,product.name,orders.total,orders.order_date,productimg.simgname,productopt.optprice,productopt.optname,status";
                         var sql=sql+" from orders,ordersdetail,product,productimg,productopt where id=? and orders.onum=ordersdetail.onum and ordersdetail.num=product.num and product.num=productimg.num and ordersdetail.optnum=productopt.optnum ORDER BY onum desc limit ?,?;";
-                        console.log(sql);
                         con.query(sql,[id,start,maxpost],function(err,result){
                                 if(err) console.log(err);
                                 else{
@@ -287,3 +300,35 @@ exports.orderifm=function(req,res){ //주문정보페이지
                 }
         })
 };
+exports.review=function(req,res){ //리뷰작성페이지
+        var num=req.query.num;
+        var opnum=req.query.opnum;
+        console.log(num);
+        var sql="select name,optname,simgname,ordersdetail.cnt,ordersdetail.optnum from ordersdetail join product using(num) join productimg using(num) join productopt using(optnum) where opnum =?";
+        con.query(sql,opnum,function(err,result){
+                if(err) console.log(err);
+                else{
+                        res.render('review',{rev:result[0],num:num,opnum:opnum});
+                }
+        })
+}
+exports.reviewpost=function(req,res){ //리뷰작성
+        var star=req.body.star;
+        var review=req.body.review;
+        var num=req.body.num;
+        var optnum=req.body.optnum;
+        var id=req.session.user;
+        if(id){
+                var sql="insert into productreview(num,optnum,id,rtext,star) values(?,?,?,?,?)";
+                con.query(sql,[num,optnum,id,review,star],function(err,result){
+                        if(err) console.log(err);
+                        else{
+                                if(result.affectedRows){
+                                        res.send("true");
+                                }else{
+                                        res.send("false");
+                                }
+                        }
+                })
+        }
+}

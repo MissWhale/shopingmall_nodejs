@@ -16,15 +16,11 @@ include ../user/top.jade
                                                                 a(href='/user/basket' style="color:black;font-weight:bold") 장바구니
                                                         li
                                                                 a(href='/user/orderifm') 주문/배송 조회
-                                                        li
-                                                                a(href='#') 취소/반품/ 신청
                                         .link-container
                                                 h2 회원정보
                                                 ul
                                                         li
                                                                 a(href='/user/information') 회원정보 변경
-                                                        li
-                                                                a(href='#') 배송지 관리
                                                         li
                                                                 a(href='#') 나의 상품 평가/리뷰
                                 .basketlist
@@ -53,7 +49,7 @@ include ../user/top.jade
                                                                                 -var total=bas.cnt*bas.optprice;
                                                                                 -var price=total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                                                                 td=price+"원"
-                                                                                td 2500원
+                                                                                td 2,500원
                                                                                 td.buy
                                                                                         a#order(name=bas.bnum class=bas.optnum) 주문하기
                                                                                         a#delete(name=bas.bnum) 삭제하기

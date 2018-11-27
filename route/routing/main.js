@@ -64,7 +64,7 @@ exports.productdetail=function(req,res){ //상세정보페이지
                 }
         })
 };
-exports.basketadd=function(req,res){
+exports.basketadd=function(req,res){ //장바구니추가
         var num=req.body.num;
         var optnum=req.body.optnum;
         var cnt=req.body.cnt;

@@ -12,15 +12,11 @@ include ../user/top.jade
                                                                 a(href='/user/basket') 장바구니
                                                         li
                                                                 a(href='/user/orderifm' style="color:black;font-weight:bold") 주문/배송 조회
-                                                        li
-                                                                a(href='#') 취소/반품/ 신청
                                         .link-container
                                                 h2 회원정보
                                                 ul
                                                         li
                                                                 a(href='/user/information' ) 회원정보 변경
-                                                        li
-                                                                a(href='#') 배송지 관리
                                                         li
                                                                 a(href='#') 나의 상품 평가/리뷰
                         .orderlist
@@ -43,11 +39,24 @@ include ../user/top.jade
                                                                         -var price=order.optprice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                                                         p.up=price+"원"
                                                                         span.down (#{order.cnt})
-                                                                td 배송준비중
+                                                                if(order.status==0)
+                                                                        td.col3  입금전
+                                                                if(order.status==1)
+                                                                        td.col3 입금완료
+                                                                if(order.status==2)
+                                                                        td.col3 배송준비
+                                                                if(order.status==3)
+                                                                        td.col3 배송중
+                                                                if(order.status==4)
+                                                                        td.col3 
+                                                                                p 배송완료
+                                                                                a#orderinfo.review(data-opnum=order.opnum data-num=order.num) 리뷰작성
+                                                                if(order.status==5)
+                                                                        td 주문취소
                                                                 td.col4
                                                                         p.up=new Date(order.order_date).format("yyyy-MM-dd")
                                                                         span.down (#{order.onum})
-                                                                        a#orderinfo(class=order.onum) 주문정보
+                                                                        a#orderinfo.orderinfo(data-onum=order.onum) 주문정보
                 .pagingdiv
                         .paging
                                 -var pover=Math.trunc(pager.pagecnt/10)
@@ -96,8 +105,15 @@ include ../user/top.jade
                                                                 a#final(href="/user/orderifm="+pager.pagecnt style="height: 14px;")
                                                                         img(src="../img/dforb.png")
                 script.
-                        $("a[id=orderinfo]").click(function(){
-                                var num=$(this).attr('class');
+                        $("a[class=review]").click(function(){
+                                var num=$(this)[0].dataset.num;
+                                var opnum=$(this)[0].dataset.opnum;
+                                var url="/user/review?num="+num+"&opnum="+opnum;
+                                window.open(url,"","width=660,height=700,left=600");
+                                //- location.href="/user/orderinfo?no="+num;
+                        })
+                        $("a[class=orderinfo]").click(function(){
+                                var num=$(this)[0].dataset.onum;
                                 location.href="/user/orderinfo?no="+num;
                         })
                         $(".col4").each(function() {
@@ -107,3 +123,10 @@ include ../user/top.jade
                                         rows.not(":eq(0)").remove();
                                 }
                         });
+                        //- $(".col3").each(function() {
+                        //-         var rows = $(".col3:contains('" + $(this).text() + "')");
+                        //-         if (rows.length > 1) {
+                        //-                 rows.eq(0).attr("rowspan", rows.length);
+                        //-                 rows.not(":eq(0)").remove();
+                        //-         }
+                        //- });

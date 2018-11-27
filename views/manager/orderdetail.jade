@@ -27,7 +27,8 @@ include ../user/top.jade
                                                                                 td: input#oname(type='text' style="width: 250px;" name="oname" value=order.oname)
                                                                         tr(style="border-bottom: 1px rgb(97, 96, 96) solid;")
                                                                                 th 주문금액
-                                                                                td=order.total
+                                                                                -var total=order.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                                                td=total+"원"
                                         .orderpro
                                                 h4(style="margin-bottom: 0px;") 주문 상품 정보
                                                 table
@@ -46,8 +47,9 @@ include ../user/top.jade
                                                                                 td=idx
                                                                                 td=detail.name
                                                                                 td=detail.cnt
-                                                                                td=detail.optprice
-                                                                                td 2500원
+                                                                                -var price=detail.optprice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                                                td=price+"원"
+                                                                                td 2,500원
                                                                                 if(detail.status==0)
                                                                                         td  입금전
                                                                                 if(detail.status==1)

@@ -21,11 +21,12 @@ include ../user/top.jade
                                                                         tr
                                                                                 th 가격
                                                                                 td
-                                                                                        strong(style="color:black")=min.min+"원" 
+                                                                                        -var price=min.min.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                                                        strong(style="color:black")=price+"원" 
                                                                         tr
                                                                                 th 배송비
                                                                                 td#deli 
-                                                                                        span#deliprice 2500원
+                                                                                        span#deliprice 2,500원
                                                                                         select#color.justselect(name='kind')
                                                                                                 option(value='ok') 주문시결제(선결제)
                                                                                                 option(value='no') 상품수령시결제(착불)     

@@ -51,7 +51,8 @@ include ../user/top.jade
                                                                                                                 td.column2=pro.optcode
                                                                                                                 td.column3(style="width: 350px;")=pro.name
                                                                                                                 td.column4=pro.comp
-                                                                                                                td.column5=pro.optprice
+                                                                                                                -var price=pro.optprice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                                                                                td.column5=price+"원"
                                                                                                                 td.column6(style="width: 40px;")=pro.optcnt
                                                                                                                 td.column7=new Date(pro.pdate).format("yyyy-MM-dd")
                                                                                                                 td.column8: a.rainbtnlist#modi(alt="수정" name=pro.num)

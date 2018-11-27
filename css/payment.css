@@ -368,4 +368,14 @@ div.postcodify_popup_layer input.keyword:focus{
 #orderinfo:hover {
         color: rgba(255, 255, 255, 0.85);
         box-shadow: red 0 0px 0px 40px inset;
+        cursor: pointer;
+}
+.orderinfodiv{
+        margin-left:160px;
+}
+.orderinfodiv tr{
+        width: 1020px !important;
+}
+.orderinfodiv .orderpro{
+        width: 1020px;
 }

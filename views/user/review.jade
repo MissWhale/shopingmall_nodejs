@@ -1,0 +1,72 @@
+doctype html
+html
+        head
+                meta(charset='utf-8')
+                link(rel='stylesheet',href='./css/review.css')
+                link(rel='stylesheet',href='../css/review.css')
+                script(src='https://code.jquery.com/jquery-2.2.4.min.js')
+                script(type='text/javascript', src='../js/ckeditor/ckeditor.js')
+        body
+                .head
+                        h1 리뷰작성
+                .review
+                        form#frm
+                                .table
+                                        table
+                                                tbody
+                                                        tr(style="border-top: none")
+                                                                th 구매상품
+                                                                td 
+                                                                        img(src="../dbimg/"+rev.simgname)
+                                                                        span#name=rev.name
+                                                                        span#option="[옵션] "+rev.optname+" - "+rev.cnt+"개"
+                                                        tr
+                                                                th 상품평가
+                                                                td
+                                                                        .revstar
+                                                                                span(class="star1 on") 별1왼쪽
+                                                                                span.star2 별1오른족
+                                                                                span.star1 별2왼쪽
+                                                                                span.star2 별2오른쪽
+                                                                                span.star1 별3왼쪽
+                                                                                span.star2 별3오른쪽
+                                                                                span.star1 별4왼쪽
+                                                                                span.star2 별4오른쪽
+                                                                                span.star1 별5왼쪽
+                                                                                span.star2 별5오른쪽
+                        textarea#explan(name="text" )
+                        .button
+                                a#orderinfo.reviewadd(data-optnum=rev.optnum data-num=num) 작성
+                                a#orderinfo.close 닫기
+        script.
+                CKEDITOR.replace( 'explan',{
+                        extraPlugins: 'autogrow',
+                });
+                $('.revstar span').click(function(){ //별점찍기
+                        $(this).parent().children('span').removeClass('on');
+                        $(this).addClass('on').prevAll('span').addClass('on');
+                        return false;
+                });
+                $(".reviewadd").click(function(){
+                        var num=$(this)[0].dataset.num;
+                        var optnum=$(this)[0].dataset.optnum;
+                        var review=CKEDITOR.instances.explan.getData();
+                        var star=$("span[class*=' on']").length;
+                        $.ajax({
+                                url:"/user/review",
+                                type:"post",
+                                data:{star:star,review:review,num:num,optnum:optnum},
+                                success: function(result){
+                                        if(result=='true'){
+                                                alert("리뷰가 작성되었습니다.");
+                                                self.close();
+                                        }else{
+                                                alert("오류발생!!");
+                                                self.close();
+                                        }
+                                }
+                        })
+                })
+                $(".close").click(function(){
+                        self.close();
+                })
