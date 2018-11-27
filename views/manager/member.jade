@@ -89,26 +89,48 @@ include ../user/top.jade
                                                 ul
                                                         if(pno>10)
                                                                 li
-                                                                        a#first(href="/admin/member" style="height: 14px;")
+                                                                        if(type)
+                                                                                a#first(href="/admin/member?page=1" style="height: 14px;")
+                                                                                img(src="../img/dbackb.png")
+                                                                        else
+                                                                                a#first(href="/admin/member?" style="height: 14px;")
                                                                                 img(src="../img/dbackb.png")
                                                         if(prev)
                                                                 li
-                                                                        a#prev(href="/admin/member?page="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        if(type)
+                                                                                a#prev(href="/admin/member?page="+prev+"&type="+query.type+"&val="+query.val style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                                img(src="../img/backb.png")
+                                                                        else
+                                                                                a#prev(href="/admin/member?page="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
                                                                                 img(src="../img/backb.png")
                                                         while n <= max
                                                                 li
                                                                         if(pno==n)
-                                                                                a(href="/admin/member?page="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                                if(type)
+                                                                                        a(href="/admin/member?page="+n+"&type="+query.type+"&val="+query.val style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                                else
+                                                                                        a(href="/admin/member?page="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
                                                                         else
-                                                                                a(href="/admin/member?page="+n)=n++
+                                                                                if(type)
+                                                                                        a(href="/admin/member?page="+n+"&type="+query.type+"&val="+query.val)=n++
+                                                                                else
+                                                                                        a(href="/admin/member?page="+n)=n++
 
                                                         if(ip != fp || check)
                                                                 li
-                                                                        a#next(href="/admin/member?page="+next style="padding: 6px 4px 4px 4px;height: 12px;")
-                                                                                img(src="../img/forb.png")
+                                                                        if(type)
+                                                                                a#next(href="/admin/member?page="+next+"&type="+query.type+"&val="+query.val style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                                        img(src="../img/forb.png")
+                                                                        else
+                                                                                a#next(href="/admin/member?page="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                                        img(src="../img/forb.png")
                                                                 li
-                                                                        a#final(href="/admin/member?page="+pager.pagecnt style="height: 14px;")
-                                                                                img(src="../img/dforb.png")
+                                                                        if(type)
+                                                                                a#final(href="/admin/member?page="+pager.pagecnt+"&type="+query.type+"&val="+query.val style="height: 14px;")
+                                                                                        img(src="../img/dforb.png")
+                                                                        else
+                                                                                a#final(href="/admin/member?page="+pager.pagecnt style="height: 14px;")
+                                                                                        img(src="../img/dforb.png")
         script.
                 $("#user").css("border-bottom","5px solid white");
                 $("#user").css("color","white");
@@ -119,7 +141,7 @@ include ../user/top.jade
                                 alert("검색어를 입력해주세요");
                                 return;
                         }
-                        location.href=location.href+"?type="+type+"&val="+val;
+                        location.href="/admin/member?page=1&type="+type+"&val="+val;
                 })
                 $("a[id=modi]").click(function(){
                         console.log($(this).parent().parent().children());

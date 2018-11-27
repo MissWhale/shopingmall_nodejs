@@ -7,12 +7,33 @@ include ../user/top.jade
                                 .prct_imgbox
                                         img(src="./dbimg/"+pro.simgname)
                                         .prct_wbox
-                                                a 별점
-                                                a 리뷰
+                                                .star
+                                                        -for(var i=1;i<11;i++){
+                                                                -if(i%2==0){
+                                                                        -if(i<star){
+                                                                                span(class="star2 on") t
+                                                                        -}else{
+                                                                                span.star2 t
+                                                                        -}
+                                                                -}else{
+                                                                        -if(i<star){
+                                                                                span(class="star1 on") t
+                                                                        -}else{
+                                                                                span.star1 t
+                                                                        -}
+                                                                -}
+                                                        -}
+                                                if(star)
+                                                        span.starnum=star
+                                                else
+                                                        span.starnum 0
+                                                .revnum
+                                                        span 상품리뷰
+                                                        span(style="font-weight: bold;")=" "+review.length+"건"
                                 .prct_infobox
                                         .prct_defalut_info
                                                 .prct_defalut_area
-                                                        label="상품코드 : "+min.optcode
+                                                        label="상품코드 : "+pro.optcode
                                                         h3=pro.name
                                                 //- hr
                                                 .prct_defalut_table
@@ -21,7 +42,7 @@ include ../user/top.jade
                                                                         tr
                                                                                 th 가격
                                                                                 td
-                                                                                        -var price=min.min.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                                                        -var price=pro.min.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                                                                         strong(style="color:black")=price+"원" 
                                                                         tr
                                                                                 th 배송비
@@ -73,44 +94,44 @@ include ../user/top.jade
                                 .proimg
                                         a#ptext(style="display:none")=pro.ptext
                                 .review(style="display:none")
-                                        .revtable
-                                                .revstar
-                                                        span(class="star1 on") 별1왼쪽
-                                                        span.star2 별1오른족
-                                                        span.star1 별2왼쪽
-                                                        span.star2 별2오른쪽
-                                                        span.star1 별3왼쪽
-                                                        span.star2 별3오른쪽
-                                                        span.star1 별4왼쪽
-                                                        span.star2 별4오른쪽
-                                                        span.star1 별5왼쪽
-                                                        span.star2 별5오른쪽
-                                                .revuser
-                                                        span.name name
-                                                        span.date date
-                                                .revopt
-                                                        | [옵션]
-                                                .revtext
-                                                        | 손에맞아서 좋은데 스나이퍼스위치쪽 때가있으면 딱는게힘듭니다..ㅠㅠ 
-                                        .revtable
-                                                .revstar
-                                                        span(class="star1 on") 별1왼쪽
-                                                        span.star2 별1오른족
-                                                        span.star1 별2왼쪽
-                                                        span.star2 별2오른쪽
-                                                        span.star1 별3왼쪽
-                                                        span.star2 별3오른쪽
-                                                        span.star1 별4왼쪽
-                                                        span.star2 별4오른쪽
-                                                        span.star1 별5왼쪽
-                                                        span.star2 별5오른쪽
-                                                .revuser
-                                                        span.name name
-                                                        span.date date
-                                                .revopt
-                                                        | [옵션]
-                                                .revtext
-                                                        | 손에맞아서 좋은데 스나이퍼스위치쪽 때가있으면 딱는게힘듭니다..ㅠㅠ 
+                                        if(review.length)
+                                                each rev in review
+                                                        .revtable
+                                                                .revstar
+                                                                        -for(var i=1;i<11;i++){
+                                                                                -if(i%2==0){
+                                                                                        -if(i<rev.star){
+                                                                                                span(class="star2 on") t
+                                                                                        -}else{
+                                                                                                span.star2 t
+                                                                                        -}
+                                                                                -}else{
+                                                                                        -if(i<rev.star){
+                                                                                                span(class="star1 on") t
+                                                                                        -}else{
+                                                                                                span.star1 t
+                                                                                        -}
+                                                                                -}
+                                                                        -}
+                                                                        //- span(class="star1 on") 별1왼쪽
+                                                                        //- span.star2 별1오른족
+                                                                        //- span.star1 별2왼쪽
+                                                                        //- span.star2 별2오른쪽
+                                                                        //- span.star1 별3왼쪽
+                                                                        //- span.star2 별3오른쪽
+                                                                        //- span.star1 별4왼쪽
+                                                                        //- span.star2 별4오른쪽
+                                                                        //- span.star1 별5왼쪽
+                                                                        //- span.star2 별5오른쪽
+                                                                .revuser
+                                                                        span.name=rev.id
+                                                                        span.date=new Date(rev.rdate).format("yyyy-MM-dd")
+                                                                .revopt
+                                                                        p=rev.optname
+                                                                .revtext
+                                                                        a#rtext(style="display:none")=rev.rtext
+                                        else
+                                                span(style="margin-left: 300px;font-size: 18px;font-weight: bold;") 작성된 리뷰가 없습니다.
 
                                 .probuy
                                         .sideoption
@@ -190,6 +211,11 @@ include ../user/top.jade
                         $( window ).on( "load", function() {
                                 $(".justwrap").css("display","inline-grid");
                                 $(".proimg").append($("#ptext")[0].innerText);
+                                var leng=$("div[class=revtext]").length;
+                                for(var i=0;i<leng;i++){
+                                        //- console.log($("div[class=revtext]")[i].children[0].innerText);
+                                        $("div[class=revtext]")[i].insertAdjacentHTML('beforeend',$("div[class=revtext]")[i].children[0].innerText);
+                                }
                         })
                         $(".option").click(function(){ //옵션창활성화
                                 $(".optiondiv").css("display","block");
@@ -292,7 +318,6 @@ include ../user/top.jade
                                 var name=m.dataset.name;
                                 var op=$('li[class='+name+']')[0];
                                 var siop=$('li[class='+name+']')[1];
-                                console.log(op.children[7]);
                                 if($(m).next().val()>1){
                                         op.children[2].value=Number(op.children[2].value)-1;
                                         siop.children[2].value=Number(siop.children[2].value)-1;
@@ -392,8 +417,3 @@ include ../user/top.jade
                         function numberWithCommas(x) { //콤마찍기
                                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         }
-                        $('.revstar span').click(function(){ //별점찍기
-                                $(this).parent().children('span').removeClass('on');
-                                $(this).addClass('on').prevAll('span').addClass('on');
-                                return false;
-                        });

@@ -26,7 +26,8 @@ include ../user/top.jade
                                                 option(value='2') 배송준비
                                                 option(value='3') 배송중
                                                 option(value='4') 배송완료
-                                                option(value='5') 주문취소
+                                                option(value='5') 구매확정
+                                                option(value='6') 주문취소
                                         input#searchval(type='text' style="position: absolute;height: 25px;top: 63px;width: 150px;margin-left: 5px;")
                                         a#searchbtn(style="margin-left:158px") 검색
                                 .prodmg
@@ -85,9 +86,13 @@ include ../user/top.jade
                                                                                                                                 else
                                                                                                                                         option(value=4) 배송완료
                                                                                                                                 if(order.status==5)
-                                                                                                                                        option(value=5 selected) 주문취소
+                                                                                                                                        option(value=5 selected) 구매확정
                                                                                                                                 else
-                                                                                                                                        option(value=5) 주문취소
+                                                                                                                                        option(value=5) 구매확정
+                                                                                                                                if(order.status==6)
+                                                                                                                                        option(value=6 selected) 주문취소
+                                                                                                                                else
+                                                                                                                                        option(value=6) 주문취소
                                                                                                                 td.column7(style="width: 7%;padding-left: 17px;"): a.rainbtnlist#modi(alt="수정" data-opnum=order.opnum)
                         .pagingdiv
                                 .paging
@@ -158,6 +163,7 @@ include ../user/top.jade
                 });
                 $(".column2").each(function() {
                         var rows = $(".column2:contains('" + $(this).text() + "')");
+                        var text=$(this).prev().text();
                         if (rows.length > 1) {
                                 rows.eq(0).attr("rowspan", rows.length);
                                 rows.not(":eq(0)").remove();

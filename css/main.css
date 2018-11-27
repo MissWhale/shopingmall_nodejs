@@ -260,7 +260,7 @@ strong{
         width:400px;
         position:relative;
         padding:50px;
-        border:1px solid;
+        border:1px solid #dadada;
 }
 .prct_imgbox img{
         width:400px;
@@ -270,7 +270,7 @@ strong{
         width: 398px;
         height: 35px;
         padding-top: 15px;
-        border:1px solid;
+        border:1px solid #dadada;
 }
 .prct_infobox{
         position: relative;
@@ -509,6 +509,7 @@ strong{
         background-position: 99% 50%;
 }
 .detailinfo  {
+        margin-bottom: 100px !important;
         display: flex;
         position:  relative;
         left:  0;
@@ -572,6 +573,7 @@ strong{
         position: relative;
         display: flex;
         width: 1200px;
+        margin-bottom: 50px;
 }
 .proimg{
         margin-top:20px;
@@ -602,7 +604,7 @@ strong{
         height: 15px;
         float:left;
         text-indent: -9999px;
-        cursor: pointer;
+        /* cursor: pointer; */
     }
     .star2{
         background: url('http://miuu227.godohosting.com/images/icon/ico_review.png') no-repeat -33px;
@@ -611,7 +613,7 @@ strong{
         height: 15px;
         float:left;
         text-indent: -9999px;
-        cursor: pointer;
+        /* cursor: pointer; */
     }
     .star1.on{background-position:2px 0;}
     .star2.on{background-position:-7px 0;}
@@ -619,7 +621,7 @@ strong{
         display: inline-block;
 }
 .revuser .name{
-        margin-left: 670px;
+        margin-left: 750px;
         font-size:12px;
 }
 .revuser .date{
@@ -837,4 +839,22 @@ strong{
         border: 1px solid red;
         color: white;
         background-position: 99% 50%;
+}
+.star{
+        width: 120px;
+        padding-left: 80px;
+}
+.starnum{
+        font-size: 14px;
+        font-weight: bold;
+        position: relative;
+        top: -3px;
+        left: 10px;
+}
+.revnum{
+        display: inline-block;
+        font-size: 14px;
+        position: relative;
+        top: -3px;
+        left: 20px;
 }

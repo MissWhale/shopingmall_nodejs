@@ -1,5 +1,6 @@
 var mysql=require('mysql');
 var fs=require('fs');
+var empty = require('is-empty');
 var con=mysql.createConnection({
         host:'114.71.137.109',
         user:'root',
@@ -9,16 +10,19 @@ var con=mysql.createConnection({
 })
 con.connect();
 exports.member=function(req,res){ //회원관리페이지
-        var maxpost=20; //페이지당 회원수
+        var maxpost=2; //페이지당 회원수
         var pno=req.query.page; //페이지넘버
         var type=req.query.type;
         var val=req.query.val;
+        var query=req.query;
         if(!pno)  var pno=1;
         var start=maxpost*pno-maxpost;
         var sql="select count(*) as mbcnt from login";
         if(type){
-                if(type!='all'){
+                if(type !="all"){
                         sql=sql+" where "+type+" like '%"+val+"%'";
+                }else{
+                        sql=sql+" where id like '%"+val+"%' or pw like '%"+val+"%' or name like '%"+val+"%' or phone like '%"+val+"%' or email like '%"+val+"%'  ";
                 }
         }
         con.query(sql,function(err,result){
@@ -29,6 +33,8 @@ exports.member=function(req,res){ //회원관리페이지
                         if(type){
                                 if(type!='all'){
                                         sql=sql+" where "+type+" like '%"+val+"%'";
+                                }else{
+                                        sql=sql+" where id like '%"+val+"%' or pw like '%"+val+"%' or name like '%"+val+"%' or phone like '%"+val+"%' or email like '%"+val+"%'  ";
                                 }
                         }
                         var sql=sql+" order by id desc limit ?,?";
@@ -42,9 +48,9 @@ exports.member=function(req,res){ //회원관리페이지
                                         }
                                         if(req.session.displayname){
                                                 var dname=req.session.displayname;
-                                                res.render('member',{name:dname,id:req.session.user,result:result,pager:pager,pno:pno});
+                                                res.render('member',{name:dname,id:req.session.user,result:result,pager:pager,pno:pno,query:query,type:type});
                                         }else{
-                                                res.render('member',{result:result,pager:pager,pno:pno});
+                                                res.render('member',{result:result,pager:pager,pno:pno,query:query});
                                         }
                                 }
                         })
@@ -89,48 +95,61 @@ exports.memmodi=function(req,res){ //회원정보수정
         })
 };
 exports.product=function(req,res){ //상품관리페이지
-        var maxpost=20; //페이지당 상품수
+        var maxpost=2; //페이지당 상품수
         var pno=req.query.page; //페이지넘버
         var type1=req.query.type1;
         var type2=req.query.type2;
         var val=req.query.val;
+        var query=req.query;
         if(!pno)  var pno=1;
         var start=maxpost*pno-maxpost;
         var sql="select count(*) as postcnt from product";
-        if(type1){
+        if(!(!type1)){
                 if(type1!='all'){
                         sql=sql+" where pkind ='"+type1+"'";
-                        if(type2){
+                        if(type2!=undefined){
                                 if(type2!='all'){
                                         sql=sql+" and comp ='"+type2+"'";
-                        }}if(val){
+                        }}if(val!=undefined){
                                 sql=sql+" and name like '%"+val+"%'";
                 }}else{
-                        if(type2){
+                        if(type2!=undefined){
                                 if(type2!='all'){
                                         sql=sql+" where comp ='"+type2+"'";
-                        }}if(val){
-                                sql=sql+" and name like '%"+val+"%'";
+                                        if(val!=undefined){
+                                                sql=sql+" and name like '%"+val+"%'";
+                                        }
+                                }else if(val!=undefined){
+                                        sql=sql+" where name like '%"+val+"%'";
+                                }
+                        }else if(val!=undefined){
+                                sql=sql+" where name like '%"+val+"%'";
         }}}
         con.query(sql,function(err,result){
                 if(err) console.log(err);
                 else{
                         var postcnt=result[0].postcnt;
                         var sql="select product.*,optcode,optcnt,min(optprice) as optprice from product join productopt using(num)";
-                        if(type1){
+                        if(!(!type1)){
                                 if(type1!='all'){
                                         sql=sql+" where pkind ='"+type1+"'";
-                                        if(type2){
+                                        if(type2!=undefined){
                                                 if(type2!='all'){
                                                         sql=sql+" and comp ='"+type2+"'";
-                                        }}if(val){
+                                        }}if(val!=undefined){
                                                 sql=sql+" and name like '%"+val+"%'";
                                 }}else{
-                                        if(type2){
+                                        if(type2!=undefined){
                                                 if(type2!='all'){
                                                         sql=sql+" where comp ='"+type2+"'";
-                                        }}if(val){
-                                                sql=sql+" and name like '%"+val+"%'";
+                                                        if(val!=undefined){
+                                                                sql=sql+" and name like '%"+val+"%'";
+                                                        }
+                                                }else if(val!=undefined){
+                                                        sql=sql+" where name like '%"+val+"%'";
+                                                }
+                                        }else if(val!=undefined){
+                                                sql=sql+" where name like '%"+val+"%'";
                         }}}
                         var sql=sql+"group by product.num ORDER by product.num DESC limit ?,?";
                         con.query(sql,[start,maxpost],function(err,result){
@@ -143,7 +162,7 @@ exports.product=function(req,res){ //상품관리페이지
                                         }
                                         if(req.session.displayname){
                                                 var dname=req.session.displayname;
-                                                res.render('product',{name:dname,id:req.session.user,result:result,pager:pager,pno:pno});
+                                                res.render('product',{name:dname,id:req.session.user,result:result,pager:pager,pno:pno,query:query});
                                         }else{
                                                 res.render('product',{result:result,pager:pager,pno:pno});
                                         }

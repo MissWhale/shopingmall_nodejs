@@ -11,10 +11,35 @@ include top.jade
                                                                 .proinfo
                                                                         a(href='/productDetail?num='+pro.num)=pro.name
                                                                         .listbtm
-                                                                                a 별점
-                                                                                a 리뷰
+                                                                                -var no=pro.num
+                                                                                -var stars=0;
+                                                                                -for(var s=0;s<star.length;s++){
+                                                                                        -if(no==star[s].num){
+                                                                                                -stars=star[s].star
+                                                                                        -}}
+                                                                                -for(var j=1;j<11;j++){
+                                                                                        -if(j%2==0){
+                                                                                                -if(j<stars){
+                                                                                                        span(class="star2 on") t
+                                                                                                -}else{
+                                                                                                        span.star2 t
+                                                                                                -}
+                                                                                        -}else{
+                                                                                                -if(j<stars){
+                                                                                                        span(class="star1 on") t
+                                                                                                -}else{
+                                                                                                        span.star1 t
+                                                                                                -}}}
+                                                                                -var cnt=0;
+                                                                                -for(var s=0;s<star.length;s++){
+                                                                                        -if(no==star[s].num){
+                                                                                                -cnt=star[s].cnt
+                                                                                        -}}
+                                                                                .revnum
+                                                                                        span(style="font-weight:bold")="리뷰 "+cnt+"건"
                                                                 .proprice
-                                                                        strong=pro.optprice
+                                                                        -var price=pro.optprice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                                                        strong=price
                                                                         |원
                                                                         .delivery
                                                                                 p

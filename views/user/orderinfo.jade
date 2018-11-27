@@ -58,7 +58,7 @@ include ../user/top.jade
                                                                                                 td=detail.cnt
                                                                                                 -var price=detail.optprice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                                                                                 td=price+"원"
-                                                                                                td 2,500원
+                                                                                                td.col5 2,500원
                                                                                                 if(detail.status==0)
                                                                                                         td  입금전
                                                                                                 if(detail.status==1)
@@ -70,6 +70,8 @@ include ../user/top.jade
                                                                                                 if(detail.status==4)
                                                                                                         td 배송완료
                                                                                                 if(detail.status==5)
+                                                                                                        td 구매확정
+                                                                                                if(detail.status==6)
                                                                                                         td 주문취소
                                                         .table
                                                                 h4(style="margin-bottom: 0px;") 배송지 정보
@@ -198,6 +200,13 @@ include ../user/top.jade
                         })
                         $(function() {
                                 $("#postsearch").postcodifyPopUp();
+                        });
+                        $(".col5").each(function() {
+                                var rows = $(".col5:contains('" + $(this).text() + "')");
+                                if (rows.length > 1) {
+                                        rows.eq(0).attr("rowspan", rows.length);
+                                        rows.not(":eq(0)").remove();
+                                }
                         });
                         function checkPhone(number){
                                 var regExp=/^\d{3}-\d{4}-\d{4}$/;

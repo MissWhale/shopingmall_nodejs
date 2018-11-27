@@ -3,10 +3,10 @@
         left: 0;
         top: 20px;
         width: 1200px;
-        height: 700px;
         margin:0px auto;
         font-family: "Roboto", sans-serif;
         overflow: hidden;
+        margin-bottom: 50px;
 }
 .baskettitle{
         display: inline-block;

@@ -26,12 +26,18 @@ exports.main=function(req,res){ //상품페이지
                                                 startpost:maxpost*pno-maxpost, //시작상품넘버
                                                 endpost:maxpost*pno-1< postcnt ?  maxpost*pno-1 : postcnt-1  //마지막상품넘버
                                         }
-                                        if(req.session.displayname){
-                                                var dname=req.session.displayname;
-                                                res.render('main',{name:dname,id:req.session.user,product:result,pager:pager,pno:pno});
-                                        }else{
-                                                res.render('main',{product:result,pager:pager,pno:pno});
-                                        }
+                                        var sql="select product.num,avg(star) as star,count(*) as cnt from product join productreview using(num) GROUP BY 1";
+                                        con.query(sql,function(err,star){
+                                                if(err) console.log(err);
+                                                else{
+                                                        if(req.session.displayname){
+                                                                var dname=req.session.displayname;
+                                                                res.render('main',{name:dname,id:req.session.user,product:result,pager:pager,pno:pno,star,star});
+                                                        }else{
+                                                                res.render('main',{product:result,pager:pager,pno:pno,star,star});
+                                                        }
+                                                }
+                                        })
                                 }
                         })
                 }
@@ -39,24 +45,30 @@ exports.main=function(req,res){ //상품페이지
 };
 exports.productdetail=function(req,res){ //상세정보페이지
         var pno=req.query.num;
-        var sql="select * from product join productimg using(num) where num=?"
+        var sql="select product.*,productimg.*,optcode,min(optprice) as min from product join productimg using(num) join productopt using(num) where num=?";
         con.query(sql,pno,function(err,result){
                 if(err) console.log(err);
                 else{
-                        var sql="select optcode,min(optprice) as min from productopt where num=?";
-                        con.query(sql,pno,function(err,min){
+                        var sql="select * from productopt where num=?";
+                        con.query(sql,pno,function(err,opt){
                                 if(err) console.log(err);
                                 else{
-                                        var sql="select * from productopt where num=?";
-                                        con.query(sql,pno,function(err,opt){
+                                        var sql="select * from productreview join productopt using(num) where num=? and productopt.optnum = productreview.optnum";
+                                        con.query(sql,pno,function(err,review){
                                                 if(err) console.log(err);
                                                 else{
-                                                        if(req.session.displayname){
-                                                                var dname=req.session.displayname;
-                                                                res.render('prodetail',{name:dname,id:req.session.user,pro:result[0],opt:opt,min:min[0]});
-                                                        }else{
-                                                                res.render('prodetail',{pro:result[0],opt:opt,min:min[0]});
-                                                        }
+                                                        var sql="select avg(star) as star from productreview where num=?";
+                                                        con.query(sql,pno,function(err,star){
+                                                                if(err) console.log(err);
+                                                                else{
+                                                                        if(req.session.displayname){
+                                                                                var dname=req.session.displayname;
+                                                                                res.render('prodetail',{name:dname,id:req.session.user,pro:result[0],opt:opt,review:review,star:star[0].star});
+                                                                        }else{
+                                                                                res.render('prodetail',{pro:result[0],opt:opt,min:min[0]});
+                                                                        }
+                                                                }
+                                                        })
                                                 }
                                         })
                                 }

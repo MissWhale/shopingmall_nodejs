@@ -50,8 +50,12 @@ include ../user/top.jade
                                                                 if(order.status==4)
                                                                         td.col3 
                                                                                 p 배송완료
-                                                                                a#orderinfo.review(data-opnum=order.opnum data-num=order.num) 리뷰작성
+                                                                                a#orderinfo.buycon(data-opnum=order.opnum) 구매확정
                                                                 if(order.status==5)
+                                                                        td 
+                                                                                p 구매확정
+                                                                                a#orderinfo.review(data-opnum=order.opnum data-num=order.num) 리뷰작성
+                                                                if(order.status==6)
                                                                         td 주문취소
                                                                 td.col4
                                                                         p.up=new Date(order.order_date).format("yyyy-MM-dd")
@@ -112,6 +116,20 @@ include ../user/top.jade
                                 window.open(url,"","width=660,height=700,left=600");
                                 //- location.href="/user/orderinfo?no="+num;
                         })
+                        $("a[class=buycon]").click(function(){
+                                var opnum=$(this)[0].dataset.opnum;
+                                $.ajax({
+                                        url:"/user/buyconfirm",
+                                        type:"post",
+                                        data:{opnum:opnum},
+                                        success: function(result){
+                                                if(result=='true'){
+                                                        alert("해당 상품이 구매확정되었습니다.");
+                                                        location.reload();
+                                                }
+                                        }
+                                })
+                        })
                         $("a[class=orderinfo]").click(function(){
                                 var num=$(this)[0].dataset.onum;
                                 location.href="/user/orderinfo?no="+num;
@@ -123,10 +141,3 @@ include ../user/top.jade
                                         rows.not(":eq(0)").remove();
                                 }
                         });
-                        //- $(".col3").each(function() {
-                        //-         var rows = $(".col3:contains('" + $(this).text() + "')");
-                        //-         if (rows.length > 1) {
-                        //-                 rows.eq(0).attr("rowspan", rows.length);
-                        //-                 rows.not(":eq(0)").remove();
-                        //-         }
-                        //- });

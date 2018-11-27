@@ -82,27 +82,40 @@ include ../user/top.jade
                                                 - var max=pager.pagecnt
                                         span
                                                 ul
+                                                        if(query.type1)
+                                                                -var loc="&type1="+query.type1;
+                                                        else
+                                                                -var loc="&type1=";
+                                                        if(query.type2)
+                                                                -var loc=loc+"&type2="+query.type2;
+                                                        else
+                                                                -var loc=loc+"&type2=";
+                                                        if(query.val)
+                                                                -var loc=loc+"&val="+query.val;
+                                                        else
+                                                                -var loc=loc+"&val=";
+                                                        -console.log(loc);
                                                         if(pno>10)
                                                                 li
-                                                                        a#first(href="/admin/product" style="height: 14px;")
+                                                                        a#first(href="/admin/product?page=1"+loc style="height: 14px;")
                                                                                 img(src="../img/dbackb.png")
                                                         if(prev)
                                                                 li
-                                                                        a#prev(href="/admin/product?page="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        a#prev(href="/admin/product?page="+prev+loc style="padding: 6px 4px 4px 4px;height: 12px;")
                                                                                 img(src="../img/backb.png")
                                                         while n <= max
                                                                 li
                                                                         if(pno==n)
-                                                                                a(href="/admin/product?page="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                                a(href="/admin/product?page="+n+loc style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
                                                                         else
-                                                                                a(href="/admin/product?page="+n)=n++
+                                                                                a(href="/admin/product?page="+n+loc)=n++
 
                                                         if(ip != fp || check)
                                                                 li
-                                                                        a#next(href="/admin/product?page="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        a#next(href="/admin/product?page="+next+loc style="padding: 6px 4px 4px 4px;height: 12px;")
                                                                                 img(src="../img/forb.png")
                                                                 li
-                                                                        a#final(href="/admin/product?page="+pager.pagecnt style="height: 14px;")
+                                                                        a#final(href="/admin/product?page="+pager.pagecnt+loc style="height: 14px;")
                                                                                 img(src="../img/dforb.png")
 
         script.
@@ -112,11 +125,11 @@ include ../user/top.jade
                         var type1=$("#searchtype1 option:selected").val();
                         var type2=$("#searchtype2 option:selected").val();
                         var val=$("#searchval").val();
-                        if(!val){
-                                alert("검색어를 입력해주세요");
-                                return;
-                        }
-                        location.href=location.href+"?type1="+type1+"&type2="+type2+"&val="+val;
+                        //- if(!val){
+                        //-         alert("검색어를 입력해주세요");
+                        //-         return;
+                        //- }
+                        location.href="/admin/product?page=1&type1="+type1+"&type2="+type2+"&val="+val;
                 })
                 $("#first").hover(function(){
                                 $("#first").children().attr('src','./img/dbackw.png');

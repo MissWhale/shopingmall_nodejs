@@ -10,6 +10,7 @@ router.post('/orderadd',user.orderadd); //주문정보삽입
 router.get('/orderinfo',user.orderinfo); //주문상세페이지
 router.post('/orderupdate',user.orderupdate); //주문정보수정
 router.get(['/orderifm','/orderifm=:pno'],user.orderifm); //주문정보페이지
+router.post('/buyconfirm',user.buyconfirm); //구매확정
 router.get('/review',user.review); //리뷰작성페이지
 router.post("/review",user.reviewpost); //리뷰작성
 module.exports = router;

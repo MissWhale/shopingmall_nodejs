@@ -132,13 +132,13 @@ exports.paymentpost=function(req,res){ //장바구니>>결제페이지
                 var sql=sql+"(SELECT num from basket where ";
                 var sql=sql+sql2+") and productopt.optnum in(SELECT optnum from basket where ";
                 var sql=sql+sql2+") and (";
-                var sql=sql+sql2+")";
+                var sql=sql+sql2+") and basket.optnum=productopt.optnum";
                 con.query(sql,function(err,result){
                         if(err) console.log(err);
                         else{
                                 if(req.session.displayname){
                                         var dname=req.session.displayname;
-                                        res.render('payment',{name:dname,id:req.session.user,pay:result,isnum:"2"});
+                                        res.render('payment',{name:dname,id:req.session.user,pay:result,isnum:"2",bnum:bnums});
                                 }else{
                                         res.render('payment');
                                 }
@@ -171,7 +171,7 @@ exports.paymentpost=function(req,res){ //장바구니>>결제페이지
                         else{
                                 if(req.session.displayname){
                                         var dname=req.session.displayname;
-                                        res.render('payment',{name:dname,id:req.session.user,pay:result[0],cnt:data.cnt,isnum:"1"});
+                                        res.render('payment',{name:dname,id:req.session.user,pay:result[0],cnt:data.cnt,isnum:"1",bnum:bnums});
                                 }else{
                                         res.render('payment');
                                 }
@@ -221,11 +221,30 @@ exports.orderadd=function(req,res){ //주문정보삽입
                 if(err) console.log(err);
                 else{
                         var innum=result.insertId;
-                        for(var i=0;i<req.body.tocnt;i++){
+                        if(req.body.procnt>1){
+                                for(var i=0;i<req.body.tocnt;i++){
+                                        var sql="insert into ordersdetail(num,onum,optnum,cnt) values(?,?,?,?)";
+                                        con.query(sql,[req.body.num[i],innum,req.body.optnum[i],req.body.cnt[i]],function(err,result){
+                                                if(err) console.log(err);
+                                        })
+                                        if(req.body.bnum){
+                                                var sql="delete from basket where bnum=?";
+                                                con.query(sql,req.body.bnum[i],function(err,result){
+                                                        if(err) console.log(err);
+                                                })
+                                        }
+                                }
+                        }else{
                                 var sql="insert into ordersdetail(num,onum,optnum,cnt) values(?,?,?,?)";
-                                con.query(sql,[req.body.num[i],innum,req.body.optnum[i],req.body.cnt[i]],function(err,result){
+                                con.query(sql,[req.body.num,innum,req.body.optnum,req.body.cnt],function(err,result){
                                         if(err) console.log(err);
                                 })
+                                if(req.body.bnum){
+                                        var sql="delete from basket where bnum=?";
+                                        con.query(sql,req.body.bnum,function(err,result){
+                                                if(err) console.log(err);
+                                        })
+                                }
                         }
                         res.redirect('/user/orderifm');
                 }
@@ -257,7 +276,6 @@ exports.orderupdate=function(req,res){ //주문정보수정
         con.query(sql,[req.body.oname,req.body.aname,req.body.aphone,req.body.locnum,req.body.locadd,req.body.locdetail,req.body.onum],function(err,result){
                 if(err) console.log(err);
                 else{
-                        console.log(result);
                         if(result.affectedRows){
                                 res.send('true');
                         }else{
@@ -272,12 +290,11 @@ exports.orderifm=function(req,res){ //주문정보페이지
         var pno=req.params.pno; //페이지넘버
         if(!pno)  var pno=1;
         var start=maxpost*pno-maxpost;
-        var sql="select count(*) as mbcnt from orders where id=?";
+        var sql="select count(*) as mbcnt from orders join ordersdetail using(onum) where id=?";
         con.query(sql,id,function(err,result){
                 if(err) console.log(err);
                 else{
                         var mbcnt=result[0].mbcnt;
-                        var sql
                         var sql="select ordersdetail.num,orders.onum,opnum,ordersdetail.optnum,ordersdetail.cnt,product.name,orders.total,orders.order_date,productimg.simgname,productopt.optprice,productopt.optname,status";
                         var sql=sql+" from orders,ordersdetail,product,productimg,productopt where id=? and orders.onum=ordersdetail.onum and ordersdetail.num=product.num and product.num=productimg.num and ordersdetail.optnum=productopt.optnum ORDER BY onum desc limit ?,?;";
                         con.query(sql,[id,start,maxpost],function(err,result){
@@ -288,7 +305,6 @@ exports.orderifm=function(req,res){ //주문정보페이지
                                                 startpost:maxpost*pno-maxpost, //시작주문넘버
                                                 endpost:maxpost*pno-1< mbcnt ?  maxpost*pno-1 : mbcnt-1  //마지막주문넘버
                                         }
-                                        console.log(result);
                                         if(req.session.displayname){
                                                 var dname=req.session.displayname;
                                                 res.render('orderifm',{name:dname,id:req.session.user,orders:result,pager:pager,pno:pno});
@@ -300,6 +316,20 @@ exports.orderifm=function(req,res){ //주문정보페이지
                 }
         })
 };
+exports.buyconfirm=function(req,res){ //구매확정
+        var opnum=req.body.opnum;
+        var sql="update ordersdetail set status=5 where opnum=?";
+        con.query(sql,opnum,function(err,result){
+                if(err) console.log(err);
+                else{
+                        if(result.affectedRows){
+                                res.send("true");
+                        }else{
+                                res.send("false");
+                        }
+                }
+        })
+}
 exports.review=function(req,res){ //리뷰작성페이지
         var num=req.query.num;
         var opnum=req.query.opnum;
