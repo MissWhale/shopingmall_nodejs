@@ -858,3 +858,14 @@ strong{
         top: -3px;
         left: 20px;
 }
+.mainsearch input{
+        width: 365px;
+        height: 30px;
+        border: none;
+        font-size: 16px;
+        padding-left: 20px;
+        margin:0px !important;
+}
+.mainsearch input:hover{
+        box-shadow: none;
+}

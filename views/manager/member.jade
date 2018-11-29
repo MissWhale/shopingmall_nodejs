@@ -134,7 +134,7 @@ include ../user/top.jade
         script.
                 $("#user").css("border-bottom","5px solid white");
                 $("#user").css("color","white");
-                $("#searchbtn").click(function(){
+                $("#searchbtn").click(function(){  //검색
                         var type=$("#searchtype option:selected").val();
                         var val=$("#searchval").val();
                         if(!val){
@@ -143,8 +143,7 @@ include ../user/top.jade
                         }
                         location.href="/admin/member?page=1&type="+type+"&val="+val;
                 })
-                $("a[id=modi]").click(function(){
-                        console.log($(this).parent().parent().children());
+                $("a[id=modi]").click(function(){  //회원정보수정 inputbox교체
                         var tr=$(this).parent().parent().children();
                         $(this).parent().parent().children(1).children("a").css("display","none");
                         $(this).parent().parent().children(1).children("input").css("display","inline");
@@ -153,7 +152,7 @@ include ../user/top.jade
                         $(this).parent().parent().children(7).children("#delete").css("display","none");
                         $(this).parent().parent().children(7).children("#close").css("display","flex");
                 });
-                $("a[id=delete]").click(function(){
+                $("a[id=delete]").click(function(){ //회원정보삭제
                         $.ajax({
                                 url:"/admin/memdel",
                                 type:"post",
@@ -169,7 +168,7 @@ include ../user/top.jade
                                 }
                         })
                 });
-                $("a[id=ok]").click(function(){
+                $("a[id=ok]").click(function(){ //회원정보수정완료
                         var pid=$(this).attr("name");
                         var id=$(this).parent().parent().children(1).children("input")[0].value;
                         var pw=$(this).parent().parent().children(1).children("input")[1].value;
@@ -192,7 +191,7 @@ include ../user/top.jade
                                 }
                         })
                 });
-                $("a[id=close]").click(function(){
+                $("a[id=close]").click(function(){  //회원정보수정 취소 inputbox>>a
                         $(this).parent().parent().children(1).children("a").css("display","block");
                         $(this).parent().parent().children(1).children("input").css("display","none");
                         $(this).parent().parent().children(6).children("#modi").css("display","flex");

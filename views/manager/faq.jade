@@ -60,32 +60,36 @@ include ../user/top.jade
                                                 - var max=pager.pagecnt
                                         span
                                                 ul
+                                                        if(query.val)
+                                                                -var loc="&val="+query.val;
+                                                        else
+                                                                -var loc="&val=";
                                                         if(pno>10)
                                                                 li
-                                                                        a#first(href="/admin/faq" style="height: 14px;")
+                                                                        a#first(href="/admin/faq?page=1" style="height: 14px;")
                                                                                 img(src="../img/dbackb.png")
                                                         if(prev)
                                                                 li
-                                                                        a#prev(href="/admin/faq="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        a#prev(href="/admin/faq?page="+prev+loc style="padding: 6px 4px 4px 4px;height: 12px;")
                                                                                 img(src="../img/backb.png")
                                                         while n <= max
                                                                 li
                                                                         if(pno==n)
-                                                                                a(href="/admin/faq="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                                a(href="/admin/faq?page="+n+loc style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
                                                                         else
-                                                                                a(href="/admin/faq="+n)=n++
+                                                                                a(href="/admin/faq?page="+n+loc)=n++
 
                                                         if(ip != fp || check)
                                                                 li
-                                                                        a#next(href="/faq="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        a#next(href="/faq?page="+next+loc style="padding: 6px 4px 4px 4px;height: 12px;")
                                                                                 img(src="../img/forb.png")
                                                                 li
-                                                                        a#final(href="/admin/faq="+pager.pagecnt style="height: 14px;")
+                                                                        a#final(href="/admin/faq?page="+pager.pagecnt+loc style="height: 14px;")
                                                                                 img(src="../img/dforb.png")
        script.
                 $("#faq").css("border-bottom","5px solid white");
                 $("#faq").css("color","white");
-                $("#searchbtn").click(function(){
+                $("#searchbtn").click(function(){ //검색
                         var val=$("#searchval").val();
                         if(!val){
                                 alert("검색어를 입력해주세요");
@@ -93,12 +97,12 @@ include ../user/top.jade
                         }
                         location.href=location.href+"?val="+val;
                 })
-                $("a[id=modi]").click(function(){
+                $("a[id=modi]").click(function(){  //faq수정페이지
                         var num=$(this).attr("name");
                         href ="/faqmodify?num="+num;
                         location.href =href;
                 })
-                $("a[id=delete]").click(function(){
+                $("a[id=delete]").click(function(){ //faq삭제
                         var num=$(this).attr("name");
                         console.log(num);
                         $.ajax({

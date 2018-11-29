@@ -30,7 +30,14 @@ include ../user/top.jade
                                                                                 -var price=total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                                                                 td#cnt(data-cnt=cnt)=cnt
                                                                                 td#price(data-price=pay.optprice)=price
-                                                                                td#deli.columdel(data-price="2500") 2,500원
+                                                                                if(pay.delivery)
+                                                                                        td#deli.columdel(data-price="0") 착불
+                                                                                else
+                                                                                        td#deli.columdel(data-price="2500") 2,500원
+                                                                                if(pay.delivery)
+                                                                                        input(type="text" name="deli"  value=1 style="display:none")
+                                                                                else
+                                                                                        input(type="text" name="deli"  value=0 style="display:none")
                                                                                 input(type="text" name="num" value=pay.num style="display:none")
                                                                                 input(type="text" name="optnum" value=pay.optnum style="display:none")
                                                                                 input(type="text" name="cnt"  value=cnt style="display:none")
@@ -58,7 +65,26 @@ include ../user/top.jade
                                                                                                 input(type="text" name="cnt"  value=cnt[i] style="display:none")
                                                                                         -}
                                                                                         td#price(data-price=pro.optprice)=price
-                                                                                        td#deli.columdel(data-price="2500") 2,500원
+                                                                                        if(deli)
+                                                                                                each del,j in deli
+                                                                                                        if(i==j)
+                                                                                                                if(del)
+                                                                                                                        td#deli.columdel(data-price="0") 착불
+                                                                                                                else
+                                                                                                                        td#deli.columdel(data-price="2500") 2,500원
+                                                                                                                if(del)
+                                                                                                                        input(type="text" name="deli"  value=1 style="display:none")
+                                                                                                                else
+                                                                                                                        input(type="text" name="deli"  value=0 style="display:none")
+                                                                                        else
+                                                                                                if(pro.delivery)
+                                                                                                        td#deli.columdel(data-price="0") 착불
+                                                                                                else
+                                                                                                        td#deli.columdel(data-price="2500") 2,500원
+                                                                                                if(pro.delivery)
+                                                                                                        input(type="text" name="deli"  value=1 style="display:none")
+                                                                                                else
+                                                                                                        input(type="text" name="deli"  value=0 style="display:none")
                                 .totalprice
                                         table
                                                 tr

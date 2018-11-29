@@ -121,42 +121,38 @@ include ../user/top.jade
         script.
                 $("#prod").css("border-bottom","5px solid white");
                 $("#prod").css("color","white");
-                $("#searchbtn").click(function(){
+                $("#searchbtn").click(function(){ //검색
                         var type1=$("#searchtype1 option:selected").val();
                         var type2=$("#searchtype2 option:selected").val();
                         var val=$("#searchval").val();
-                        //- if(!val){
-                        //-         alert("검색어를 입력해주세요");
-                        //-         return;
-                        //- }
                         location.href="/admin/product?page=1&type1="+type1+"&type2="+type2+"&val="+val;
                 })
-                $("#first").hover(function(){
-                                $("#first").children().attr('src','./img/dbackw.png');
-                        },function(){
-                                $("#first").children().attr('src','./img/dbackb.png');
-                        })
-                        $("#prev").hover(function(){
-                                $("#prev").children().attr('src','./img/backw.png');
-                        },function(){
-                                $("#prev").children().attr('src','./img/backb.png');
-                        })
-                        $("#next").hover(function(){
-                                $("#next").children().attr('src','./img/forw.png');
-                        },function(){
-                                $("#next").children().attr('src','./img/forb.png');
-                        })
-                        $("#final").hover(function(){
-                                $("#final").children().attr('src','./img/dforw.png');
-                        },function(){
-                                $("#final").children().attr('src','./img/dforb.png');
-                        })
-                $("a[id='modi']").click(function(){
+                $("#first").hover(function(){ //페이징버튼css
+                        $("#first").children().attr('src','./img/dbackw.png');
+                },function(){
+                        $("#first").children().attr('src','./img/dbackb.png');
+                })
+                $("#prev").hover(function(){
+                        $("#prev").children().attr('src','./img/backw.png');
+                },function(){
+                        $("#prev").children().attr('src','./img/backb.png');
+                })
+                $("#next").hover(function(){
+                        $("#next").children().attr('src','./img/forw.png');
+                },function(){
+                        $("#next").children().attr('src','./img/forb.png');
+                })
+                $("#final").hover(function(){
+                        $("#final").children().attr('src','./img/dforw.png');
+                },function(){
+                        $("#final").children().attr('src','./img/dforb.png');
+                })
+                $("a[id='modi']").click(function(){ //상품수정
                         num=$(this)[0].name;
                         href ="/admin/productmodify?num="+num;
                         location.href =href;
                 });
-                $("a[id='delete']").click(function(){
+                $("a[id='delete']").click(function(){ //상품삭제
                         num=$(this)[0].name;
                         console.log(num);
                         $.ajax({

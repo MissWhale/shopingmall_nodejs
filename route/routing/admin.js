@@ -1,6 +1,5 @@
 var mysql=require('mysql');
 var fs=require('fs');
-var empty = require('is-empty');
 var con=mysql.createConnection({
         host:'114.71.137.109',
         user:'root',
@@ -10,7 +9,7 @@ var con=mysql.createConnection({
 })
 con.connect();
 exports.member=function(req,res){ //회원관리페이지
-        var maxpost=2; //페이지당 회원수
+        var maxpost=20; //페이지당 회원수
         var pno=req.query.page; //페이지넘버
         var type=req.query.type;
         var val=req.query.val;
@@ -95,7 +94,7 @@ exports.memmodi=function(req,res){ //회원정보수정
         })
 };
 exports.product=function(req,res){ //상품관리페이지
-        var maxpost=2; //페이지당 상품수
+        var maxpost=20; //페이지당 상품수
         var pno=req.query.page; //페이지넘버
         var type1=req.query.type1;
         var type2=req.query.type2;
@@ -446,26 +445,36 @@ exports.order=function(req,res){ //주문관리
         var type1=req.query.type1;
         var type2=req.query.type2;
         var val=req.query.val;
+        var query=req.query;
+        console.log(query);
         if(!pno)  var pno=1;
         var start=maxpost*pno-maxpost;
         var sql="select count(*) as postcnt from orders natural join ordersdetail natural join product";
-        if(type1){
+        if(!(!type1)){
                 if(type1!='all'){
                         sql=sql+" where pkind ='"+type1+"'";
-                        if(type2){
+                        if(type2!=undefined){
                                 if(type2!='all'){
                                         sql=sql+" and status ='"+type2+"'";
-                        }}if(val){
+                                        if(val!=undefined){
+                                                sql=sql+" and name like '%"+val+"%'";
+                                        }
+                        }}else if(val!=undefined){
                                 sql=sql+" and name like '%"+val+"%'";
                 }}else{
-                        if(type2){
+                        if(type2!=undefined){
                                 if(type2!='all'){
                                         sql=sql+" where status ='"+type2+"'";
-                                        if(val){
+                                        if(val!=undefined){
                                                 sql=sql+" and name like '%"+val+"%'";
-                        }}}if(val){
+                                        }
+                                }else if(val!=undefined){
+                                        sql=sql+" where name like '%"+val+"%'";
+                                }
+                        }else if(val!=undefined){
                                 sql=sql+" where name like '%"+val+"%'";
         }}}
+        console.log(sql);
         con.query(sql,function(err,result){
                 if(err) console.log(err);
                 else{
@@ -473,22 +482,31 @@ exports.order=function(req,res){ //주문관리
                         // var sql="select orders.onum,ordersdetail.num,order_date,cnt,total,name,optname,optprice,status from orders join ordersdetail using(onum) join product using(num) join productopt using(num) group by orders.onum desc limit ?,?";
                         // var sql="select distinct orders.onum,ordersdetail.num,order_date,cnt,total,name,status,optname,optprice from orders join ordersdetail using(onum) join product using(num) join productopt using(num) order by 1 desc limit ?,?"
                         var sql="select distinct orders.onum,ordersdetail.num,opnum,order_date,cnt,pkind,total,name,status,optname,optprice from orders join ordersdetail using(onum) join product using(num) join productopt using(num) where ordersdetail.optnum = productopt.optnum";
-                        if(type1){
+                        if(!(!type1)){
                                 if(type1!='all'){
                                         sql=sql+" and pkind ='"+type1+"'";
-                                        if(type2){
+                                        if(type2!=undefined){
                                                 if(type2!='all'){
                                                         sql=sql+" and status ='"+type2+"'";
                                         }}if(val){
                                                 sql=sql+" and name like '%"+val+"%'";
                                 }}else{
-                                        if(type2){
+                                        if(type2!=undefined){
                                                 if(type2!='all'){
                                                         sql=sql+" and status ='"+type2+"'";
-                                        }}if(val){
-                                                sql=sql+" and name like '%"+val+"%'";
+                                                        if(val!=undefined){
+                                                                sql=sql+" and name like '%"+val+"%'";
+                                                        }
+                                                }else if(val!=undefined){
+                                                        console.log(1);
+                                                        sql=sql+" and name like '%"+val+"%'";
+                                                }
+                                        }else if(val!=undefined){
+                                                console.log(2);
+                                                sql=sql+" where name like '%"+val+"%'";
                         }}}
                         sql=sql+" order by 1 desc limit ?,?";
+                        console.log(sql);
                         con.query(sql,[start,maxpost],function(err,result){
                                 if(err) console.log(err);
                                 else{
@@ -499,9 +517,9 @@ exports.order=function(req,res){ //주문관리
                                         }
                                         if(req.session.displayname){
                                                 var dname=req.session.displayname;
-                                                res.render('order',{name:dname,id:req.session.user,orders:result,pager:pager,pno:pno});
+                                                res.render('order',{name:dname,id:req.session.user,orders:result,pager:pager,pno:pno,query:query});
                                         }else{
-                                                res.render('order',{result:result,pager:pager,pno:pno});
+                                                res.render('order',{result:result,pager:pager,pno:pno,query:query});
                                         }
                                 }
                         })
@@ -515,7 +533,7 @@ exports.orderdetail=function(req,res){ //주문상세페이지
         con.query(sql,onum,function(err,order){
                 if(err) console.log(err);
                 else{
-                        var sql="select distinct orders.onum,ordersdetail.num,opnum,order_date,cnt,pkind,total,name,status,optname,optprice from orders join ordersdetail using(onum) join product using(num) join productopt using(num) where ordersdetail.optnum = productopt.optnum and onum=?";
+                        var sql="select distinct ordersdetail.delivery,orders.onum,ordersdetail.num,opnum,order_date,cnt,pkind,total,name,status,optname,optprice from orders join ordersdetail using(onum) join product using(num) join productopt using(num) where ordersdetail.optnum = productopt.optnum and onum=?";
                         con.query(sql,onum,function(err,detail){
                                 if(err) console.log(err);
                                 else{
@@ -558,8 +576,9 @@ exports.statusch=function(req,res){ //주문상태 체인지
 }
 exports.faq=function(req,res){ //faq페이지
         var maxpost=20; //페이지당 상품수
-        var pno=req.params.pno; //페이지넘버
+        var pno=req.query.page; //페이지넘버
         var val=req.query.val;
+        var query=req.query;
         if(!pno)  var pno=1;
         var start=maxpost*pno-maxpost;
         var sql="select count(*) as postcnt from faq";
@@ -584,9 +603,9 @@ exports.faq=function(req,res){ //faq페이지
                                         }
                                         if(req.session.displayname){
                                                 var dname=req.session.displayname;
-                                                res.render('faq',{name:dname,id:req.session.user,result:result,pager:pager,pno:pno});
+                                                res.render('faq',{name:dname,id:req.session.user,result:result,pager:pager,pno:pno,query:query});
                                         }else{
-                                                res.render('faq',{result:result,pager:pager,pno:pno});
+                                                res.render('faq',{result:result,pager:pager,pno:pno,query:query});
                                         }
                                 }
                         })

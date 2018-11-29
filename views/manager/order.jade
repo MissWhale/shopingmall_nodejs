@@ -119,49 +119,57 @@ include ../user/top.jade
                                                 - var max=pager.pagecnt
                                         span
                                                 ul
+                                                        if(query.type1)
+                                                                -var loc="&type1="+query.type1;
+                                                        else
+                                                                -var loc="&type1=";
+                                                        if(query.type2)
+                                                                -var loc=loc+"&type2="+query.type2;
+                                                        else
+                                                                -var loc=loc+"&type2=";
+                                                        if(query.val)
+                                                                -var loc=loc+"&val="+query.val;
+                                                        else
+                                                                -var loc=loc+"&val=";
                                                         if(pno>10)
                                                                 li
-                                                                        a#first(href="/admin/order" style="height: 14px;")
+                                                                        a#first(href="/admin/order?page=1"+src+loc style="height: 14px;")
                                                                                 img(src="../img/dbackb.png")
                                                         if(prev)
                                                                 li
-                                                                        a#prev(href="/admin/order?page="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        a#prev(href="/admin/order?page="+prev+loc style="padding: 6px 4px 4px 4px;height: 12px;")
                                                                                 img(src="../img/backb.png")
                                                         while n <= max
                                                                 li
                                                                         if(pno==n)
-                                                                                a(href="/admin/order?page="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                                a(href="/admin/order?page="+n+loc style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
                                                                         else
-                                                                                a(href="/admin/order?page="+n)=n++
+                                                                                a(href="/admin/order?page="+n+loc)=n++
 
                                                         if(ip != fp || check)
                                                                 li
-                                                                        a#next(href="/admin/order?page="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                        a#next(href="/admin/order?page="+next+loc style="padding: 6px 4px 4px 4px;height: 12px;")
                                                                                 img(src="../img/forb.png")
                                                                 li
-                                                                        a#final(href="/admin/order?page="+pager.pagecnt style="height: 14px;")
+                                                                        a#final(href="/admin/order?page="+pager.pagecnt+loc style="height: 14px;")
                                                                                 img(src="../img/dforb.png")
         script.
                 $("#order").css("border-bottom","5px solid white");
                 $("#order").css("color","white");
-                $("#searchbtn").click(function(){
+                $("#searchbtn").click(function(){ //검색
                         var type1=$("#searchtype1 option:selected").val();
                         var type2=$("#searchtype2 option:selected").val();
                         var val=$("#searchval").val();
-                        if(!val){
-                                alert("검색어를 입력해주세요");
-                                return;
-                        }
-                        location.href=location.href+"?type1="+type1+"&type2="+type2+"&val="+val;
+                        location.href="/admin/order?page=1&type1="+type1+"&type2="+type2+"&val="+val;
                 })
-                $(".column1").each(function() {
+                $(".column1").each(function() { //테이블1열합치기
                         var rows = $(".column1:contains('" + $(this).text() + "')");
                         if (rows.length > 1) {
                                 rows.eq(0).attr("rowspan", rows.length);
                                 rows.not(":eq(0)").remove();
                         }
                 });
-                $(".column2").each(function() {
+                $(".column2").each(function() { //테이블2열합치기
                         var rows = $(".column2:contains('" + $(this).text() + "')");
                         var text=$(this).prev().text();
                         if (rows.length > 1) {
@@ -169,14 +177,14 @@ include ../user/top.jade
                                 rows.not(":eq(0)").remove();
                         }
                 });
-                 $(".column4").each(function() {
+                 $(".column4").each(function() { //테이블4열합치기
                         var rows = $(".column4:contains('" + $(this).text() + "')");
                         if (rows.length > 1) {
                                 rows.eq(0).attr("rowspan", rows.length);
                                 rows.not(":eq(0)").remove();
                         }
                 });
-                $("a[id=modi]").click(function(){
+                $("a[id=modi]").click(function(){ //주문상태수정
                         var opnum=$(this)[0].dataset.opnum;
                         var selbox=$(this)[0].offsetParent.previousElementSibling.children[0].children[0];
                         var before=selbox.dataset.status;

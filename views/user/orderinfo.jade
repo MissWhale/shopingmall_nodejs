@@ -58,7 +58,10 @@ include ../user/top.jade
                                                                                                 td=detail.cnt
                                                                                                 -var price=detail.optprice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                                                                                 td=price+"원"
-                                                                                                td.col5 2,500원
+                                                                                                if(detail.delivery)
+                                                                                                        td.col5 착불
+                                                                                                else
+                                                                                                        td.col5 2,500원
                                                                                                 if(detail.status==0)
                                                                                                         td  입금전
                                                                                                 if(detail.status==1)

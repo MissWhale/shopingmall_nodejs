@@ -71,28 +71,52 @@ include top.jade
                                         - var max=pager.pagecnt
                                 span
                                         ul
-                                                if(pno>10)
-                                                        li
-                                                                a#first(href="/" style="height: 14px;")
-                                                                        img(src="./img/dbackb.png")
-                                                if(prev)
-                                                        li
-                                                                a#prev(href="/pagenum="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
-                                                                        img(src="./img/backb.png")
-                                                while n <= max
-                                                        li
-                                                                if(pno==n)
-                                                                        a(href="/pagenum="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
-                                                                else
-                                                                        a(href="/pagenum="+n)=n++
+                                                if(search)
+                                                        if(pno>10)
+                                                                li
+                                                                        a#first(href="/search?page=1&search="+search style="height: 14px;")
+                                                                                img(src="./img/dbackb.png")
+                                                        if(prev)
+                                                                li
+                                                                        a#prev(href="/search?page="+prev+"&search="+search style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                                img(src="./img/backb.png")
+                                                        while n <= max
+                                                                li
+                                                                        if(pno==n)
+                                                                                a(href="/search?page="+n+"&search="+search style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                        else
+                                                                                a(href="/search?page="+n+"&search="+search)=n++
 
-                                                if(ip != fp || check)
-                                                        li
-                                                                a#next(href="/pagenum="+next style="padding: 6px 4px 4px 4px;height: 12px;")
-                                                                        img(src="./img/forb.png")
-                                                        li
-                                                                a#final(href="/pagenum="+pager.pagecnt style="height: 14px;")
-                                                                        img(src="./img/dforb.png")
+                                                        if(ip != fp || check)
+                                                                li
+                                                                        a#next(href="/search?page="+next+"&search="+search style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                                img(src="./img/forb.png")
+                                                                li
+                                                                        a#final(href="/search?page="+pager.pagecnt+"&search="+search style="height: 14px;")
+                                                                                img(src="./img/dforb.png")
+                                                else
+                                                        if(pno>10)
+                                                                li
+                                                                        a#first(href="/" style="height: 14px;")
+                                                                                img(src="./img/dbackb.png")
+                                                        if(prev)
+                                                                li
+                                                                        a#prev(href="/pagenum="+prev style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                                img(src="./img/backb.png")
+                                                        while n <= max
+                                                                li
+                                                                        if(pno==n)
+                                                                                a(href="/pagenum="+n style="color: #fff;border: 1px solid #f40;background-color: #f40;")=n++
+                                                                        else
+                                                                                a(href="/pagenum="+n)=n++
+
+                                                        if(ip != fp || check)
+                                                                li
+                                                                        a#next(href="/pagenum="+next style="padding: 6px 4px 4px 4px;height: 12px;")
+                                                                                img(src="./img/forb.png")
+                                                                li
+                                                                        a#final(href="/pagenum="+pager.pagecnt style="height: 14px;")
+                                                                                img(src="./img/dforb.png")
                 script.
                         $("#first").hover(function(){
                                 $("#first").children().attr('src','./img/dbackw.png');

@@ -49,8 +49,8 @@ include ../user/top.jade
                                                                                 td#deli 
                                                                                         span#deliprice 2,500원
                                                                                         select#color.justselect(name='kind')
-                                                                                                option(value='ok') 주문시결제(선결제)
-                                                                                                option(value='no') 상품수령시결제(착불)     
+                                                                                                option(value='0') 주문시결제(선결제)
+                                                                                                option(value='1') 상품수령시결제(착불)     
                                                                         tr
                                                                                 th 옵션
                                                                                 td.option
@@ -72,6 +72,7 @@ include ../user/top.jade
                                                 //- hr
                                                 form#option(action="/user/payment" method="post")
                                                         input#lcnt(name="lcnt" style="display:none" type="text" value=0)
+                                                        input#delivery(name="deli" style="display:none" type="text" value=0)
                                                         .optionprice
                                                                 ul.optionul
                                                 .optiontotal(style="display:none")
@@ -165,6 +166,7 @@ include ../user/top.jade
                                                 a#nowbuy 바로구매
                 script.
                         $("a[id=nowbuy]").click(function(){
+                                $("#delivery")[0].value=$("#color option:selected").val();
                                 $("#option").submit();
                         })
                         $("a[id=basket]").click(function(){ //장바구니담기
@@ -177,11 +179,12 @@ include ../user/top.jade
                                         var num=$(".optionul")[0].children[i].dataset.num; //상품번호
                                         var optnum=$(".optionul")[0].children[i].dataset.optnum; //옵션번호
                                         var cnt=$(".optionul")[0].children[i].children[2].value; //수량
+                                        var deli=$("#color option:selected").val();
                                         $.ajax({
                                                 url:"/basketadd",
                                                 dataType:'json',
                                                 type:"post",
-                                                data:{num:num,optnum:optnum,cnt:cnt},
+                                                data:{num:num,optnum:optnum,cnt:cnt,deli:deli},
                                                 success: function(result){
                                                         if(!result){
                                                                 alert("오류발생");

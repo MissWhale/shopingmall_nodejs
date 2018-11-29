@@ -30,6 +30,8 @@ html
                                                 h1.logo
                                                         a(href="/")
                                                 button#search
+                                                form.mainsearch(action="/search" method="get")
+                                                        input(type="text" name="search" autocomplete="off")
                         nav.category
                                 ul#mainMenu
                                         li: a(href='/keboard') 키보드
@@ -41,5 +43,5 @@ html
                 block content
                 script.
                         $("#search").click(function(){
-                                location.href="/search"
+                                $(".mainsearch").submit();
                         })

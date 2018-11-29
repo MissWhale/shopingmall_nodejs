@@ -111,7 +111,6 @@ exports.paymentget=function(req,res){ //결제페이지
 };
 exports.paymentpost=function(req,res){ //장바구니>>결제페이지
         var num=0;
-        console.log(req.body);
         if(req.body.all>0){
                 var bnum=JSON.stringify(req.body.post);
                 var pcnt=bnum.substring(bnum.indexOf("cnt",0)+6,bnum.length-2);
@@ -119,7 +118,7 @@ exports.paymentpost=function(req,res){ //장바구니>>결제페이지
                 for(var i=0;i<bnums.length;i++){
                         bnums[i]=bnums[i].replace(/[^0-9]/g,'');
                 }
-                var sql="SELECT distinct product.num,name,productopt.optnum,optname,optprice,simgname,basket.cnt from product,productopt,productimg,basket where product.num=productimg.num and product.num=productopt.num and product.num in ";
+                var sql="SELECT distinct delivery,product.num,name,productopt.optnum,optname,optprice,simgname,basket.cnt from product,productopt,productimg,basket where product.num=productimg.num and product.num=productopt.num and product.num in ";
                 var sql2='';
                 for(var i=0;i<pcnt;i++){
                         sql2=sql2+"bnum="+bnums[i];
@@ -171,7 +170,7 @@ exports.paymentpost=function(req,res){ //장바구니>>결제페이지
                         else{
                                 if(req.session.displayname){
                                         var dname=req.session.displayname;
-                                        res.render('payment',{name:dname,id:req.session.user,pay:result[0],cnt:data.cnt,isnum:"1",bnum:bnums});
+                                        res.render('payment',{name:dname,id:req.session.user,pay:result[0],cnt:data.cnt,isnum:"1",bnum:bnums,deli:req.body.deli});
                                 }else{
                                         res.render('payment');
                                 }
@@ -196,7 +195,7 @@ exports.paymentpost=function(req,res){ //장바구니>>결제페이지
                                 if(req.session.displayname){
                                         var dname=req.session.displayname;
                                         console.log(result);
-                                        res.render('payment',{name:dname,id:req.session.user,pay:result,cnt:req.body.cnt,isnum:"2"});
+                                        res.render('payment',{name:dname,id:req.session.user,pay:result,cnt:req.body.cnt,isnum:"2",deli:req.body.deli});
                                 }else{
                                         res.render('payment');
                                 }
@@ -214,8 +213,9 @@ exports.orderadd=function(req,res){ //주문정보삽입
                 locadd:req.body.locadd,
                 locdetail:req.body.locdetail,
                 oname:req.body.oname,
-                ophone:req.body.ophone
+                ophone:req.body.ophone,
         }
+        console.log(req.body);
         var sql="insert into orders(id,total,a_name,a_phone,oname,ophone,locnum,locadd,locdetail) values(?,?,?,?,?,?,?,?,?)";
         con.query(sql,[data.id,data.total,data.aname,data.aphone,data.oname,data.ophone,data.locnum,data.locadd,data.locdetail],function(err,result){
                 if(err) console.log(err);
@@ -223,8 +223,8 @@ exports.orderadd=function(req,res){ //주문정보삽입
                         var innum=result.insertId;
                         if(req.body.procnt>1){
                                 for(var i=0;i<req.body.tocnt;i++){
-                                        var sql="insert into ordersdetail(num,onum,optnum,cnt) values(?,?,?,?)";
-                                        con.query(sql,[req.body.num[i],innum,req.body.optnum[i],req.body.cnt[i]],function(err,result){
+                                        var sql="insert into ordersdetail(num,onum,optnum,cnt,delivery) values(?,?,?,?,?)";
+                                        con.query(sql,[req.body.num[i],innum,req.body.optnum[i],req.body.cnt[i],req.body.deli[i]],function(err,result){
                                                 if(err) console.log(err);
                                         })
                                         if(req.body.bnum){
@@ -256,7 +256,7 @@ exports.orderinfo=function(req,res){ //주문상세페이지
         con.query(sql,onum,function(err,order){
                 if(err) console.log(err);
                 else{
-                        var sql="select distinct orders.onum,ordersdetail.num,opnum,order_date,cnt,pkind,total,name,status,optname,optprice from orders join ordersdetail using(onum) join product using(num) join productopt using(num) where ordersdetail.optnum = productopt.optnum and onum=?";
+                        var sql="select distinct delivery,orders.onum,ordersdetail.num,opnum,order_date,cnt,pkind,total,name,status,optname,optprice from orders join ordersdetail using(onum) join product using(num) join productopt using(num) where ordersdetail.optnum = productopt.optnum and onum=?";
                         con.query(sql,onum,function(err,detail){
                                 if(err) console.log(err);
                                 else{

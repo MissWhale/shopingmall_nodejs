@@ -49,7 +49,10 @@ include ../user/top.jade
                                                                                 -var total=bas.cnt*bas.optprice;
                                                                                 -var price=total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                                                                 td=price+"원"
-                                                                                td.col4 2,500원
+                                                                                if(bas.delivery)
+                                                                                        td.col4 착불
+                                                                                else
+                                                                                        td.col4 2,500원
                                                                                 td.buy
                                                                                         a#order(name=bas.bnum class=bas.optnum) 주문하기
                                                                                         a#delete(name=bas.bnum) 삭제하기
